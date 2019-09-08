@@ -69,7 +69,7 @@ class ClipboardApp extends React.Component {
   }
   componentWillUnmount() {}
   onSuccess = () => {
-    const notificationDiv = <div className="test">Successfully Copied!!!</div>;
+    const notificationDiv = <div className="notification-popup">Successfully Copied!!!</div>;
  
     toaster.notify(notificationDiv, {
       duration: 500

@@ -1,5 +1,16 @@
+.notification-popup {
+  font-weight: 1000;
+  border-radius: 8px;
+  width: 200px;
+  text-align: center;
+  color: black;
+}
+.Toaster__alert {
+  background-color: lightgreen !important;
+}
+
+// common styles
 .clipboard-container {
-  padding: 60px;
   .clipboard {
     &__heading {
       h1 {
@@ -13,19 +24,17 @@
         margin: 0px;
         padding: 0px;
         li {
-          padding: 10px 0px;
-          span.text-id {
+          font-family: sans-serif;
+         .text-id {
             font-weight: bold;
             position: absolute;
-            left: 50px;
           }
-          span.text-value {
-            // cursor: pointer;
+         .text-value {
+            cursor: pointer;
             user-select: all;
           }
-          span.clipboard-icon {
+         .clipboard-icon {
             position: absolute;
-            right: 50px;
             button {
               background: none;
               color: inherit;
@@ -62,13 +71,43 @@
   }
 }
 
-.test {
-  font-weight: 1000;
-  border-radius: 8px;
-  width: 200px;
-  text-align: center;
-  color: black;
+//mobile styles
+@media screen and (max-width: 767px) {
+  .clipboard-container {
+    ul {
+      li {
+        padding: 10px 35px;
+        .text-id {
+          left: 10px;
+        }
+       .text-value {
+          user-select: all;
+        }
+       .clipboard-icon {
+          right: 10px;
+        }
+      }
+    }
+  }
 }
-.Toaster__alert {
-  background-color: lightgreen !important;
+
+// desktop styles
+@media screen and (min-width: 768px) {
+  .clipboard-container {
+    margin: 50px;
+    ul {
+      li {
+        padding: 10px 35px;
+       .text-id {
+          left: 50px;
+        }
+       .text-value {
+          user-select: all;
+        }
+       .clipboard-icon {
+          right: 50px;
+        }
+      }
+    }
+  }
 }
