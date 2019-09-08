@@ -7,9 +7,15 @@ import { DB_CONFIG } from "./Config/config";
 import "./Clipboard.scss";
 // import { MDBMask, MDBView, MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import { MDBInput } from "mdbreact";
-var FontAwesome = require("react-fontawesome");
+import Clipboard from "react-clipboard.js";
+import { ReactComponent as IconClipboard } from "./assets/svg/IconClipboard.svg";
 
-class Clipboard extends React.Component {
+import toaster from "toasted-notes";
+import "toasted-notes/src/styles.css"; // optional styles
+
+const FontAwesome = require("react-fontawesome");
+
+class ClipboardApp extends React.Component {
   constructor(props) {
     super(props);
     this.app = firebase.initializeApp(DB_CONFIG);
@@ -24,32 +30,36 @@ class Clipboard extends React.Component {
       texts: []
     };
   }
+
   handleInputChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
-    console.log("event", event.target.value);
   };
   handleSubmit = () => {
+    // console.log("date", Date());
+
     let textObj = {
       id: this.state.texts.length + 1,
-      textValue: this.state.inputText
+      textValue: this.state.inputText,
+      dateStamp: new Date().toLocaleString().split(",")
     };
     this.setState({
       inputText: ""
     });
     // put data to db
     this.db_texts.push().set(textObj);
+    navigator.clipboard.writeText("raviii");
   };
   componentWillMount() {
     const prevTexts = this.state.texts;
 
     // Data Snapshot, load db data into local state on page load and on each submit
     this.db_texts.on("child_added", snap => {
-      // console.log("snap valu", snap.val());
       let textObj = {
         id: snap.val().id,
-        textValue: snap.val().textValue // textValue from DB texts array.
+        textValue: snap.val().textValue, // textValue from DB texts array.
+        dateStamp: snap.val().dateStamp
       };
       prevTexts.push(textObj);
       this.setState({
@@ -58,7 +68,15 @@ class Clipboard extends React.Component {
     });
   }
   componentWillUnmount() {}
+  onSuccess = () => {
+    const notificationDiv = <div className="test">Successfully Copied!!!</div>;
+ 
+    toaster.notify(notificationDiv, {
+      duration: 500
+    });
+  };
   render() {
+    // console.log("state", this.state);
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
@@ -71,7 +89,15 @@ class Clipboard extends React.Component {
                 return (
                   <li key={index}>
                     <span className="text-id">{text.id}.</span>
-                    {text.textValue}
+                    <span className="text-value">{text.textValue}</span>
+                    <span className="clipboard-icon">
+                      <Clipboard
+                        data-clipboard-text={text.textValue}
+                        onSuccess={this.onSuccess}
+                      >
+                        <IconClipboard />
+                      </Clipboard>
+                    </span>
                   </li>
                 );
               })}
@@ -91,7 +117,6 @@ class Clipboard extends React.Component {
             <MDBInput
               type="textarea"
               rows="2"
-              // icon="pencil-alt"
               name="inputText"
               value={this.state.inputText}
               onChange={this.handleInputChange}
@@ -107,4 +132,4 @@ class Clipboard extends React.Component {
     );
   }
 }
-export default Clipboard;
+export default ClipboardApp;
