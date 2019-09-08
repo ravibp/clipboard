@@ -24,16 +24,38 @@
         margin: 0px;
         padding: 0px;
         li {
+          text-align: left;
           font-family: sans-serif;
-         .text-id {
+          .text-id {
             font-weight: bold;
             position: absolute;
           }
-         .text-value {
+          .text-value {
+            margin: 0px;
+            width: 100%;
+            text-align: initial;
             cursor: pointer;
-            user-select: all;
+            display: inline-table;
+            text-align: initial;
           }
-         .clipboard-icon {
+          .text-value:focus {
+            min-height: 25px;
+            font-family: sans-serif;
+            cursor: text !important;
+            width: 100%;
+            padding: 5px 10px;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out,
+              box-shadow 0.15s ease-in-out;
+          }
+          .clipboard-icon {
             position: absolute;
             button {
               background: none;
@@ -64,8 +86,18 @@
     }
     &__textArea {
       padding: 0px;
+      .md-form {
+        margin: 20px 30px;
+      }
       textarea {
-        text-align: center;
+        border: 1px solid gray !important;
+        height: 200px;
+        overflow-y: hidden;
+        width: 90%; // necessary for inside textbox padding
+        padding: 30px 10px !important;
+        overflow: visible !important;
+        margin: auto !important;
+        // text-align: center;
       }
     }
   }
@@ -80,10 +112,10 @@
         .text-id {
           left: 10px;
         }
-       .text-value {
+        .text-value {
           user-select: all;
         }
-       .clipboard-icon {
+        .clipboard-icon {
           right: 10px;
         }
       }
@@ -97,14 +129,14 @@
     margin: 50px;
     ul {
       li {
-        padding: 10px 35px;
-       .text-id {
+        padding: 10px 80px;
+        .text-id {
           left: 50px;
         }
-       .text-value {
-          user-select: all;
+        .text-value {
+          // user-select: all;
         }
-       .clipboard-icon {
+        .clipboard-icon {
           right: 50px;
         }
       }

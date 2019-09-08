@@ -1,6 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import Rebase from "re-base";
+//firebase imports
 import * as firebase from "firebase/app";
 import "firebase/database";
 import { DB_CONFIG } from "./Config/config";
@@ -44,39 +43,46 @@ class ClipboardApp extends React.Component {
       textValue: this.state.inputText,
       dateStamp: new Date().toLocaleString().split(",")
     };
+    let temp = this.state.texts;
+    temp.push(textObj);
     this.setState({
-      inputText: ""
+      inputText: "",
+      texts: temp
     });
     // put data to db
-    this.db_texts.push().set(textObj);
-    navigator.clipboard.writeText("raviii");
+    // this.db_texts.push().set(textObj);
   };
-  componentWillMount() {
-    const prevTexts = this.state.texts;
+  // componentWillMount() {
+  //   const prevTexts = this.state.texts;
 
-    // Data Snapshot, load db data into local state on page load and on each submit
-    this.db_texts.on("child_added", snap => {
-      let textObj = {
-        id: snap.val().id,
-        textValue: snap.val().textValue, // textValue from DB texts array.
-        dateStamp: snap.val().dateStamp
-      };
-      prevTexts.push(textObj);
-      this.setState({
-        texts: prevTexts
-      });
-    });
-  }
+  //   // Data Snapshot, load db data into local state on page load and on each submit
+  //   this.db_texts.on("child_added", snap => {
+  //     let textObj = {
+  //       id: snap.val().id,
+  //       textValue: snap.val().textValue, // textValue from DB texts array.
+  //       dateStamp: snap.val().dateStamp
+  //     };
+  //     prevTexts.push(textObj);
+  //     this.setState({
+  //       texts: prevTexts
+  //     });
+  //   });
+  // }
   componentWillUnmount() {}
   onSuccess = () => {
-    const notificationDiv = <div className="notification-popup">Successfully Copied!!!</div>;
- 
+    const notificationDiv = (
+      <div className="notification-popup">Successfully Copied!!!</div>
+    );
+
     toaster.notify(notificationDiv, {
       duration: 500
     });
   };
+  handleChange = () => {
+    console.log("changed")
+  }
   render() {
-    // console.log("state", this.state);
+    // console.log("aaaaaaa", this.state);
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
@@ -89,7 +95,13 @@ class ClipboardApp extends React.Component {
                 return (
                   <li key={index}>
                     <span className="text-id">{text.id}.</span>
-                    <span className="text-value">{text.textValue}</span>
+                    <pre
+                      className="text-value"
+                      contentEditable="true"
+                      onChange={this.handleChange}
+                    >
+                      {text.textValue}
+                    </pre>
                     <span className="clipboard-icon">
                       <Clipboard
                         data-clipboard-text={text.textValue}
