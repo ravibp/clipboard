@@ -80,9 +80,11 @@
         }
       }
     }
-    &__icon {
+    &__copyIcon {
       position: absolute;
       top: 55px;
+      top: 40px;
+      left: 15px;
     }
     &__textArea {
       padding: 0px;

@@ -118,7 +118,7 @@ class ClipboardApp extends React.Component {
           </ul>
         </div>
         <div className="clipboard__input col-12">
-          <div className="clipboard__icon">
+          <div className="clipboard__copyIcon">
             <FontAwesome
               className="super-crazy-colors"
               name="pencil"
