@@ -43,31 +43,31 @@ class ClipboardApp extends React.Component {
       textValue: this.state.inputText,
       dateStamp: new Date().toLocaleString().split(",")
     };
-    let temp = this.state.texts;
-    temp.push(textObj);
+    // let temp = this.state.texts;
+    // temp.push(textObj);
     this.setState({
-      inputText: "",
-      texts: temp
+      inputText: ""
+      // texts: temp
     });
     // put data to db
-    // this.db_texts.push().set(textObj);
+    this.db_texts.push().set(textObj);
   };
-  // componentWillMount() {
-  //   const prevTexts = this.state.texts;
+  componentWillMount() {
+    const prevTexts = this.state.texts;
 
-  //   // Data Snapshot, load db data into local state on page load and on each submit
-  //   this.db_texts.on("child_added", snap => {
-  //     let textObj = {
-  //       id: snap.val().id,
-  //       textValue: snap.val().textValue, // textValue from DB texts array.
-  //       dateStamp: snap.val().dateStamp
-  //     };
-  //     prevTexts.push(textObj);
-  //     this.setState({
-  //       texts: prevTexts
-  //     });
-  //   });
-  // }
+    // Data Snapshot, load db data into local state on page load and on each submit
+    this.db_texts.on("child_added", snap => {
+      let textObj = {
+        id: snap.val().id,
+        textValue: snap.val().textValue, // textValue from DB texts array.
+        dateStamp: snap.val().dateStamp
+      };
+      prevTexts.push(textObj);
+      this.setState({
+        texts: prevTexts
+      });
+    });
+  }
   componentWillUnmount() {}
   onSuccess = () => {
     const notificationDiv = (
@@ -79,8 +79,8 @@ class ClipboardApp extends React.Component {
     });
   };
   handleChange = () => {
-    console.log("changed")
-  }
+    console.log("changed");
+  };
   render() {
     // console.log("aaaaaaa", this.state);
     return (
@@ -96,8 +96,10 @@ class ClipboardApp extends React.Component {
                   <li key={index}>
                     <span className="text-id">{text.id}.</span>
                     <pre
+                      id={`text-${text.id}`}
                       className="text-value"
                       contentEditable="true"
+                      suppressContentEditableWarning={true}
                       onChange={this.handleChange}
                     >
                       {text.textValue}
