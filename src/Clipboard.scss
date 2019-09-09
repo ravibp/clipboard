@@ -32,7 +32,7 @@
           }
           .text-value {
             margin: 0px;
-            width: 100%;
+            width: 100%; // needed to make full row clickable for text edit, especially if empty string is present in that row.
             text-align: initial;
             cursor: pointer;
             display: inline-table;
@@ -74,6 +74,19 @@
               transform: scale(1) !important;
             }
           }
+          .edit-icon {
+            position: absolute;
+            right: 85px;
+            transform: scale(0.7);
+            span {
+              cursor: pointer;
+              transform: scale(0.7) !important;
+              transition: 0.3s transform !important;
+            }
+            span:hover {
+              transform: scale(1) !important;
+            }
+          }
         }
         li:nth-child(even) {
           background-color: #e8f4ff;
@@ -86,6 +99,7 @@
       top: 40px;
       left: 15px;
     }
+
     &__textArea {
       padding: 0px;
       .md-form {
@@ -95,11 +109,10 @@
         border: 1px solid gray !important;
         height: 200px;
         overflow-y: hidden;
-        width: 90%; // necessary for inside textbox padding
+        width: 90%; // don't remove! Necessary for inside textbox padding
         padding: 30px 10px !important;
         overflow: visible !important;
         margin: auto !important;
-        // text-align: center;
       }
     }
   }
