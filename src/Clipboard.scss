@@ -24,16 +24,38 @@
         margin: 0px;
         padding: 0px;
         li {
+          text-align: left;
           font-family: sans-serif;
-         .text-id {
+          .text-id {
             font-weight: bold;
             position: absolute;
           }
-         .text-value {
+          .text-value {
+            margin: 0px;
+            width: 100%; // needed to make full row clickable for text edit, especially if empty string is present in that row.
+            text-align: initial;
             cursor: pointer;
-            user-select: all;
+            display: inline-table;
+            text-align: initial;
           }
-         .clipboard-icon {
+          .text-value:focus {
+            min-height: 25px;
+            font-family: sans-serif;
+            cursor: text !important;
+            width: 100%;
+            padding: 5px 10px;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out,
+              box-shadow 0.15s ease-in-out;
+          }
+          .clipboard-icon {
             position: absolute;
             button {
               background: none;
@@ -52,20 +74,45 @@
               transform: scale(1) !important;
             }
           }
+          .edit-icon {
+            position: absolute;
+            right: 85px;
+            transform: scale(0.7);
+            span {
+              cursor: pointer;
+              transform: scale(0.7) !important;
+              transition: 0.3s transform !important;
+            }
+            span:hover {
+              transform: scale(1) !important;
+            }
+          }
         }
         li:nth-child(even) {
           background-color: #e8f4ff;
         }
       }
     }
-    &__icon {
+    &__copyIcon {
       position: absolute;
       top: 55px;
+      top: 40px;
+      left: 15px;
     }
+
     &__textArea {
       padding: 0px;
+      .md-form {
+        margin: 20px 30px;
+      }
       textarea {
-        text-align: center;
+        border: 1px solid gray !important;
+        height: 200px;
+        overflow-y: hidden;
+        width: 90%; // don't remove! Necessary for inside textbox padding
+        padding: 30px 10px !important;
+        overflow: visible !important;
+        margin: auto !important;
       }
     }
   }
@@ -80,10 +127,10 @@
         .text-id {
           left: 10px;
         }
-       .text-value {
+        .text-value {
           user-select: all;
         }
-       .clipboard-icon {
+        .clipboard-icon {
           right: 10px;
         }
       }
@@ -97,14 +144,14 @@
     margin: 50px;
     ul {
       li {
-        padding: 10px 35px;
-       .text-id {
+        padding: 10px 80px;
+        .text-id {
           left: 50px;
         }
-       .text-value {
-          user-select: all;
+        .text-value {
+          // user-select: all;
         }
-       .clipboard-icon {
+        .clipboard-icon {
           right: 50px;
         }
       }
