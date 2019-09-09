@@ -43,7 +43,7 @@
             font-family: sans-serif;
             cursor: text !important;
             width: 100%;
-            padding: 5px 10px;
+            padding: 10px 10px;
             font-size: 1rem;
             font-weight: 400;
             line-height: 1.5;
@@ -76,11 +76,8 @@
           }
           .edit-icon {
             position: absolute;
-            right: 85px;
-            transform: scale(0.7);
             span {
               cursor: pointer;
-              transform: scale(0.7) !important;
               transition: 0.3s transform !important;
             }
             span:hover {
@@ -91,9 +88,12 @@
         li:nth-child(even) {
           background-color: #e8f4ff;
         }
+        li:nth-child(odd) {
+          background-color: #a5cdff;
+        }
       }
     }
-    &__copyIcon {
+    &__inputIcon {
       position: absolute;
       top: 55px;
       top: 40px;
@@ -113,6 +113,24 @@
         padding: 30px 10px !important;
         overflow: visible !important;
         margin: auto !important;
+        -webkit-box-shadow: 9px 10px 5px -4px rgba(0, 0, 0, 0.37);
+        -moz-box-shadow: 9px 10px 5px -4px rgba(0, 0, 0, 0.37);
+        box-shadow: 9px 10px 5px -4px rgba(0, 0, 0, 0.37);
+      }
+    }
+    &__submit {
+      .addText-btn {
+        font-weight: bold;
+        transition: all 1s !important; 
+      }
+      .addText-btn:hover {
+        
+      }
+      .submit-disabled {
+        background: initial !important;
+        background-color: #d8d8d8 !important;
+        color: #b0b0b0 !important;
+        pointer-events: none;
       }
     }
   }
@@ -121,17 +139,33 @@
 //mobile styles
 @media screen and (max-width: 767px) {
   .clipboard-container {
-    ul {
-      li {
-        padding: 10px 35px;
-        .text-id {
-          left: 10px;
+    .clipboard {
+      &__list {
+        ul {
+          li {
+            padding: 15px 75px 15px 35px;
+            .text-id {
+              left: 10px;
+            }
+            .text-value {
+            }
+            .clipboard-icon {
+              right: 10px;
+            }
+            .edit-icon {
+              right: 35px;
+              margin-top: -1px;
+              span {
+                transform: scale(0.6) !important;
+              }
+            }
+          }
         }
-        .text-value {
-          user-select: all;
-        }
-        .clipboard-icon {
-          right: 10px;
+      }
+      &__textArea {
+        padding: 0px;
+        .md-form {
+          margin: 20px 55px;
         }
       }
     }
@@ -142,17 +176,32 @@
 @media screen and (min-width: 768px) {
   .clipboard-container {
     margin: 50px;
-    ul {
-      li {
-        padding: 10px 80px;
-        .text-id {
-          left: 50px;
+    .clipboard {
+      &__list {
+        ul {
+          li {
+            padding: 15px 120px 15px 80px;
+            .text-id {
+              left: 50px;
+            }
+            .text-value {
+            }
+            .clipboard-icon {
+              right: 50px;
+            }
+            .edit-icon {
+              right: 85px;
+              span {
+                transform: scale(0.7) !important;
+              }
+            }
+          }
         }
-        .text-value {
-          // user-select: all;
-        }
-        .clipboard-icon {
-          right: 50px;
+      }
+      &__textArea {
+        padding: 0px;
+        .md-form {
+          margin: 20px 30px;
         }
       }
     }

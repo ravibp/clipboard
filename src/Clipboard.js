@@ -36,7 +36,6 @@ class ClipboardApp extends React.Component {
     });
   };
   handleSubmit = () => {
-    console.log("date", Date());
 
     let textObj = {
       id: this.state.texts.length + 1,
@@ -49,7 +48,8 @@ class ClipboardApp extends React.Component {
       inputText: "",
       texts: temp
     });
-    // put data to db
+    /* put data to db */
+
     // this.db_texts.push().set(textObj);
     // this.db_texts.update({
     //   [1]:{
@@ -86,7 +86,6 @@ class ClipboardApp extends React.Component {
   };
   handleChange = (id, event) => {
     let updatedText = this.state.texts;
-    console.log("id", id, updatedText, event.target.value);
     if (updatedText.length > 0) {
       updatedText[id - 1].textValue = event.target.value;
       this.setState(
@@ -94,12 +93,13 @@ class ClipboardApp extends React.Component {
           texts: updatedText
         },
         () => {
-          // put to db
-          let textObj = {
-            id: this.state.texts.length + 1,
-            textValue: this.state.inputText,
-            dateStamp: new Date().toLocaleString().split(",")
-          };
+          /* update text to db */
+
+          // let textObj = {
+          //   id: this.state.texts.length + 1,
+          //   textValue: this.state.inputText,
+          //   dateStamp: new Date().toLocaleString().split(",")
+          // };
           // let temp = this.state.texts;
           // temp.push(textObj);
           this.setState({
@@ -122,7 +122,6 @@ class ClipboardApp extends React.Component {
     document.getElementById(`text-${id}`).focus();
   };
   render() {
-    console.log("aaaaaaa", this.state.texts);
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
@@ -172,7 +171,7 @@ class ClipboardApp extends React.Component {
           </ul>
         </div>
         <div className="clipboard__input col-12">
-          <div className="clipboard__copyIcon">
+          <div className="clipboard__inputIcon">
             <FontAwesome
               className="super-crazy-colors"
               name="pencil"
@@ -192,8 +191,13 @@ class ClipboardApp extends React.Component {
           </div>
         </div>
         <div className="clipboard__submit col-12">
-          <button type="button" onClick={this.handleSubmit}>
-            Submit
+          <button type="button" className={this.state.inputText.length > 0 
+          ?
+          "btn blue-gradient"
+          :
+          "btn blue-gradient addText-btn submit-disabled"
+             } onClick={this.handleSubmit}>
+            Add Text
           </button>
         </div>
       </div>
