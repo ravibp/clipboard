@@ -36,7 +36,6 @@ class ClipboardApp extends React.Component {
     });
   };
   handleSubmit = () => {
-
     let textObj = {
       id: this.state.texts.length + 1,
       textValue: this.state.inputText,
@@ -117,15 +116,39 @@ class ClipboardApp extends React.Component {
     document.getElementById(`text-${id}`).contentEditable = true;
     document.getElementById(`text-${id}`).focus();
   };
+
   handleEdit = id => {
     document.getElementById(`text-${id}`).contentEditable = true;
     document.getElementById(`text-${id}`).focus();
   };
+  handleClipboardCopy = textId => {
+    window
+      .getSelection()
+      .selectAllChildren(document.getElementById(`text-${textId}`));
+    document.execCommand("copy");
+
+    // de-select selection
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+    } else if (document.selection) {
+      document.selection.empty();
+    }
+
+    // toaster popup
+    const notificationDiv = (
+      <div className="notification-popup">Successfully Copied!!!</div>
+    );
+
+    toaster.notify(notificationDiv, {
+      duration: 500
+    });
+  };
   render() {
+    // console.log("render", this.state);
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
-          <h1>My ClipBoard</h1>
+          <h1 id="test">My ClipBoard</h1>
         </div>
         <div className="clipboard__list col-12">
           <ul>
@@ -134,20 +157,6 @@ class ClipboardApp extends React.Component {
                 return (
                   <li key={index}>
                     <span className="text-id">{text.id}.</span>
-
-                    <ContentEditable
-                      // innerRef={`textRef-${text.id}`}
-                      onDoubleClick={this.handleDoubleclick.bind(this, text.id)}
-                      contentEditable={false}
-                      className="text-value"
-                      id={`text-${text.id}`}
-                      ref={`textRef-${text.id}`}
-                      html={text.textValue} // innerHTML of the editable div
-                      disabled={true} // use true to disable editing
-                      onChange={this.handleChange.bind(this, text.id)} // handle innerHTML change
-                      onBlur={this.handleBlur.bind(this, text.id)}
-                      tagName="pre" // Use a custom HTML tag (uses a div by default)
-                    />
                     <span className="edit-icon">
                       <FontAwesome
                         onClick={this.handleEdit.bind(this, text.id)}
@@ -158,13 +167,27 @@ class ClipboardApp extends React.Component {
                       />
                     </span>
                     <span className="clipboard-icon">
-                      <Clipboard
-                        data-clipboard-text={text.textValue}
-                        onSuccess={this.onSuccess}
-                      >
-                        <IconClipboard />
-                      </Clipboard>
+                      <IconClipboard
+                        onClick={this.handleClipboardCopy.bind(this, text.id)}
+                      />
                     </span>
+                    <div className="contentEditable-wrapper">
+                      <ContentEditable
+                        onDoubleClick={this.handleDoubleclick.bind(
+                          this,
+                          text.id
+                        )}
+                        contentEditable={false}
+                        className="text-value"
+                        id={`text-${text.id}`}
+                        html={text.textValue} // innerHTML of the editable div
+                        disabled={true} // use true to disable editing
+                        onChange={this.handleChange.bind(this, text.id)} // handle innerHTML change
+                        onBlur={this.handleBlur.bind(this, text.id)}
+                        tagName="pre" // Use a custom HTML tag (uses a div by default)
+                      />
+                    </div>
+                    
                   </li>
                 );
               })}
@@ -185,18 +208,21 @@ class ClipboardApp extends React.Component {
               type="textarea"
               rows="2"
               name="inputText"
-              value={this.state.inputText}
+              value={this.state.inputText.toString()}
               onChange={this.handleInputChange}
             />
           </div>
         </div>
         <div className="clipboard__submit col-12">
-          <button type="button" className={this.state.inputText.length > 0 
-          ?
-          "btn blue-gradient"
-          :
-          "btn blue-gradient addText-btn submit-disabled"
-             } onClick={this.handleSubmit}>
+          <button
+            type="button"
+            className={
+              this.state.inputText.length > 0
+                ? "btn blue-gradient"
+                : "btn blue-gradient addText-btn submit-disabled"
+            }
+            onClick={this.handleSubmit}
+          >
             Add Text
           </button>
         </div>
