@@ -30,36 +30,7 @@ class ClipboardApp extends React.Component {
     };
   }
 
-  handleInputChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
-  handleSubmit = () => {
-    let textObj = {
-      id: this.state.texts.length + 1,
-      textValue: this.state.inputText,
-      dateStamp: new Date().toLocaleString().split(",")
-    };
-    this.setState({
-      inputText: ""
-    });
-    this.db_texts.push().set(textObj);
-    this.onSuccess("Successfully Added!!! ");
 
-  };
-  handleDelete = textId => {
-    firebase
-      .database()
-      .ref()
-      .child("/texts/" + textId)
-      .remove()
-      .then(function() {
-        // this.onSuccess();
-      })
-      .catch(function(error) {});
-    this.onSuccess("Successfully Deleted!!! ");
-  };
   componentWillMount() {
     const prevTexts = this.state.texts;
 
@@ -91,15 +62,18 @@ class ClipboardApp extends React.Component {
   componentWillUnmount() {
     // remove connection
   }
-  onSuccess = message => {
-    console.log("called????");
-    const notificationDiv = <div className="notification-popup">{message}</div>;
-
-    toaster.notify(notificationDiv, {
-      duration: 500
+  handleInputChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
     });
   };
-  handleChange = (textId, event) => {
+  onSuccess = (message, notificationStylesClass) => {
+    const notificationDiv = <div className={notificationStylesClass + " notification-popup"}>{message}</div>;
+    toaster.notify(notificationDiv, {
+      duration: 2000
+    });
+  };
+  handleContentChange = (textId, event) => {
     let textObj = {
       id: textId,
       textValue: event.target.value,
@@ -110,35 +84,55 @@ class ClipboardApp extends React.Component {
       .ref("texts/" + textId)
       .set(textObj);
   };
-  handleBlur = id => {
+  handleContentBlur = id => {
     document.getElementById(`text-${id}`).contentEditable = false;
-    this.onSuccess("Changes Saved!!! ");
+    this.onSuccess("Changes Saved!!! ", "notify-update");
   };
   handleDoubleclick = id => {
     document.getElementById(`text-${id}`).contentEditable = true;
     document.getElementById(`text-${id}`).focus();
   };
 
-  handleEdit = id => {
-    document.getElementById(`text-${id}`).contentEditable = true;
-    document.getElementById(`text-${id}`).focus();
+  // CRUD Operations
+  createText = () => {
+    let textObj = {
+      id: this.state.texts.length + 1,
+      textValue: this.state.inputText,
+      dateStamp: new Date().toLocaleString().split(",")
+    };
+    this.setState({
+      inputText: ""
+    });
+    this.db_texts.push().set(textObj);
+    this.onSuccess("Successfully Added!!! ", "notify-create");
+
   };
-  handleClipboardCopy = textId => {
+  readText = textId => {
     window
       .getSelection()
       .selectAllChildren(document.getElementById(`text-${textId}`));
     document.execCommand("copy");
 
-    // de-select selection
+    // de-select current selection
     if (window.getSelection) {
       window.getSelection().removeAllRanges();
     } else if (document.selection) {
       document.selection.empty();
     }
-
-    this.onSuccess("Successfully Copied!!! ");
+    this.onSuccess("Successfully Copied!!! ", "notify-read");
   };
-
+  updateText = id => {
+    document.getElementById(`text-${id}`).contentEditable = true;
+    document.getElementById(`text-${id}`).focus();
+  };
+  deleteText = textId => {
+    firebase
+      .database()
+      .ref()
+      .child("/texts/" + textId)
+      .remove()
+    this.onSuccess("Successfully Deleted!!! ",  "notify-delete");
+  };
   render() {
     console.log("render", this.state);
     return (
@@ -155,7 +149,7 @@ class ClipboardApp extends React.Component {
                     <span className="text-id">{index + 1}.</span>
                     <span className="edit-icon">
                       <FontAwesome
-                        onClick={this.handleEdit.bind(this, text.id)}
+                        onClick={this.updateText.bind(this, text.id)}
                         className="super-crazy-colors"
                         name="edit"
                         size="2x"
@@ -164,12 +158,12 @@ class ClipboardApp extends React.Component {
                     </span>
                     <span className="clipboard-icon">
                       <IconClipboard
-                        onClick={this.handleClipboardCopy.bind(this, text.id)}
+                        onClick={this.readText.bind(this, text.id)}
                       />
                     </span>
                     <span className="delete-icon">
                       <FontAwesome
-                        onClick={this.handleDelete.bind(this, text.id)}
+                        onClick={this.deleteText.bind(this, text.id)}
                         className="super-crazy-colors"
                         name="remove"
                         size="2x"
@@ -187,8 +181,8 @@ class ClipboardApp extends React.Component {
                         id={`text-${text.id}`}
                         html={text.textValue} // innerHTML of the editable div
                         disabled={true} // use true to disable editing
-                        onChange={this.handleChange.bind(this, text.id)} // handle innerHTML change
-                        onBlur={this.handleBlur.bind(this, text.id)}
+                        onChange={this.handleContentChange.bind(this, text.id)} // handle innerHTML change
+                        onBlur={this.handleContentBlur.bind(this, text.id)}
                         tagName="pre" // Use a custom HTML tag (uses a div by default)
                       />
                     </div>
@@ -225,7 +219,7 @@ class ClipboardApp extends React.Component {
                 ? "btn blue-gradient"
                 : "btn blue-gradient addText-btn submit-disabled"
             }
-            onClick={this.handleSubmit}
+            onClick={this.createText}
           >
             Add Text
           </button>
