@@ -18,11 +18,11 @@ const FontAwesome = require("react-fontawesome");
 class ClipboardApp extends React.Component {
   constructor(props) {
     super(props);
-    // this.app = firebase.initializeApp(DB_CONFIG);
-    // this.db_texts = this.app
-    //   .database()
-    //   .ref()
-    //   .child("texts"); // refers to db.collection.texts field
+    this.app = firebase.initializeApp(DB_CONFIG);
+    this.db_texts = this.app
+      .database()
+      .ref()
+      .child("texts"); // refers to db.collection.texts field
 
     this.state = {
       inputText: "",
@@ -41,76 +41,78 @@ class ClipboardApp extends React.Component {
       textValue: this.state.inputText,
       dateStamp: new Date().toLocaleString().split(",")
     };
-    let temp = this.state.texts;
-    temp.push(textObj);
     this.setState({
-      inputText: "",
-      texts: temp
+      inputText: ""
     });
-    /* put data to db */
+    this.db_texts.push().set(textObj);
+    this.onSuccess("Successfully Added!!! ");
 
-    // this.db_texts.push().set(textObj);
-    // this.db_texts.update({
-    //   [1]:{
-    //     ...this.state.items[1],
-    //     textValue: "success"
-    //   }
-    // })
   };
-  // componentWillMount() {
-  //   const prevTexts = this.state.texts;
+  handleDelete = textId => {
+    firebase
+      .database()
+      .ref()
+      .child("/texts/" + textId)
+      .remove()
+      .then(function() {
+        // this.onSuccess();
+      })
+      .catch(function(error) {});
+    this.onSuccess("Successfully Deleted!!! ");
+  };
+  componentWillMount() {
+    const prevTexts = this.state.texts;
 
-  //   // Data Snapshot, load db data into local state on page load and on each submit
-  //   this.db_texts.on("child_added", snap => {
-  //     let textObj = {
-  //       id: snap.val().id,
-  //       textValue: snap.val().textValue, // textValue from DB texts array.
-  //       dateStamp: snap.val().dateStamp
-  //     };
-  //     prevTexts.push(textObj);
-  //     this.setState({
-  //       texts: prevTexts
-  //     });
-  //   });
-  // }
-  componentWillUnmount() {}
-  onSuccess = () => {
-    const notificationDiv = (
-      <div className="notification-popup">Successfully Copied!!!</div>
-    );
+    // ADD to db snapshot
+    this.db_texts.on("child_added", snap => {
+      let textObj = {
+        id: snap.key,
+        textValue: snap.val().textValue, // textValue from DB texts array.
+        dateStamp: snap.val().dateStamp
+      };
+      prevTexts.push(textObj);
+      this.setState({
+        texts: prevTexts
+      });
+    });
+
+    // DELETE from db snapshot
+    this.db_texts.on("child_removed", snap => {
+      for (let i = 0; i < prevTexts.length; i++) {
+        if (prevTexts[i].id == snap.key) {
+          prevTexts.splice(i, 1);
+        }
+      }
+      this.setState({
+        texts: prevTexts
+      });
+    });
+  }
+  componentWillUnmount() {
+    // remove connection
+  }
+  onSuccess = message => {
+    console.log("called????");
+    const notificationDiv = <div className="notification-popup">{message}</div>;
 
     toaster.notify(notificationDiv, {
       duration: 500
     });
   };
-  handleChange = (id, event) => {
-    let updatedText = this.state.texts;
-    if (updatedText.length > 0) {
-      updatedText[id - 1].textValue = event.target.value;
-      this.setState(
-        {
-          texts: updatedText
-        },
-        () => {
-          /* update text to db */
-
-          // let textObj = {
-          //   id: this.state.texts.length + 1,
-          //   textValue: this.state.inputText,
-          //   dateStamp: new Date().toLocaleString().split(",")
-          // };
-          // let temp = this.state.texts;
-          // temp.push(textObj);
-          this.setState({
-            inputText: ""
-            // texts: temp
-          });
-        }
-      );
-    }
+  handleChange = (textId, event) => {
+    let textObj = {
+      id: textId,
+      textValue: event.target.value,
+      dateStamp: new Date().toLocaleString().split(",")
+    };
+    firebase
+      .database()
+      .ref("texts/" + textId)
+      .set(textObj);
   };
   handleBlur = id => {
     document.getElementById(`text-${id}`).contentEditable = false;
+    this.onSuccess("Changes Saved!!! ");
   };
   handleDoubleclick = id => {
     document.getElementById(`text-${id}`).contentEditable = true;
@@ -134,17 +136,11 @@ class ClipboardApp extends React.Component {
       document.selection.empty();
     }
 
-    // toaster popup
-    const notificationDiv = (
-      <div className="notification-popup">Successfully Copied!!!</div>
-    );
-
-    toaster.notify(notificationDiv, {
-      duration: 500
-    });
+    this.onSuccess("Successfully Copied!!! ");
   };
+
   render() {
-    // console.log("render", this.state);
+    console.log("render", this.state);
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
@@ -155,8 +151,8 @@ class ClipboardApp extends React.Component {
             {this.state.texts.length > 0 &&
               this.state.texts.map((text, index) => {
                 return (
-                  <li key={index}>
-                    <span className="text-id">{text.id}.</span>
+                  <li key={index + 1}>
+                    <span className="text-id">{index + 1}.</span>
                     <span className="edit-icon">
                       <FontAwesome
                         onClick={this.handleEdit.bind(this, text.id)}
@@ -169,6 +165,15 @@ class ClipboardApp extends React.Component {
                     <span className="clipboard-icon">
                       <IconClipboard
                         onClick={this.handleClipboardCopy.bind(this, text.id)}
+                      />
+                    </span>
+                    <span className="delete-icon">
+                      <FontAwesome
+                        onClick={this.handleDelete.bind(this, text.id)}
+                        className="super-crazy-colors"
+                        name="remove"
+                        size="2x"
+                        style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
                       />
                     </span>
                     <div className="contentEditable-wrapper">
@@ -187,7 +192,6 @@ class ClipboardApp extends React.Component {
                         tagName="pre" // Use a custom HTML tag (uses a div by default)
                       />
                     </div>
-                    
                   </li>
                 );
               })}

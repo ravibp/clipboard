@@ -91,6 +91,12 @@
               transform: scale(1) !important;
             }
           }
+          .delete-icon {
+            position: absolute;
+            span {
+              font-size: 25px;
+            }
+          }
         }
         li:nth-child(even) {
           background-color: #e8f4ff;
@@ -170,6 +176,10 @@
                 transform: scale(0.6) !important;
               }
             }
+            .delete-icon {
+              right: 80px;
+              margin-top: 8px;
+            }
           }
         }
       }
@@ -208,6 +218,10 @@
               span {
                 transform: scale(0.7) !important;
               }
+            }
+            .delete-icon {
+              right: 120px;
+              margin-top: 13px;
             }
           }
         }
