@@ -126,6 +126,9 @@
       }
     }
     &__submit {
+      button {
+        transition: initial;
+      }
       .addText-btn {
         font-weight: bold;
         transition: all 1s !important;
