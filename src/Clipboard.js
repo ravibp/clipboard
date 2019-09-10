@@ -116,16 +116,39 @@ class ClipboardApp extends React.Component {
     document.getElementById(`text-${id}`).contentEditable = true;
     document.getElementById(`text-${id}`).focus();
   };
+
   handleEdit = id => {
     document.getElementById(`text-${id}`).contentEditable = true;
     document.getElementById(`text-${id}`).focus();
   };
+  handleClipboardCopy = textId => {
+    window
+      .getSelection()
+      .selectAllChildren(document.getElementById(`text-${textId}`));
+    document.execCommand("copy");
+
+    // de-select selection
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+    } else if (document.selection) {
+      document.selection.empty();
+    }
+
+    // toaster popup
+    const notificationDiv = (
+      <div className="notification-popup">Successfully Copied!!!</div>
+    );
+
+    toaster.notify(notificationDiv, {
+      duration: 500
+    });
+  };
   render() {
-    console.log("render", this.state);
+    // console.log("render", this.state);
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
-          <h1>My ClipBoard</h1>
+          <h1 id="test">My ClipBoard</h1>
         </div>
         <div className="clipboard__list col-12">
           <ul>
@@ -144,16 +167,12 @@ class ClipboardApp extends React.Component {
                       />
                     </span>
                     <span className="clipboard-icon">
-                      <Clipboard
-                        data-clipboard-text={text.textValue}
-                        onSuccess={this.onSuccess}
-                      >
-                        <IconClipboard />
-                      </Clipboard>
+                      <IconClipboard
+                        onClick={this.handleClipboardCopy.bind(this, text.id)}
+                      />
                     </span>
                     <div className="contentEditable-wrapper">
                       <ContentEditable
-                        // innerRef={`textRef-${text.id}`}
                         onDoubleClick={this.handleDoubleclick.bind(
                           this,
                           text.id
@@ -168,6 +187,7 @@ class ClipboardApp extends React.Component {
                         tagName="pre" // Use a custom HTML tag (uses a div by default)
                       />
                     </div>
+                    
                   </li>
                 );
               })}

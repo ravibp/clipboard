@@ -15,6 +15,7 @@
   .clipboard {
     &__heading {
       h1 {
+        user-select: all;
         font-family: sans-serif;
         font-weight: 1000;
       }
@@ -41,7 +42,6 @@
             width: 100%; // needed to make full row clickable for text edit, especially if empty string is present in that row.
             text-align: initial;
             cursor: pointer;
-            // display: inline-table;
             display: block;
             text-align: initial;
           }
