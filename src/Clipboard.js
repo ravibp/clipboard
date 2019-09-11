@@ -25,11 +25,10 @@ class ClipboardApp extends React.Component {
 
     this.state = {
       inputText: "",
-      texts: [],
+      texts: []
     };
-    this.updateFlag = false
+    this.updateFlag = false;
   }
-
 
   componentWillMount() {
     const prevTexts = this.state.texts;
@@ -68,7 +67,11 @@ class ClipboardApp extends React.Component {
     });
   };
   showPopupNotification = (message, notificationStylesClass) => {
-    const notificationDiv = <div className={notificationStylesClass + " notification-popup"}>{message}</div>;
+    const notificationDiv = (
+      <div className={notificationStylesClass + " notification-popup"}>
+        {message}
+      </div>
+    );
     toaster.notify(notificationDiv, {
       duration: 2000
     });
@@ -76,12 +79,12 @@ class ClipboardApp extends React.Component {
 
   handleContentBlur = id => {
     document.getElementById(`text-${id}`).contentEditable = false;
-    if(this.updateFlag === true) {
+    if (this.updateFlag === true) {
       this.showPopupNotification("Changes Saved!!! ", "notify-update");
     }
   };
   handleDoubleclick = id => {
-   this.updateFlag = false
+    this.updateFlag = false;
     document.getElementById(`text-${id}`).contentEditable = true;
     document.getElementById(`text-${id}`).focus();
   };
@@ -98,7 +101,6 @@ class ClipboardApp extends React.Component {
     });
     this.db_texts.push().set(textObj);
     this.showPopupNotification("Successfully Added!!! ", "notify-create");
-
   };
   readText = textId => {
     window
@@ -115,7 +117,7 @@ class ClipboardApp extends React.Component {
     this.showPopupNotification("Successfully Copied!!! ", "notify-read");
   };
   updateText = (textId, event) => {
-    console.log("updateText called???? ", event.target.value)
+    console.log("updateText called???? ", event.target.value);
     let textObj = {
       id: textId,
       textValue: event.target.value,
@@ -125,21 +127,20 @@ class ClipboardApp extends React.Component {
       .database()
       .ref("texts/" + textId)
       .set(textObj);
-      this.updateFlag = true
-   
+    this.updateFlag = true;
   };
   enableTextEdit = id => {
     document.getElementById(`text-${id}`).contentEditable = true;
     document.getElementById(`text-${id}`).focus();
-    this.updateFlag = false
+    this.updateFlag = false;
   };
   deleteText = textId => {
     firebase
       .database()
       .ref()
       .child("/texts/" + textId)
-      .remove()
-    this.showPopupNotification("Successfully Deleted!!! ",  "notify-delete");
+      .remove();
+    this.showPopupNotification("Successfully Deleted!!! ", "notify-delete");
   };
   render() {
     console.log("render", this.state);
@@ -155,29 +156,33 @@ class ClipboardApp extends React.Component {
                 return (
                   <li key={index + 1}>
                     <span className="text-id">{index + 1}.</span>
-                    <span className="edit-icon">
-                      <FontAwesome
-                        onClick={this.enableTextEdit.bind(this, text.id)}
-                        className="super-crazy-colors"
-                        name="edit"
-                        size="2x"
-                        style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
-                      />
-                    </span>
-                    <span className="clipboard-icon">
-                      <IconClipboard
-                        onClick={this.readText.bind(this, text.id)}
-                      />
-                    </span>
-                    <span className="delete-icon">
-                      <FontAwesome
-                        onClick={this.deleteText.bind(this, text.id)}
-                        className="super-crazy-colors"
-                        name="remove"
-                        size="2x"
-                        style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
-                      />
-                    </span>
+
+                    <div className="icons-container">
+                      <span className="edit-icon">
+                        <FontAwesome
+                          onClick={this.enableTextEdit.bind(this, text.id)}
+                          className="super-crazy-colors"
+                          name="edit"
+                          size="2x"
+                          style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+                        />
+                      </span>
+                      <span className="delete-icon">
+                        <FontAwesome
+                          onDoubleClick={this.deleteText.bind(this, text.id)}
+                          className="super-crazy-colors"
+                          name="remove"
+                          size="2x"
+                          style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+                        />
+                      </span>
+                      <span className="clipboard-icon">
+                        <IconClipboard
+                          onClick={this.readText.bind(this, text.id)}
+                        />
+                      </span>
+                    </div>
+
                     <div className="contentEditable-wrapper">
                       <ContentEditable
                         name="inputText"
