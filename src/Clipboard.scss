@@ -33,7 +33,6 @@
   .clipboard {
     &__heading {
       h1 {
-        user-select: all;
         font-family: sans-serif;
         font-weight: 1000;
       }
@@ -183,29 +182,38 @@
       &__list {
         ul {
           li {
-            padding: 15px 35px 15px 35px;
+            padding: 15px 35px 40px 35px;
             .text-id {
               left: 10px;
               margin-top: 10px;
             }
             .text-value {
             }
+            .delete-icon,
+            .edit-icon,
             .clipboard-icon {
-              margin-top: 10px;
+              position: relative !important;
+            }
+            .clipboard-icon {
             }
             .edit-icon {
-              margin-top: 10px;
               span {
-                // transform: scale(0.6) !important;
+                font-size: 20px !important;
               }
             }
             .delete-icon {
-              margin-top: 8px;
+              span {
+                font-size: 20px;
+              }
             }
-            // .icons-container {
-            //   right: 0px;
-            //   margin-top: -5px;
-            // }
+            .delete-icon,
+            .edit-icon,
+            .clipboard-icon { 
+              margin-right: 5px;
+            }
+            .icons-container {
+              padding-top: 9px;
+            }
           }
         }
       }

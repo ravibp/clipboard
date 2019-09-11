@@ -142,6 +142,34 @@ class ClipboardApp extends React.Component {
       .remove();
     this.showPopupNotification("Successfully Deleted!!! ", "notify-delete");
   };
+  show = text => {
+    return (
+      <div className="icons-container">
+        <span className="edit-icon">
+          <FontAwesome
+            onClick={this.enableTextEdit.bind(this, text.id)}
+            className="super-crazy-colors"
+            name="edit"
+            size="2x"
+            style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+          />
+        </span>
+        <span className="clipboard-icon">
+          <IconClipboard onClick={this.readText.bind(this, text.id)} />
+        </span>
+        <span className="delete-icon">
+          <FontAwesome
+            onDoubleClick={this.deleteText.bind(this, text.id)}
+            className="super-crazy-colors"
+            name="remove"
+            size="2x"
+            style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+          />
+        </span>
+      </div>
+    );
+  };
+
   render() {
     console.log("render", this.state);
     return (
@@ -157,31 +185,7 @@ class ClipboardApp extends React.Component {
                   <li key={index + 1}>
                     <span className="text-id">{index + 1}.</span>
 
-                    <div className="icons-container">
-                      <span className="edit-icon">
-                        <FontAwesome
-                          onClick={this.enableTextEdit.bind(this, text.id)}
-                          className="super-crazy-colors"
-                          name="edit"
-                          size="2x"
-                          style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
-                        />
-                      </span>
-                      <span className="delete-icon">
-                        <FontAwesome
-                          onDoubleClick={this.deleteText.bind(this, text.id)}
-                          className="super-crazy-colors"
-                          name="remove"
-                          size="2x"
-                          style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
-                        />
-                      </span>
-                      <span className="clipboard-icon">
-                        <IconClipboard
-                          onClick={this.readText.bind(this, text.id)}
-                        />
-                      </span>
-                    </div>
+                    {window.innerWidth > 767 && this.show(text)}
 
                     <div className="contentEditable-wrapper">
                       <ContentEditable
@@ -200,6 +204,10 @@ class ClipboardApp extends React.Component {
                         tagName="pre" // Use a custom HTML tag (uses a div by default)
                       />
                     </div>
+                    {
+                      window.innerWidth <= 767 &&
+                       this.show(text)
+                       }
                   </li>
                 );
               })}
