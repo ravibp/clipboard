@@ -222,11 +222,12 @@
             .clipboard-icon {
               margin-right: 5px;
             }
-            .delete-icon,
             .edit-icon,
             .clipboard-icon {
+              span, svg {
+                pointer-events: none !important;
+              }
               opacity: 0;
-              pointer-events: none !important;
             }
             .icons-container {
               padding-top: 9px;
@@ -236,12 +237,13 @@
         li:hover,
         li:focus {
             padding: 15px 35px 40px 35px !important;
-          .delete-icon,
           .edit-icon,
           .clipboard-icon {
             transition: all 1s;
             opacity: 1;
-            pointer-events: initial !important;
+            span, svg {
+              pointer-events: initial !important;
+            }
           }
         }
       }

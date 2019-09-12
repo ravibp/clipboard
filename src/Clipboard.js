@@ -119,7 +119,6 @@ class ClipboardApp extends React.Component {
     this.showPopupNotification("Successfully Copied!!! ", "notify-read");
   };
   updateText = (textId, event) => {
-    console.log("updateText called???? ", event.target.value);
     let textObj = {
       id: textId,
       textValue: event.target.value,
@@ -164,7 +163,7 @@ class ClipboardApp extends React.Component {
   };
 
   render() {
-    console.log("render", this.state);
+    // console.log("render", this.state);
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
@@ -188,10 +187,9 @@ class ClipboardApp extends React.Component {
                       <FontAwesome
                         onDoubleClick={this.deleteText.bind(this, text.id)}
                         onClick={() => {
-                          console.log("aaa");
-                          // if(window.innerWidth < 768) {
-                          this.deleteText(text.id);
-                          // }
+                          if(window.innerWidth < 768) {
+                            this.deleteText(text.id);
+                          }
                         }}
                         className="super-crazy-colors"
                         name="remove"
