@@ -13,7 +13,9 @@ import "toasted-notes/src/styles.css"; // optional styles
 import ContentEditable from "react-contenteditable";
 
 const FontAwesome = require("react-fontawesome");
-
+const monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 class ClipboardApp extends React.Component {
   constructor(props) {
     super(props);
@@ -135,7 +137,6 @@ class ClipboardApp extends React.Component {
     this.updateFlag = false;
   };
   deleteText = textId => {
-    console.log("double click");
     firebase
       .database()
       .ref()
@@ -173,6 +174,13 @@ class ClipboardApp extends React.Component {
           <ul>
             {this.state.texts.length > 0 &&
               this.state.texts.map((text, index) => {
+                const d = new Date();
+                const dateVariable = (`
+                  ${text.dateStamp[0].slice(0,2)} 
+                  ${monthNames[d.getMonth()]} 
+                    ${text.dateStamp[0].slice(-4)},   
+                      ${text.dateStamp[1].slice(0, -3)}
+                `) 
                 return (
                   <li key={index + 1}>
                     <span className="text-id">{index + 1}.</span>
@@ -209,8 +217,10 @@ class ClipboardApp extends React.Component {
                         tagName="pre" // Use a custom HTML tag (uses a div by default)
                       />
                     </div>
-                 
                     {window.innerWidth <= 767 && this.show(text)}
+                    <div className="dateStamp">
+                          {dateVariable}
+                    </div>
                   </li>
                 );
               })}

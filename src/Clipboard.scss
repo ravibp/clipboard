@@ -118,6 +118,13 @@
           .icons-container {
             position: absolute;
           }
+          .dateStamp {
+            float: right;
+            color: #00000069;
+            font-size: 12px;
+            margin-top: -2px;
+          }
+          
         }
         li:nth-child(even) {
           background-color: #e8f4ff;
