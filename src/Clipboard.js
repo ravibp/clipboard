@@ -135,6 +135,7 @@ class ClipboardApp extends React.Component {
     this.updateFlag = false;
   };
   deleteText = textId => {
+    console.log("double click");
     firebase
       .database()
       .ref()
@@ -157,15 +158,6 @@ class ClipboardApp extends React.Component {
         <span className="clipboard-icon">
           <IconClipboard onClick={this.readText.bind(this, text.id)} />
         </span>
-        <span className="delete-icon">
-          <FontAwesome
-            onDoubleClick={this.deleteText.bind(this, text.id)}
-            className="super-crazy-colors"
-            name="remove"
-            size="2x"
-            style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
-          />
-        </span>
       </div>
     );
   };
@@ -184,9 +176,22 @@ class ClipboardApp extends React.Component {
                 return (
                   <li key={index + 1}>
                     <span className="text-id">{index + 1}.</span>
-
+                    <span className="delete-icon">
+                      <FontAwesome
+                        onDoubleClick={this.deleteText.bind(this, text.id)}
+                        onClick={() => {
+                          console.log("aaa");
+                          // if(window.innerWidth < 768) {
+                          this.deleteText(text.id);
+                          // }
+                        }}
+                        className="super-crazy-colors"
+                        name="remove"
+                        size="2x"
+                        style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+                      />
+                    </span>
                     {window.innerWidth > 767 && this.show(text)}
-
                     <div className="contentEditable-wrapper">
                       <ContentEditable
                         name="inputText"
@@ -204,10 +209,8 @@ class ClipboardApp extends React.Component {
                         tagName="pre" // Use a custom HTML tag (uses a div by default)
                       />
                     </div>
-                    {
-                      window.innerWidth <= 767 &&
-                       this.show(text)
-                       }
+                 
+                    {window.innerWidth <= 767 && this.show(text)}
                   </li>
                 );
               })}
