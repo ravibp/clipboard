@@ -8,6 +8,11 @@ export default function clipboardReducer(state = initialState, action) {
         ...state,
         testValue: action.testValue
       }
+      case actionKeys.FETCH_TEXTS_DB:
+        return {
+          ...state,
+          texts: action.texts
+        }
     default:
       return state;
   }

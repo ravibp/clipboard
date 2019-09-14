@@ -22,7 +22,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setTestValue: (testValue) => dispatch(ClipboardActions.setTestValue(testValue))
+    setTestValue: (testValue) => dispatch(ClipboardActions.setTestValue(testValue)),
+    addTextDB: (textObj) => dispatch(ClipboardActions.addTextDB(textObj)),
+    deleteTextDB: (textId) => dispatch(ClipboardActions.deleteTextDB(textId)),
+    fetchTextsDB: (textId) => dispatch(ClipboardActions.fetchTextsDB(textId))
   };
 }
 export default connect(
