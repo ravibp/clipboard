@@ -258,6 +258,10 @@ class ClipboardApp extends React.Component {
           >
             Add Text
           </button>
+          {this.props.testValue}
+          <button onClick={()=>{
+            this.props.setTestValue("on button click")
+          }}></button>
         </div>
       </div>
     );
