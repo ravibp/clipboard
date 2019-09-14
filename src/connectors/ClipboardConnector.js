@@ -25,7 +25,8 @@ const mapDispatchToProps = (dispatch) => {
     setTestValue: (testValue) => dispatch(ClipboardActions.setTestValue(testValue)),
     addTextDB: (textObj) => dispatch(ClipboardActions.addTextDB(textObj)),
     deleteTextDB: (textId) => dispatch(ClipboardActions.deleteTextDB(textId)),
-    fetchTextsDB: (textId) => dispatch(ClipboardActions.fetchTextsDB(textId))
+    fetchTextsDB: (textId) => dispatch(ClipboardActions.fetchTextsDB(textId)),
+    updateTextDB: (textObj) => dispatch(ClipboardActions.updateTextDB(textObj))
   };
 }
 export default connect(

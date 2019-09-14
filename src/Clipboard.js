@@ -37,43 +37,8 @@ class ClipboardApp extends React.Component {
     this.updateFlag = false;
   }
   componentDidMount() {
-    console.log("didmount");
     this.props.fetchTextsDB();
   }
-  // componentWillMount() {
-  //   const prevTexts = this.state.texts;
-
-  //   // ADD to db snapshot
-  //   this.db_texts.on("child_added", snap => {
-  //     let textObj = {
-  //       id: snap.key,
-  //       textValue: snap.val().textValue, // textValue from DB texts array.
-  //       dateStamp: snap.val().dateStamp
-  //     };
-  //     prevTexts.push(textObj);
-  //     this.setState({
-  //       texts: prevTexts
-  //     });
-  //   });
-
-  //   // DELETE from db snapshot
-  //   this.db_texts.on("child_removed", snap => {
-  //     for (let i = 0; i < prevTexts.length; i++) {
-  //       if (prevTexts[i].id == snap.key) {
-  //         prevTexts.splice(i, 1);
-  //       }
-  //     }
-  //     this.setState({
-  //       texts: prevTexts
-  //     });
-  //   });
-  // }
-  // componentDidMount() {
-  //   this.props.setTestValue("raviiiii works")
-  // }
-  // componentWillUnmount() {
-  //   // remove connection
-  // }
   handleInputChange = event => {
     this.setState({
       [event.target.name]: event.target.value
@@ -135,10 +100,7 @@ class ClipboardApp extends React.Component {
       textValue: event.target.value,
       dateStamp: new Date().toLocaleString().split(",")
     };
-    // firebase
-    //   .database()
-    //   .ref("texts/" + textId)
-    //   .set(textObj);
+    this.props.updateTextDB(textObj)
     this.updateFlag = true;
   };
   enableTextEdit = id => {
@@ -148,7 +110,6 @@ class ClipboardApp extends React.Component {
   };
   deleteText = textId => {
     this.props.deleteTextDB(textId);
-    console.log("zzzzzzid", textId )
     this.showPopupNotification("Successfully Deleted!!! ", "notify-delete");
   };
   showEditCopyBtn = text => {

@@ -13,22 +13,26 @@ export const addTextDB = textObject => async dispatch => {
   textsRef.push().set(textObject);
 };
 export const deleteTextDB = textId => async dispatch => {
-  textsRef.child(textId).remove();
+  textsRef.child("/" + textId).remove();
+};
+export const updateTextDB = textObj => async dispatch => {
+  textsRef.child("/" + textObj.id).set(textObj);
 };
 
+// action to update store corresponding to database data change
 export const fetchTextsDB = () => async dispatch => {
-  let texts = [];
+  /* above function is not called on db data change, only below event data change listener is called */
+
   textsRef.on("value", snapshot => {
+    let texts = [];
     _.map(snapshot.val(), (value, key) => {
-    //   console.log("fetchTextsDB action", value, key, "\n");
       let textObj = {
         id: key,
         textValue: value.textValue,
         dateStamp: value.dateStamp ? value.dateStamp : null
       };
-    texts.push(textObj);
+      texts.push(textObj);
     });
-    console.log("texts", texts.length, texts)
     dispatch({
       type: actionKeys.FETCH_TEXTS_DB,
       texts: texts
