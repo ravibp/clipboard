@@ -1,4 +1,4 @@
-import * as actionKeys from "../actions/actionTypes";
+import * as actionKeys from "../actions/ActionTypes";
 
 export const setTestValue = (testValue) => {
   return {
