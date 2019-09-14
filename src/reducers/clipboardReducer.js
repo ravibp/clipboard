@@ -1,5 +1,5 @@
-import initialState from './InitialState';
-import * as actionKeys from '../actions/ActionTypes';
+import initialState from "./InitialState";
+import * as actionKeys from "../actions/ActionTypes";
 
 export default function clipboardReducer(state = initialState, action) {
   switch (action.type) {
@@ -7,12 +7,22 @@ export default function clipboardReducer(state = initialState, action) {
       return {
         ...state,
         testValue: action.testValue
-      }
-      case actionKeys.FETCH_TEXTS_DB:
+      };
+    case actionKeys.FETCH_TEXTS_DB:
+      return {
+        ...state,
+        texts: action.texts
+      };
+    case actionKeys.MODAL_TOGGLE:
+      return {
+        ...state,
+        modalFlag: !state.modalFlag
+      };
+      case actionKeys.SET_TEXT_DETAILS:
         return {
           ...state,
-          texts: action.texts
-        }
+          textObj: action.textObj
+        };
     default:
       return state;
   }

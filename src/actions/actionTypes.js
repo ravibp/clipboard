@@ -1,4 +1,6 @@
-export const FETCH_STUFF = 'FETCH_STUFF';
-export const RECEIVE_STUFF = 'RECEIVE_STUFF';
-export const SET_TEST_VALUE = 'SET_TEST_VALUE';
-export const FETCH_TEXTS_DB = 'FETCH_TEXTS_DB';
+export const FETCH_STUFF = "FETCH_STUFF";
+export const RECEIVE_STUFF = "RECEIVE_STUFF";
+export const SET_TEST_VALUE = "SET_TEST_VALUE";
+export const FETCH_TEXTS_DB = "FETCH_TEXTS_DB";
+export const MODAL_TOGGLE = "MODAL_TOGGLE";
+export const SET_TEXT_DETAILS = "SET_TEXT_DETAILS";

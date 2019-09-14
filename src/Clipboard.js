@@ -11,6 +11,7 @@ import { ReactComponent as IconClipboard } from "./assets/svg/IconClipboard.svg"
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css"; // optional styles
 import ContentEditable from "react-contenteditable";
+import ModalPage from "./ModalPage";
 
 const FontAwesome = require("react-fontawesome");
 const monthNames = [
@@ -70,7 +71,6 @@ class ClipboardApp extends React.Component {
   // CRUD Operations
   createText = () => {
     let textObj = {
-      id: this.props.texts.length + 1,
       textValue: this.state.inputText,
       dateStamp: new Date().toLocaleString().split(",")
     };
@@ -100,7 +100,7 @@ class ClipboardApp extends React.Component {
       textValue: event.target.value,
       dateStamp: new Date().toLocaleString().split(",")
     };
-    this.props.updateTextDB(textObj)
+    this.props.updateTextDB(textObj);
     this.updateFlag = true;
   };
   enableTextEdit = id => {
@@ -160,9 +160,8 @@ class ClipboardApp extends React.Component {
                       <FontAwesome
                         onDoubleClick={this.deleteText.bind(this, text.id)}
                         onClick={() => {
-                          if (window.innerWidth < 768) {
-                            this.deleteText(text.id);
-                          }
+                          this.props.setTextDetails(text);
+                          this.props.modalToggle();
                         }}
                         className="super-crazy-colors"
                         name="remove"
@@ -188,7 +187,7 @@ class ClipboardApp extends React.Component {
                         tagName="pre" // Use a custom HTML tag (uses a div by default)
                       />
                     </div>
-                    {window.innerWidth <= 767 && this.show(text)}
+                    {window.innerWidth <= 767 && this.showEditCopyBtn(text)}
                     <div className="dateStamp">{dateVariable}</div>
                   </li>
                 );
@@ -228,25 +227,7 @@ class ClipboardApp extends React.Component {
             Add Text
           </button>
         </div>
-        <div>
-          <button
-            onClick={() => {
-              this.props.addTextDB({
-                textValue: "AAAA",
-                dateStamp: new Date()
-              });
-            }}
-          >
-            db add
-          </button>
-          <button
-            onClick={() => {
-              this.props.deleteTextDB("-LoirKb8fJXhst7Q2GEf");
-            }}
-          >
-            db delete
-          </button>
-        </div>
+        <ModalPage {...this.props} deleteText={this.deleteText} />
       </div>
     );
   }

@@ -39,3 +39,16 @@ export const fetchTextsDB = () => async dispatch => {
     });
   });
 };
+
+export const modalToggle = () => {
+  return {
+    type: actionKeys.MODAL_TOGGLE,
+  };
+};
+
+export const setTextDetails = (textObj) => {
+    return {
+      type: actionKeys.SET_TEXT_DETAILS,
+      textObj: textObj
+    };
+  };

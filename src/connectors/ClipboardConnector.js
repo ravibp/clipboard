@@ -16,7 +16,9 @@ class ClipboardConnector extends React.Component {
 const mapStateToProps = (state) => {
   return {
     texts: state.clipboardReducer.texts,
-    testValue: state.clipboardReducer.testValue
+    textObj: state.clipboardReducer.textObj,
+    testValue: state.clipboardReducer.testValue,
+    modalFlag: state.clipboardReducer.modalFlag
   };
 }
 
@@ -26,7 +28,9 @@ const mapDispatchToProps = (dispatch) => {
     addTextDB: (textObj) => dispatch(ClipboardActions.addTextDB(textObj)),
     deleteTextDB: (textId) => dispatch(ClipboardActions.deleteTextDB(textId)),
     fetchTextsDB: (textId) => dispatch(ClipboardActions.fetchTextsDB(textId)),
-    updateTextDB: (textObj) => dispatch(ClipboardActions.updateTextDB(textObj))
+    updateTextDB: (textObj) => dispatch(ClipboardActions.updateTextDB(textObj)),
+    modalToggle: (modalFlag) => dispatch(ClipboardActions.modalToggle(modalFlag)),
+    setTextDetails: (textObj) => dispatch(ClipboardActions.setTextDetails(textObj)),
   };
 }
 export default connect(
