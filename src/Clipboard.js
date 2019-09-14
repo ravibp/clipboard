@@ -60,6 +60,9 @@ class ClipboardApp extends React.Component {
       });
     });
   }
+  componentDidMount() {
+    this.props.setTestValue("raviiiii works")
+  }
   componentWillUnmount() {
     // remove connection
   }
@@ -163,7 +166,6 @@ class ClipboardApp extends React.Component {
   };
 
   render() {
-    // console.log("render", this.state);
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
