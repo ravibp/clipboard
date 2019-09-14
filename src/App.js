@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-import Clipboard from './Clipboard';
+import ClipboardConnector from './connectors/ClipboardConnector';
 function App() {
   return (
     <div className="App">
-      <Clipboard />
+      <ClipboardConnector />
     </div>
   );
 }

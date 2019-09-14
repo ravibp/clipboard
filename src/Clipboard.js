@@ -2,7 +2,7 @@ import React from "react";
 //firebase imports
 import * as firebase from "firebase/app";
 import "firebase/database";
-import { DB_CONFIG } from "./Config/config";
+import { DB_CONFIG } from "./Config/Config";
 import "./Clipboard.scss";
 import { MDBInput } from "mdbreact";
 import Clipboard from "react-clipboard.js";
@@ -59,6 +59,9 @@ class ClipboardApp extends React.Component {
         texts: prevTexts
       });
     });
+  }
+  componentDidMount() {
+    this.props.setTestValue("raviiiii works")
   }
   componentWillUnmount() {
     // remove connection
@@ -163,7 +166,6 @@ class ClipboardApp extends React.Component {
   };
 
   render() {
-    // console.log("render", this.state);
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
