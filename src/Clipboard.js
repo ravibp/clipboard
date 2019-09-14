@@ -105,7 +105,7 @@ class ClipboardApp extends React.Component {
   // CRUD Operations
   createText = () => {
     let textObj = {
-      id: this.state.texts.length + 1,
+      id: this.props.texts.length + 1,
       textValue: this.state.inputText,
       dateStamp: new Date().toLocaleString().split(",")
     };
@@ -148,6 +148,7 @@ class ClipboardApp extends React.Component {
   };
   deleteText = textId => {
     this.props.deleteTextDB(textId);
+    console.log("zzzzzzid", textId )
     this.showPopupNotification("Successfully Deleted!!! ", "notify-delete");
   };
   showEditCopyBtn = text => {

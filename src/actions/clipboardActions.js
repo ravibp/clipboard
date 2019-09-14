@@ -20,7 +20,7 @@ export const fetchTextsDB = () => async dispatch => {
   let texts = [];
   textsRef.on("value", snapshot => {
     _.map(snapshot.val(), (value, key) => {
-      console.log("fetchTextsDB action", value, key, "\n");
+    //   console.log("fetchTextsDB action", value, key, "\n");
       let textObj = {
         id: key,
         textValue: value.textValue,
@@ -28,6 +28,7 @@ export const fetchTextsDB = () => async dispatch => {
       };
     texts.push(textObj);
     });
+    console.log("texts", texts.length, texts)
     dispatch({
       type: actionKeys.FETCH_TEXTS_DB,
       texts: texts
