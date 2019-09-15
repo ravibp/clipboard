@@ -1,33 +1,26 @@
 import React from "react";
-//firebase imports
-import * as firebase from "firebase/app";
-import "firebase/database";
-// import { DB_CONFIG } from "./config/Config";
 import "./Clipboard.scss";
 import { MDBInput } from "mdbreact";
-import Clipboard from "react-clipboard.js";
 import { ReactComponent as IconClipboard } from "./assets/svg/IconClipboard.svg";
 
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css"; // optional styles
 import ContentEditable from "react-contenteditable";
 import ModalPage from "./ModalPage";
-
+import * as GLOBAL_CONSTANTS from "./GlobalConstants";
 const FontAwesome = require("react-fontawesome");
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-];
+const monthNames = GLOBAL_CONSTANTS.monthNames;
+export function showPopupNotification(message, notificationStylesClass) {
+  const notificationDiv = (
+    <div className={notificationStylesClass + " notification-popup"}>
+      {message}
+    </div>
+  );
+  toaster.notify(notificationDiv, {
+    duration: 2000
+  });
+}
+
 class ClipboardApp extends React.Component {
   constructor(props) {
     super(props);
@@ -36,6 +29,7 @@ class ClipboardApp extends React.Component {
       inputText: ""
     };
     this.updateFlag = false;
+    this.newTextObj = "";
   }
   componentDidMount() {
     this.props.fetchTextsDB();
@@ -45,21 +39,13 @@ class ClipboardApp extends React.Component {
       [event.target.name]: event.target.value
     });
   };
-  showPopupNotification = (message, notificationStylesClass) => {
-    const notificationDiv = (
-      <div className={notificationStylesClass + " notification-popup"}>
-        {message}
-      </div>
-    );
-    toaster.notify(notificationDiv, {
-      duration: 2000
-    });
-  };
 
   handleContentBlur = id => {
     document.getElementById(`text-${id}`).contentEditable = false;
     if (this.updateFlag === true) {
-      this.showPopupNotification("Changes Saved!!! ", "notify-update");
+      this.props.setTextDetails(this.props.textObj, this.newTextObj);
+      this.props.modalToggle("UPDATE");
+      // showPopupNotification("Changes Saved!!! ", "notify-update");
     }
   };
   handleDoubleclick = id => {
@@ -78,7 +64,7 @@ class ClipboardApp extends React.Component {
       inputText: ""
     });
     this.props.addTextDB(textObj);
-    this.showPopupNotification("Successfully Added!!! ", "notify-create");
+    showPopupNotification("Successfully Added!!! ", "notify-create");
   };
   readText = textId => {
     window
@@ -92,32 +78,33 @@ class ClipboardApp extends React.Component {
     } else if (document.selection) {
       document.selection.empty();
     }
-    this.showPopupNotification("Successfully Copied!!! ", "notify-read");
+    showPopupNotification("Successfully Copied!!! ", "notify-read");
   };
   updateText = (textId, event) => {
     let textObj = {
       id: textId,
-      textValue: event.target.value,
+      textValue: document.getElementById("text-"+textId).innerHTML,
       dateStamp: new Date().toLocaleString().split(",")
     };
-    this.props.updateTextDB(textObj);
+    this.newTextObj = textObj;
     this.updateFlag = true;
   };
-  enableTextEdit = id => {
-    document.getElementById(`text-${id}`).contentEditable = true;
-    document.getElementById(`text-${id}`).focus();
+  enableTextEdit = textObj => {
+    document.getElementById(`text-${textObj.id}`).contentEditable = true;
+    document.getElementById(`text-${textObj.id}`).focus();
+    this.props.setTextDetails(textObj, null);
     this.updateFlag = false;
   };
   deleteText = textId => {
     this.props.deleteTextDB(textId);
-    this.showPopupNotification("Successfully Deleted!!! ", "notify-delete");
+    showPopupNotification("Successfully Deleted!!! ", "notify-delete");
   };
   showEditCopyBtn = text => {
     return (
       <div className="icons-container">
         <span className="edit-icon">
           <FontAwesome
-            onClick={this.enableTextEdit.bind(this, text.id)}
+            onClick={this.enableTextEdit.bind(this, text)}
             className="super-crazy-colors"
             name="edit"
             size="2x"
@@ -160,8 +147,8 @@ class ClipboardApp extends React.Component {
                       <FontAwesome
                         onDoubleClick={this.deleteText.bind(this, text.id)}
                         onClick={() => {
-                          this.props.setTextDetails(text);
-                          this.props.modalToggle();
+                          this.props.setTextDetails(text, null);
+                          this.props.modalToggle("DELETE");
                         }}
                         className="super-crazy-colors"
                         name="remove"
@@ -182,7 +169,7 @@ class ClipboardApp extends React.Component {
                         id={`text-${text.id}`}
                         html={text.textValue} // innerHTML of the editable div
                         disabled={true} // use true to disable editing
-                        onChange={this.updateText.bind(this, text.id)} // handle innerHTML change
+                        onKeyUp={this.updateText.bind(this, text.id)} // handle innerHTML change
                         onBlur={this.handleContentBlur.bind(this, text.id)}
                         tagName="pre" // Use a custom HTML tag (uses a div by default)
                       />

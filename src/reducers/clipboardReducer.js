@@ -16,13 +16,16 @@ export default function clipboardReducer(state = initialState, action) {
     case actionKeys.MODAL_TOGGLE:
       return {
         ...state,
-        modalFlag: !state.modalFlag
+        modalFlag: !state.modalFlag,
+        crudOperation: action.crudOperation
       };
       case actionKeys.SET_TEXT_DETAILS:
         return {
           ...state,
-          textObj: action.textObj
+          textObj: action.textObj,
+          updatedTextObj: action.updatedTextObj
         };
+
     default:
       return state;
   }

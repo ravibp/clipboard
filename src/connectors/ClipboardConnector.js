@@ -17,8 +17,10 @@ const mapStateToProps = (state) => {
   return {
     texts: state.clipboardReducer.texts,
     textObj: state.clipboardReducer.textObj,
+    updatedTextObj: state.clipboardReducer.updatedTextObj,
     testValue: state.clipboardReducer.testValue,
-    modalFlag: state.clipboardReducer.modalFlag
+    modalFlag: state.clipboardReducer.modalFlag,
+    crudOperation: state.clipboardReducer.crudOperation
   };
 }
 
@@ -29,8 +31,8 @@ const mapDispatchToProps = (dispatch) => {
     deleteTextDB: (textId) => dispatch(ClipboardActions.deleteTextDB(textId)),
     fetchTextsDB: (textId) => dispatch(ClipboardActions.fetchTextsDB(textId)),
     updateTextDB: (textObj) => dispatch(ClipboardActions.updateTextDB(textObj)),
-    modalToggle: (modalFlag) => dispatch(ClipboardActions.modalToggle(modalFlag)),
-    setTextDetails: (textObj) => dispatch(ClipboardActions.setTextDetails(textObj)),
+    modalToggle: (crudOperation) => dispatch(ClipboardActions.modalToggle(crudOperation)),
+    setTextDetails: (textObj, updatedTextObj) => dispatch(ClipboardActions.setTextDetails(textObj, updatedTextObj)),
   };
 }
 export default connect(

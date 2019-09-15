@@ -40,15 +40,17 @@ export const fetchTextsDB = () => async dispatch => {
   });
 };
 
-export const modalToggle = () => {
+export const modalToggle = (crudOperation) => {
   return {
     type: actionKeys.MODAL_TOGGLE,
+    crudOperation
   };
 };
 
-export const setTextDetails = (textObj) => {
+export const setTextDetails = (textObj, updatedTextObj) => {
     return {
       type: actionKeys.SET_TEXT_DETAILS,
-      textObj: textObj
+      textObj,
+      updatedTextObj
     };
   };
