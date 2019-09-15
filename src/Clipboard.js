@@ -1,91 +1,51 @@
 import React from "react";
-//firebase imports
-import * as firebase from "firebase/app";
-import "firebase/database";
-import { DB_CONFIG } from "./Config/Config";
 import "./Clipboard.scss";
 import { MDBInput } from "mdbreact";
-import Clipboard from "react-clipboard.js";
 import { ReactComponent as IconClipboard } from "./assets/svg/IconClipboard.svg";
 
 import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css"; // optional styles
 import ContentEditable from "react-contenteditable";
-
+import ModalPage from "./ModalPage";
+import * as GLOBAL_CONSTANTS from "./GlobalConstants";
 const FontAwesome = require("react-fontawesome");
-const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
+const monthNames = GLOBAL_CONSTANTS.monthNames;
+export function showPopupNotification(message, notificationStylesClass) {
+  const notificationDiv = (
+    <div className={notificationStylesClass + " notification-popup"}>
+      {message}
+    </div>
+  );
+  toaster.notify(notificationDiv, {
+    duration: 2000
+  });
+}
+
 class ClipboardApp extends React.Component {
   constructor(props) {
     super(props);
-    this.app = firebase.initializeApp(DB_CONFIG);
-    this.db_texts = this.app
-      .database()
-      .ref()
-      .child("texts"); // refers to db.collection.texts field
 
     this.state = {
-      inputText: "",
-      texts: []
+      inputText: ""
     };
     this.updateFlag = false;
-  }
-
-  componentWillMount() {
-    const prevTexts = this.state.texts;
-
-    // ADD to db snapshot
-    this.db_texts.on("child_added", snap => {
-      let textObj = {
-        id: snap.key,
-        textValue: snap.val().textValue, // textValue from DB texts array.
-        dateStamp: snap.val().dateStamp
-      };
-      prevTexts.push(textObj);
-      this.setState({
-        texts: prevTexts
-      });
-    });
-
-    // DELETE from db snapshot
-    this.db_texts.on("child_removed", snap => {
-      for (let i = 0; i < prevTexts.length; i++) {
-        if (prevTexts[i].id == snap.key) {
-          prevTexts.splice(i, 1);
-        }
-      }
-      this.setState({
-        texts: prevTexts
-      });
-    });
+    this.newTextObj = "";
   }
   componentDidMount() {
-    this.props.setTestValue("raviiiii works")
-  }
-  componentWillUnmount() {
-    // remove connection
+    this.props.fetchTextsDB();
   }
   handleInputChange = event => {
     this.setState({
       [event.target.name]: event.target.value
     });
   };
-  showPopupNotification = (message, notificationStylesClass) => {
-    const notificationDiv = (
-      <div className={notificationStylesClass + " notification-popup"}>
-        {message}
-      </div>
-    );
-    toaster.notify(notificationDiv, {
-      duration: 2000
-    });
-  };
 
   handleContentBlur = id => {
     document.getElementById(`text-${id}`).contentEditable = false;
     if (this.updateFlag === true) {
-      this.showPopupNotification("Changes Saved!!! ", "notify-update");
+      this.props.setTextDetails(this.props.textObj, this.newTextObj);
+      this.props.modalToggle("UPDATE");
+      // showPopupNotification("Changes Saved!!! ", "notify-update");
     }
   };
   handleDoubleclick = id => {
@@ -97,15 +57,14 @@ class ClipboardApp extends React.Component {
   // CRUD Operations
   createText = () => {
     let textObj = {
-      id: this.state.texts.length + 1,
       textValue: this.state.inputText,
       dateStamp: new Date().toLocaleString().split(",")
     };
     this.setState({
       inputText: ""
     });
-    this.db_texts.push().set(textObj);
-    this.showPopupNotification("Successfully Added!!! ", "notify-create");
+    this.props.addTextDB(textObj);
+    showPopupNotification("Successfully Added!!! ", "notify-create");
   };
   readText = textId => {
     window
@@ -119,39 +78,34 @@ class ClipboardApp extends React.Component {
     } else if (document.selection) {
       document.selection.empty();
     }
-    this.showPopupNotification("Successfully Copied!!! ", "notify-read");
+    showPopupNotification("Successfully Copied!!! ", "notify-read");
   };
-  updateText = (textId, event) => {
+  updateText = (textId) => {
     let textObj = {
       id: textId,
-      textValue: event.target.value,
+      textValue: document.getElementById("text-"+textId).innerHTML,
       dateStamp: new Date().toLocaleString().split(",")
     };
-    firebase
-      .database()
-      .ref("texts/" + textId)
-      .set(textObj);
+    this.newTextObj = textObj;
+    this.props.renderText(textObj)
     this.updateFlag = true;
   };
-  enableTextEdit = id => {
-    document.getElementById(`text-${id}`).contentEditable = true;
-    document.getElementById(`text-${id}`).focus();
+  enableTextEdit = textObj => {
+    document.getElementById(`text-${textObj.id}`).contentEditable = true;
+    document.getElementById(`text-${textObj.id}`).focus();
+    this.props.setTextDetails(textObj, null);
     this.updateFlag = false;
   };
   deleteText = textId => {
-    firebase
-      .database()
-      .ref()
-      .child("/texts/" + textId)
-      .remove();
-    this.showPopupNotification("Successfully Deleted!!! ", "notify-delete");
+    this.props.deleteTextDB(textId);
+    showPopupNotification("Successfully Deleted!!! ", "notify-delete");
   };
-  show = text => {
+  showEditCopyBtn = text => {
     return (
       <div className="icons-container">
         <span className="edit-icon">
           <FontAwesome
-            onClick={this.enableTextEdit.bind(this, text.id)}
+            onClick={this.enableTextEdit.bind(this, text)}
             className="super-crazy-colors"
             name="edit"
             size="2x"
@@ -173,15 +127,18 @@ class ClipboardApp extends React.Component {
         </div>
         <div className="clipboard__list col-12">
           <ul>
-            {this.state.texts.length > 0 &&
-              this.state.texts.map((text, index) => {
+            {this.props.texts &&
+              this.props.texts.length > 0 &&
+              this.props.texts.map((text, index) => {
                 const d = new Date();
-                const dateVariable = (`
-                  ${text.dateStamp[0].slice(0,2)} 
+                const dateVariable = text.dateStamp
+                  ? `
+                  ${text.dateStamp[0].slice(0, 2)} 
                   ${monthNames[d.getMonth()]} 
                     ${text.dateStamp[0].slice(-4)},   
                       ${text.dateStamp[1].slice(0, -3)}
-                `) 
+                `
+                  : "";
                 return (
                   <li key={index + 1}>
                     <span className="text-id">{index + 1}.</span>
@@ -189,9 +146,8 @@ class ClipboardApp extends React.Component {
                       <FontAwesome
                         onDoubleClick={this.deleteText.bind(this, text.id)}
                         onClick={() => {
-                          if(window.innerWidth < 768) {
-                            this.deleteText(text.id);
-                          }
+                          this.props.setTextDetails(text, null);
+                          this.props.modalToggle("DELETE");
                         }}
                         className="super-crazy-colors"
                         name="remove"
@@ -199,7 +155,7 @@ class ClipboardApp extends React.Component {
                         style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
                       />
                     </span>
-                    {window.innerWidth > 767 && this.show(text)}
+                    {window.innerWidth > 767 && this.showEditCopyBtn(text)}
                     <div className="contentEditable-wrapper">
                       <ContentEditable
                         name="inputText"
@@ -217,10 +173,8 @@ class ClipboardApp extends React.Component {
                         tagName="pre" // Use a custom HTML tag (uses a div by default)
                       />
                     </div>
-                    {window.innerWidth <= 767 && this.show(text)}
-                    <div className="dateStamp">
-                          {dateVariable}
-                    </div>
+                    {window.innerWidth <= 767 && this.showEditCopyBtn(text)}
+                    <div className="dateStamp">{dateVariable}</div>
                   </li>
                 );
               })}
@@ -259,6 +213,7 @@ class ClipboardApp extends React.Component {
             Add Text
           </button>
         </div>
+        <ModalPage {...this.props} deleteText={this.deleteText} />
       </div>
     );
   }

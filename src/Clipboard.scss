@@ -27,6 +27,12 @@
 .notify-delete {
   background-color: lightsalmon;
 }
+/* Chrome, Safari, Opera */
+@keyframes sucessAnimation {
+  from {background-color: lightgreen;}
+  to {background-color: #0000000a;}
+}
+
 
 // common styles
 .clipboard-container {
@@ -50,7 +56,7 @@
             position: absolute;
           }
           .contentEditable-wrapper {
-            background-color: #0000000a;
+            // background-color: #0000000a;
           }
 
           .text-value {
