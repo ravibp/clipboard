@@ -54,3 +54,11 @@ export const setTextDetails = (textObj, updatedTextObj) => {
       updatedTextObj
     };
   };
+  export const renderText = (textObj) => {
+    return {
+      type: actionKeys.RENDER_TEXT,
+      textObj,
+    };
+  };
+
+  

@@ -12,11 +12,12 @@ class ModalPage extends Component {
  
   handleConfirmNo = () => {
     const crudOperation = this.props.crudOperation;
-    switch (crudOperation) {
+      switch (crudOperation) {
       case "DELETE":
         this.props.modalToggle();
         break;
       case "UPDATE":
+        this.props.renderText(this.props.textObj)
         this.props.modalToggle();
         break;
       default:
@@ -35,23 +36,21 @@ class ModalPage extends Component {
       case "UPDATE":
         this.props.updateTextDB(this.props.updatedTextObj);
         this.props.modalToggle();
+        document.getElementById("text-"+this.props.updatedTextObj.id).style.animation = "sucessAnimation 2s";
         break;
       default:
         this.props.modalToggle();
     }
   };
   render() {
-    console.log("propsssss", this.props);
-
     return (
       <MDBContainer>
-        {/* MODAL */}
         <MDBModal
           isOpen={this.props.modalFlag}
           modalToggle={this.props.modalToggle}
         >
           <MDBModalHeader toggle={this.props.modalToggle}>
-            Confirm???
+            Confirm {this.props.crudOperation} ???
           </MDBModalHeader>
           <MDBModalFooter>
             <MDBBtn color="secondary" onClick={this.handleConfirmNo}>

@@ -33,6 +33,7 @@ const mapDispatchToProps = (dispatch) => {
     updateTextDB: (textObj) => dispatch(ClipboardActions.updateTextDB(textObj)),
     modalToggle: (crudOperation) => dispatch(ClipboardActions.modalToggle(crudOperation)),
     setTextDetails: (textObj, updatedTextObj) => dispatch(ClipboardActions.setTextDetails(textObj, updatedTextObj)),
+    renderText: (textObj) => dispatch(ClipboardActions.renderText(textObj)),
   };
 }
 export default connect(

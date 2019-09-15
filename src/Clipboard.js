@@ -80,13 +80,14 @@ class ClipboardApp extends React.Component {
     }
     showPopupNotification("Successfully Copied!!! ", "notify-read");
   };
-  updateText = (textId, event) => {
+  updateText = (textId) => {
     let textObj = {
       id: textId,
       textValue: document.getElementById("text-"+textId).innerHTML,
       dateStamp: new Date().toLocaleString().split(",")
     };
     this.newTextObj = textObj;
+    this.props.renderText(textObj)
     this.updateFlag = true;
   };
   enableTextEdit = textObj => {
@@ -119,7 +120,6 @@ class ClipboardApp extends React.Component {
   };
 
   render() {
-    console.log("render", this.props.texts);
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
@@ -127,7 +127,6 @@ class ClipboardApp extends React.Component {
         </div>
         <div className="clipboard__list col-12">
           <ul>
-            {console.log("render ul", this.props.texts)}
             {this.props.texts &&
               this.props.texts.length > 0 &&
               this.props.texts.map((text, index) => {
@@ -169,7 +168,7 @@ class ClipboardApp extends React.Component {
                         id={`text-${text.id}`}
                         html={text.textValue} // innerHTML of the editable div
                         disabled={true} // use true to disable editing
-                        onKeyUp={this.updateText.bind(this, text.id)} // handle innerHTML change
+                        onChange={this.updateText.bind(this, text.id)} // handle innerHTML change
                         onBlur={this.handleContentBlur.bind(this, text.id)}
                         tagName="pre" // Use a custom HTML tag (uses a div by default)
                       />
