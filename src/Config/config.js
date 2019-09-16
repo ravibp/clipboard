@@ -11,5 +11,6 @@ const DB_CONFIG = {
   };
 
   firebase.initializeApp(DB_CONFIG);
-  const databaseRef = firebase.database().ref();
-  export const textsRef = databaseRef.child("texts")
+  export const databaseRef = firebase.database().ref();
+  // export const textsRef = databaseRef.child("texts")
+  // export const usersRef = databaseRef.child("users")
