@@ -34,7 +34,7 @@ class ModalPage extends Component {
         this.props.modalToggle();
         break;
       case "UPDATE":
-        this.props.updateTextDB(this.props.updatedTextObj);
+        this.props.updateTextDB(this.props.updatedTextObj, this.props.user);
         this.props.modalToggle();
         document.getElementById("text-"+this.props.updatedTextObj.id).style.animation = "sucessAnimation 2s";
         break;

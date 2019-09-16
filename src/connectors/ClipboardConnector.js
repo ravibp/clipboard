@@ -27,10 +27,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setTestValue: (testValue) => dispatch(ClipboardActions.setTestValue(testValue)),
-    addTextDB: (textObj) => dispatch(ClipboardActions.addTextDB(textObj)),
-    deleteTextDB: (textId) => dispatch(ClipboardActions.deleteTextDB(textId)),
-    fetchTextsDB: (textId) => dispatch(ClipboardActions.fetchTextsDB(textId)),
-    updateTextDB: (textObj) => dispatch(ClipboardActions.updateTextDB(textObj)),
+    addTextDB: (textObj, user) => dispatch(ClipboardActions.addTextDB(textObj, user)),
+    deleteTextDB: (textId, user) => dispatch(ClipboardActions.deleteTextDB(textId, user)),
+    fetchTextsDB: (textId, user) => dispatch(ClipboardActions.fetchTextsDB(textId, user)),
+    updateTextDB: (textObj, user) => dispatch(ClipboardActions.updateTextDB(textObj, user)),
     modalToggle: (crudOperation) => dispatch(ClipboardActions.modalToggle(crudOperation)),
     setTextDetails: (textObj, updatedTextObj) => dispatch(ClipboardActions.setTextDetails(textObj, updatedTextObj)),
     renderText: (textObj) => dispatch(ClipboardActions.renderText(textObj)),

@@ -7,7 +7,11 @@ import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css"; // optional styles
 import ContentEditable from "react-contenteditable";
 import ModalPage from "./ModalPage";
+import * as firebase from "firebase";
 import * as GLOBAL_CONSTANTS from "./GlobalConstants";
+import { withRouter, Redirect, BrowserRouter } from "react-router-dom";
+import { authHandler } from "./auth/Auth";
+
 const FontAwesome = require("react-fontawesome");
 const monthNames = GLOBAL_CONSTANTS.monthNames;
 export function showPopupNotification(message, notificationStylesClass) {
@@ -26,14 +30,35 @@ class ClipboardApp extends React.Component {
     super(props);
 
     this.state = {
-      inputText: ""
+      inputText: "",
+      userName: null
     };
     this.updateFlag = false;
     this.newTextObj = "";
   }
   componentDidMount() {
-    this.props.fetchTextsDB();
+    this.props.fetchTextsDB(this.props.user);
+    let displayName = this.handleDisplayName(this.props.user);
+    this.setState({
+      displayName
+    });
   }
+  capitalizeFirstLetter = string => {
+    return string.replace(/^./, string[0].toUpperCase());
+  };
+  handleDisplayName = user => {
+    let displayName = "";
+    if (user !== null) {
+      if (user.displayName) {
+        displayName = user.displayName;
+      } else if (user.email) {
+        displayName = this.capitalizeFirstLetter(user.email.split("@")[0]);
+      } else if (user.phoneNumber) {
+        displayName = user.phoneNumber;
+      }
+    }
+    return displayName;
+  };
   handleInputChange = event => {
     this.setState({
       [event.target.name]: event.target.value
@@ -63,7 +88,7 @@ class ClipboardApp extends React.Component {
     this.setState({
       inputText: ""
     });
-    this.props.addTextDB(textObj);
+    this.props.addTextDB(textObj, this.props.user);
     showPopupNotification("Successfully Added!!! ", "notify-create");
   };
   readText = textId => {
@@ -80,14 +105,14 @@ class ClipboardApp extends React.Component {
     }
     showPopupNotification("Successfully Copied!!! ", "notify-read");
   };
-  updateText = (textId) => {
+  updateText = textId => {
     let textObj = {
       id: textId,
-      textValue: document.getElementById("text-"+textId).innerHTML,
+      textValue: document.getElementById("text-" + textId).innerHTML,
       dateStamp: new Date().toLocaleString().split(",")
     };
     this.newTextObj = textObj;
-    this.props.renderText(textObj)
+    this.props.renderText(textObj);
     this.updateFlag = true;
   };
   enableTextEdit = textObj => {
@@ -97,7 +122,7 @@ class ClipboardApp extends React.Component {
     this.updateFlag = false;
   };
   deleteText = textId => {
-    this.props.deleteTextDB(textId);
+    this.props.deleteTextDB(textId, this.props.user);
     showPopupNotification("Successfully Deleted!!! ", "notify-delete");
   };
   showEditCopyBtn = text => {
@@ -120,10 +145,26 @@ class ClipboardApp extends React.Component {
   };
 
   render() {
+    if (!this.props.user) return <Redirect to="/" />;
+
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
           <h1 id="test">My ClipBoard</h1>
+          {this.state.displayName && <h4>Welcome {this.state.displayName}</h4>}
+
+          {this.props.user && this.props.user.uid && (
+            <button
+              className="mb-1"
+              onClick={() => {
+                let uid = this.props.user.uid;
+                uid === "@Guest" && window.location.replace("/");
+                uid !== "@Guest" && firebase.auth().signOut();
+              }}
+            >
+              {this.props.user.uid === "@Guest" ? "Go to Homepage" : "Logout"}
+            </button>
+          )}
         </div>
         <div className="clipboard__list col-12">
           <ul>
@@ -218,4 +259,4 @@ class ClipboardApp extends React.Component {
     );
   }
 }
-export default ClipboardApp;
+export default withRouter(ClipboardApp);
