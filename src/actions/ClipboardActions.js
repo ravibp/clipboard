@@ -1,4 +1,4 @@
-import * as actionKeys from "../actions/ActionTypes";
+import * as actionKeys from "./ActionTypes";
 import { databaseRef } from "../config/Config";
 import _ from "lodash";
 
