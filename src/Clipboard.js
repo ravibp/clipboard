@@ -3,17 +3,21 @@ import "./Clipboard.scss";
 import { MDBInput } from "mdbreact";
 import { ReactComponent as IconClipboard } from "./assets/svg/IconClipboard.svg";
 
-import toaster from "toasted-notes";
 import "toasted-notes/src/styles.css"; // optional styles
 import ContentEditable from "react-contenteditable";
-import ModalPage from "./ModalPage";
+import ModalPopup from "./ModalPopup";
 import * as firebase from "firebase";
 import * as GLOBAL_CONSTANTS from "./GlobalConstants";
 import { withRouter, Redirect, BrowserRouter } from "react-router-dom";
 import { authHandler } from "./auth/Auth";
+import { MDBBtn } from "mdbreact";
+import toaster from "toasted-notes";
+import { MDBContainer, MDBScrollbar } from "mdbreact";
+import "./common/Scrollbar.scss";
 
 const FontAwesome = require("react-fontawesome");
 const monthNames = GLOBAL_CONSTANTS.monthNames;
+
 export function showPopupNotification(message, notificationStylesClass) {
   const notificationDiv = (
     <div className={notificationStylesClass + " notification-popup"}>
@@ -24,7 +28,6 @@ export function showPopupNotification(message, notificationStylesClass) {
     duration: 2000
   });
 }
-
 class ClipboardApp extends React.Component {
   constructor(props) {
     super(props);
@@ -70,7 +73,7 @@ class ClipboardApp extends React.Component {
     if (this.updateFlag === true) {
       this.props.setTextDetails(this.props.textObj, this.newTextObj);
       this.props.modalToggle("UPDATE");
-      // showPopupNotification("Changes Saved!!! ", "notify-update");
+      showPopupNotification("Changes Saved!!! ", "notify-update");
     }
   };
   handleDoubleclick = id => {
@@ -103,7 +106,7 @@ class ClipboardApp extends React.Component {
     } else if (document.selection) {
       document.selection.empty();
     }
-    showPopupNotification("Successfully Copied!!! ", "notify-read");
+    showPopupNotification("Successfully Copied!!! ", "notify-create");
   };
   updateText = textId => {
     let textObj = {
@@ -122,8 +125,7 @@ class ClipboardApp extends React.Component {
     this.updateFlag = false;
   };
   deleteText = textId => {
-    this.props.deleteTextDB(textId, this.props.user);
-    showPopupNotification("Successfully Deleted!!! ", "notify-delete");
+
   };
   showEditCopyBtn = text => {
     return (
@@ -143,7 +145,17 @@ class ClipboardApp extends React.Component {
       </div>
     );
   };
+  handleScroll = (textId) => {
+    let contentEditableDiv = document.getElementById("text-" + textId)
+    setTimeout(() => {
+      // if (contentEditableDiv.clientHeight() > 50) {
+      //   return "text-value  scrollbar scrollbar-primary"
+      // }
+    }, 2000);
 
+    return "text-value"
+
+  }
   render() {
     if (!this.props.user) return <Redirect to="/" />;
 
@@ -154,7 +166,8 @@ class ClipboardApp extends React.Component {
           {this.state.displayName && <h4>Welcome {this.state.displayName}</h4>}
 
           {this.props.user && this.props.user.uid && (
-            <button
+            <MDBBtn
+              color="mdb-color"
               className="mb-1"
               onClick={() => {
                 let uid = this.props.user.uid;
@@ -163,7 +176,7 @@ class ClipboardApp extends React.Component {
               }}
             >
               {this.props.user.uid === "@Guest" ? "Go to Homepage" : "Logout"}
-            </button>
+            </MDBBtn>
           )}
         </div>
         <div className="clipboard__list col-12">
@@ -185,7 +198,6 @@ class ClipboardApp extends React.Component {
                     <span className="text-id">{index + 1}.</span>
                     <span className="delete-icon">
                       <FontAwesome
-                        onDoubleClick={this.deleteText.bind(this, text.id)}
                         onClick={() => {
                           this.props.setTextDetails(text, null);
                           this.props.modalToggle("DELETE");
@@ -205,8 +217,8 @@ class ClipboardApp extends React.Component {
                           text.id
                         )}
                         contentEditable={false}
-                        className="text-value"
                         id={`text-${text.id}`}
+                        className={this.handleScroll(text.id)}
                         html={text.textValue} // innerHTML of the editable div
                         disabled={true} // use true to disable editing
                         onChange={this.updateText.bind(this, text.id)} // handle innerHTML change
@@ -254,7 +266,7 @@ class ClipboardApp extends React.Component {
             Add Text
           </button>
         </div>
-        <ModalPage {...this.props} deleteText={this.deleteText} />
+        <ModalPopup {...this.props} />
       </div>
     );
   }
