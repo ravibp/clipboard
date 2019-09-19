@@ -56,7 +56,10 @@
             position: absolute;
           }
           .contentEditable-wrapper {
-            // background-color: #0000000a;
+            background-color: #0000000a;
+            .text-value {
+              max-height: 300px;
+            }
           }
 
           .text-value {
