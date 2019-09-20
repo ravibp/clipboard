@@ -8,7 +8,7 @@ import {
   MDBModalFooter
 } from "mdbreact";
 
-import { showPopupNotification } from "./common/ToasterNotification";
+import showPopupNotification from "./common/ToasterNotification";
 
 class ModalPopup extends Component {
 
@@ -39,6 +39,7 @@ class ModalPopup extends Component {
         this.props.updateTextDB(this.props.updatedTextObj, this.props.user);
         this.props.modalToggle();
         document.getElementById("text-" + this.props.updatedTextObj.id).style.animation = "sucessAnimation 2s";
+        showPopupNotification("Changes Saved!!! ", "notify-update");
         break;
       default:
         this.props.modalToggle();

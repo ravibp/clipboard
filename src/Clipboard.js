@@ -3,7 +3,6 @@ import "./Clipboard.scss";
 import { MDBInput } from "mdbreact";
 import { ReactComponent as IconClipboard } from "./assets/svg/IconClipboard.svg";
 
-import "toasted-notes/src/styles.css"; // optional styles
 import ContentEditable from "react-contenteditable";
 import ModalPopup from "./ModalPopup";
 import * as firebase from "firebase";
@@ -11,23 +10,14 @@ import * as GLOBAL_CONSTANTS from "./GlobalConstants";
 import { withRouter, Redirect, BrowserRouter } from "react-router-dom";
 import { authHandler } from "./auth/Auth";
 import { MDBBtn } from "mdbreact";
-import toaster from "toasted-notes";
 import { MDBContainer, MDBScrollbar } from "mdbreact";
 import "./common/Scrollbar.scss";
+import  showPopupNotification  from "./common/ToasterNotification";
 
 const FontAwesome = require("react-fontawesome");
 const monthNames = GLOBAL_CONSTANTS.monthNames;
 
-export function showPopupNotification(message, notificationStylesClass) {
-  const notificationDiv = (
-    <div className={notificationStylesClass + " notification-popup"}>
-      {message}
-    </div>
-  );
-  toaster.notify(notificationDiv, {
-    duration: 2000
-  });
-}
+
 class ClipboardApp extends React.Component {
   constructor(props) {
     super(props);
@@ -73,7 +63,6 @@ class ClipboardApp extends React.Component {
     if (this.updateFlag === true) {
       this.props.setTextDetails(this.props.textObj, this.newTextObj);
       this.props.modalToggle("UPDATE");
-      showPopupNotification("Changes Saved!!! ", "notify-update");
     }
   };
   handleDoubleclick = id => {
@@ -145,17 +134,7 @@ class ClipboardApp extends React.Component {
       </div>
     );
   };
-  handleScroll = (textId) => {
-    let contentEditableDiv = document.getElementById("text-" + textId)
-    setTimeout(() => {
-      // if (contentEditableDiv.clientHeight() > 50) {
-      //   return "text-value  scrollbar scrollbar-primary"
-      // }
-    }, 2000);
 
-    return "text-value"
-
-  }
   render() {
     if (!this.props.user) return <Redirect to="/" />;
 
@@ -218,7 +197,7 @@ class ClipboardApp extends React.Component {
                         )}
                         contentEditable={false}
                         id={`text-${text.id}`}
-                        className={this.handleScroll(text.id)}
+                        className="text-value"
                         html={text.textValue} // innerHTML of the editable div
                         disabled={true} // use true to disable editing
                         onChange={this.updateText.bind(this, text.id)} // handle innerHTML change
