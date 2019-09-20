@@ -66,9 +66,10 @@
             margin: 0px;
             width: 100%; // needed to make full row clickable for text edit, especially if empty string is present in that row.
             text-align: initial;
-            cursor: pointer;
+            // cursor: text;
             display: block;
             text-align: initial;
+         
           }
           .text-value:focus {
             min-height: 25px;
