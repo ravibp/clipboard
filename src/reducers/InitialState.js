@@ -1,5 +1,5 @@
 export default {
-    texts: [],
+    texts: null,
     testValue: "intial value",
     modalFlag: false,
     textObj: null,

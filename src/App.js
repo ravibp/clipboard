@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import ClipboardConnector from "./connectors/ClipboardConnector";
 import Dashboard from "./Dashboard";
-import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { authHandler } from "./auth/Auth";
 import "./App.scss";
 
@@ -13,14 +13,20 @@ class App extends Component {
       userState: null
     };
   }
+  showRenderedPage = () => {
+    const spinnerComponent = document.querySelector("#spinner-loader");
+    spinnerComponent.style.opacity = "0";
+    spinnerComponent.style.transition = "opacity 1s";
+  };
   componentDidMount() {
     authHandler(this);
+    this.showRenderedPage();
   }
   render() {
     const guestUser = {
       uid: "@Guest",
-      displayName: "Guest User",
-    }
+      displayName: "Guest User"
+    };
     return (
       <BrowserRouter>
         <div className="App">

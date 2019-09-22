@@ -3,12 +3,12 @@ import "./Spinner.scss";
 
 const SpinnerPage = () => {
   return (
-    <div class="spinner-container">
-      <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
+    <div className="spinner">
+      <div className="inner one"></div>
+      <div className="inner two"></div>
+      <div className="inner three"></div>
     </div>
   );
-}
+};
 
 export default SpinnerPage;

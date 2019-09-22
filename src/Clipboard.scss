@@ -51,8 +51,15 @@
           text-decoration: underline;
         }
       }
-      .goto-homepage {
+      .homepage-btn {
         margin-bottom: 27px !important;
+      }
+      p {
+        margin: 0px;
+        font-size: 19px;
+        color: #007bff;
+        font-weight: bold;
+    
       }
     }
     &__list {
