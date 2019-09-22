@@ -1,7 +1,5 @@
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import * as ClipboardActions from '../actions/ClipboardActions';
-import PropTypes from 'prop-types';
 import React from 'react';
 import Clipboard from "../Clipboard"
 

@@ -1,19 +1,18 @@
 import React from "react";
-import "./Clipboard.scss";
 import { MDBInput } from "mdbreact";
 import { ReactComponent as IconClipboard } from "./assets/svg/IconClipboard.svg";
 
+import * as firebase from "firebase";
 import ContentEditable from "react-contenteditable";
 import ModalPopup from "./ModalPopup";
 import * as GLOBAL_CONSTANTS from "./GlobalConstants";
-import { withRouter, Redirect, BrowserRouter } from "react-router-dom";
-// import { authHandler } from "./auth/Auth";
-import { MDBBtn } from "mdbreact";
-import { MDBContainer, MDBScrollbar } from "mdbreact";
-import "./common/Scrollbar.scss";
+import { withRouter, Redirect } from "react-router-dom";
+
 import showPopupNotification from "./common/ToasterNotification";
-import * as firebase from "firebase";
 import Spinner from "./common/Spinner";
+import { MDBBtn } from "mdbreact";
+import "./Clipboard.scss";
+import "./common/Scrollbar.scss";
 
 const FontAwesome = require("react-fontawesome");
 const monthNames = GLOBAL_CONSTANTS.monthNames;
@@ -24,8 +23,7 @@ class ClipboardApp extends React.Component {
 
     this.state = {
       inputText: "",
-      userName: null,
-      isLoading: true,
+      userName: null
     };
     this.updateFlag = false;
     this.newTextObj = "";
@@ -36,11 +34,6 @@ class ClipboardApp extends React.Component {
     this.setState({
       displayName
     });
-    setTimeout(() => {
-      this.setState({
-        isLoading: false
-      })
-    }, 1500);
   }
   capitalizeFirstLetter = string => {
     return string.replace(/^./, string[0].toUpperCase());
@@ -140,8 +133,11 @@ class ClipboardApp extends React.Component {
   };
 
   render() {
+    console.log("propssss", this.props.texts);
     if (!this.props.user) return <Redirect to="/" />;
-    else if(this.state.isLoading) return <Spinner/>
+    else if (this.props.texts === null) {
+      return <Spinner />;
+    }
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
@@ -155,7 +151,7 @@ class ClipboardApp extends React.Component {
           {this.props.user && this.props.user.uid && (
             <MDBBtn
               color="mdb-color"
-              className="goto-homepage mb-1"
+              className="homepage-btn mb-1"
               onClick={() => {
                 let uid = this.props.user.uid;
                 uid === "@Guest" && window.location.replace("/");
@@ -165,6 +161,7 @@ class ClipboardApp extends React.Component {
               {this.props.user.uid === "@Guest" ? "Go to Homepage" : "Logout"}
             </MDBBtn>
           )}
+          {this.props.texts.length === 0 && <p>Your Clipboard is empty!</p>}
         </div>
         <div className="clipboard__list col-12">
           <ul>
