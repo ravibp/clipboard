@@ -4,6 +4,7 @@ import ClipboardConnector from "./connectors/ClipboardConnector";
 import Dashboard from "./Dashboard";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { authHandler } from "./auth/Auth";
+import "./App.scss";
 
 class App extends Component {
   constructor(props) {
