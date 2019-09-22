@@ -5,18 +5,18 @@ import { ReactComponent as IconClipboard } from "./assets/svg/IconClipboard.svg"
 
 import ContentEditable from "react-contenteditable";
 import ModalPopup from "./ModalPopup";
-import * as firebase from "firebase";
 import * as GLOBAL_CONSTANTS from "./GlobalConstants";
 import { withRouter, Redirect, BrowserRouter } from "react-router-dom";
-import { authHandler } from "./auth/Auth";
+// import { authHandler } from "./auth/Auth";
 import { MDBBtn } from "mdbreact";
 import { MDBContainer, MDBScrollbar } from "mdbreact";
 import "./common/Scrollbar.scss";
-import  showPopupNotification  from "./common/ToasterNotification";
+import showPopupNotification from "./common/ToasterNotification";
+import * as firebase from "firebase";
+import Spinner from "./common/Spinner";
 
 const FontAwesome = require("react-fontawesome");
 const monthNames = GLOBAL_CONSTANTS.monthNames;
-
 
 class ClipboardApp extends React.Component {
   constructor(props) {
@@ -24,7 +24,8 @@ class ClipboardApp extends React.Component {
 
     this.state = {
       inputText: "",
-      userName: null
+      userName: null,
+      isLoading: true,
     };
     this.updateFlag = false;
     this.newTextObj = "";
@@ -35,6 +36,11 @@ class ClipboardApp extends React.Component {
     this.setState({
       displayName
     });
+    setTimeout(() => {
+      this.setState({
+        isLoading: false
+      })
+    }, 1500);
   }
   capitalizeFirstLetter = string => {
     return string.replace(/^./, string[0].toUpperCase());
@@ -113,9 +119,7 @@ class ClipboardApp extends React.Component {
     this.props.setTextDetails(textObj, null);
     this.updateFlag = false;
   };
-  deleteText = textId => {
-
-  };
+  deleteText = textId => {};
   showEditCopyBtn = text => {
     return (
       <div className="icons-container">
@@ -137,17 +141,21 @@ class ClipboardApp extends React.Component {
 
   render() {
     if (!this.props.user) return <Redirect to="/" />;
-
+    else if(this.state.isLoading) return <Spinner/>
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
           <h1 id="test">My ClipBoard</h1>
-          {this.state.displayName && <h4>Welcome {this.state.displayName}</h4>}
+          {this.state.displayName && (
+            <h4>
+              Welcome <span>{this.state.displayName}</span>
+            </h4>
+          )}
 
           {this.props.user && this.props.user.uid && (
             <MDBBtn
               color="mdb-color"
-              className="mb-1"
+              className="goto-homepage mb-1"
               onClick={() => {
                 let uid = this.props.user.uid;
                 uid === "@Guest" && window.location.replace("/");
