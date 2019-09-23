@@ -4,6 +4,22 @@
   .dashboard {
     &__heading {
       font-weight: bold;
+      color: lightgoldenrodyellow;
+      margin-bottom: 40px;
     }
+    &__viewDemo-btn {
+      button {
+        font-weight: bold;
+      }
+    }
+  }
+  p {
+    color: lightgoldenrodyellow;
+    a {
+    color: #4facff;
+    }
+  }
+  .firebaseui-idp-text.firebaseui-idp-text-long:nth-child(3) {
+    opacity: 0 !important;
   }
 }

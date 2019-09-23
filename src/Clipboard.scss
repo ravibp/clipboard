@@ -1,57 +1,37 @@
-// Toaster notification popup styles
-.notification-popup {
-  font-weight: 1000;
-  border-radius: 8px;
-  width: 200px;
-  text-align: center;
-  color: black;
-  padding: 20px;
-}
-.Toaster__alert {
-  padding: 0px !important;
-  background-color: transparent !important;
-}
-.Toaster__alert_close {
-  top: -3px !important;
-  right: -2px !important;
-}
-.notify-create {
-  background-color: lightgreen;
-}
-.notify-read {
-  background-color: lightblue;
-}
-.notify-update {
-  background-color: lightgreen;
-}
-.notify-delete {
-  background-color: lightsalmon;
-}
 /* Chrome, Safari, Opera */
+// Modal Popup animation
 @keyframes sucessAnimation {
-  from {background-color: lightgreen;}
-  to {background-color: #0000000a;}
+  from {
+    background-color: lightgreen;
+  }
+  to {
+    background-color: #0000000a;
+  }
 }
-
 
 // common styles
 .clipboard-container {
-  // padding: 0px 30px;
   max-width: 1400px;
+  button {
+    border-radius: 10px;
+  }
   .clipboard {
     &__heading {
       h1 {
         font-family: sans-serif;
         font-weight: 1000;
+        color: lightgoldenrodyellow;
       }
       h4 {
+        color: lightgoldenrodyellow;
         span {
-          color: #0093ff;
+          color: #2196F3;
           font-weight: bold;
           text-decoration: underline;
         }
       }
       .homepage-btn {
+        background-color: #4ac36eed !important;
         margin-bottom: 27px !important;
       }
       p {
@@ -59,7 +39,6 @@
         font-size: 19px;
         color: #007bff;
         font-weight: bold;
-    
       }
     }
     &__list {
@@ -89,7 +68,6 @@
             // cursor: text;
             display: block;
             text-align: initial;
-         
           }
           .text-value:focus {
             min-height: 25px;
@@ -154,17 +132,17 @@
             font-size: 12px;
             margin-top: -2px;
           }
-          
         }
         li:nth-child(even) {
           background-color: #e8f4ff;
         }
         li:nth-child(odd) {
-          background-color: #a5cdff;
+          background-color: #add2ff;
         }
       }
     }
     &__inputIcon {
+      color: white;
       position: absolute;
       top: 55px;
       top: 40px;
@@ -172,9 +150,17 @@
     }
 
     &__textArea {
+      width: 90%; // don't remove! Necessary for inside textbox padding  don't remove! Necessary for inside textbox padding  don't remove! Necessary for inside textbox padding
+      margin: auto;
       padding: 0px;
       .md-form {
         margin: 20px 30px;
+      }
+      label {
+        margin-left: 10px;
+      }
+      label.active {
+        display: none !important;
       }
       textarea {
         background-color: white !important;
@@ -182,28 +168,29 @@
         border: 1px solid #bcbcbc !important;
         height: 200px;
         overflow-y: hidden;
-        width: 90%; // don't remove! Necessary for inside textbox padding  don't remove! Necessary for inside textbox padding  don't remove! Necessary for inside textbox padding
         overflow: visible !important;
-        margin: auto !important;
         -webkit-box-shadow: 9px 10px 5px -4px rgba(0, 0, 0, 0.37);
         -moz-box-shadow: 9px 10px 5px -4px rgba(0, 0, 0, 0.37);
         box-shadow: 9px 10px 5px -4px rgba(0, 0, 0, 0.37);
       }
       textarea:focus {
-        border: 1px solid #00acfa !important;
-
+        box-shadow: 0 5px 0 0 #4285f4 !important;
+        border: 3px solid #4285f4!important;
       }
-
     }
     &__submit {
       button {
         transition: initial;
       }
       .addText-btn {
+        font-family: sans-serif;
         font-weight: bold;
         transition: all 1s !important;
       }
-      .addText-btn:hover {
+      .addText-btn-color {
+        font-weight: bold;
+        color: white;
+        background: #4ac36eed;
       }
       .submit-disabled {
         background: initial !important;
@@ -218,6 +205,7 @@
 //mobile styles
 @media screen and (max-width: 767px) {
   .clipboard-container {
+    margin: 30px 0px;
     .clipboard {
       &__list {
         ul {
@@ -260,7 +248,8 @@
             }
             .edit-icon,
             .clipboard-icon {
-              span, svg {
+              span,
+              svg {
                 pointer-events: none !important;
               }
               opacity: 0;
@@ -272,12 +261,13 @@
         }
         li:hover,
         li:focus {
-            padding: 15px 35px 40px 35px !important;
+          padding: 15px 35px 40px 35px !important;
           .edit-icon,
           .clipboard-icon {
             transition: all 1s;
             opacity: 1;
-            span, svg {
+            span,
+            svg {
               pointer-events: initial !important;
             }
           }
@@ -297,11 +287,14 @@
 @media screen and (min-width: 768px) {
   .clipboard-container {
     margin: 50px;
+    padding: 0px 30px;
     .clipboard {
       &__list {
         ul {
           li {
             padding: 15px 120px 15px 80px;
+            border-radius: 30px;
+            margin: 10px 0px;
             .text-id {
               left: 50px;
               margin-top: 15px;

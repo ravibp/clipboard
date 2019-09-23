@@ -1,0 +1,29 @@
+// Toaster notification popup styles
+.notification-popup {
+    font-weight: 1000;
+    border-radius: 8px;
+    width: 200px;
+    text-align: center;
+    color: black;
+    padding: 20px;
+  }
+  .Toaster__alert {
+    padding: 0px !important;
+    background-color: transparent !important;
+  }
+  .Toaster__alert_close {
+    top: -3px !important;
+    right: -2px !important;
+  }
+  .notify-create {
+    background-color: lightgreen;
+  }
+  .notify-read {
+    background-color: lightblue;
+  }
+  .notify-update {
+    background-color: lightgreen;
+  }
+  .notify-delete {
+    background-color: lightsalmon;
+  }

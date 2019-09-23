@@ -133,7 +133,6 @@ class ClipboardApp extends React.Component {
   };
 
   render() {
-    console.log("propssss", this.props.texts);
     if (!this.props.user) return <Redirect to="/" />;
     else if (this.props.texts === null) {
       return <Spinner />;
@@ -158,7 +157,7 @@ class ClipboardApp extends React.Component {
                 uid !== "@Guest" && firebase.auth().signOut();
               }}
             >
-              {this.props.user.uid === "@Guest" ? "Go to Homepage" : "Logout"}
+              {this.props.user.uid === "@Guest" ? "Login/ Signup" : "Logout"}
             </MDBBtn>
           )}
           {this.props.texts.length === 0 && <p>Your Clipboard is empty!</p>}
@@ -229,7 +228,9 @@ class ClipboardApp extends React.Component {
           </div>
           <div className="col-12 clipboard__textArea">
             <MDBInput
+              id="textarea-char-counter"
               type="textarea"
+              label="Type something here..."
               rows="2"
               name="inputText"
               value={this.state.inputText.toString()}
@@ -242,8 +243,8 @@ class ClipboardApp extends React.Component {
             type="button"
             className={
               this.state.inputText.length > 0
-                ? "btn blue-gradient"
-                : "btn blue-gradient addText-btn submit-disabled"
+                ? "btn addText-btn-color"
+                : "btn addText-btn-color addText-btn submit-disabled"
             }
             onClick={this.createText}
           >

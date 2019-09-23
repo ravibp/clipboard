@@ -13,11 +13,10 @@ class Dashboard extends Component {
     if (this.props.user) return <Redirect to="/clipboard" />;
     return (
       <div className="dashboard-container row no-gutters">
-        <div className="col-12"></div>
         <div className="col-12">
           <h1 className="dashboard__heading">Welcome to My Clipboard App</h1>
         </div>
-        <div className="col-12">
+        <div className="col-12 dashboard__viewDemo-btn">
           <MDBBtn
             color="mdb-color"
             onClick={() => {

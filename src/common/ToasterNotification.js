@@ -1,6 +1,6 @@
 import React from "react";
-import "toasted-notes/src/styles.css"; // optional styles
 import toaster from "toasted-notes";
+import "./ToasterNotification.scss";
 
 function showPopupNotification(message, notificationStylesClass) {
   const notificationDiv = (
