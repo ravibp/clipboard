@@ -3,16 +3,17 @@ import {
   MDBContainer,
   MDBBtn,
   MDBModal,
-  MDBModalBody,
   MDBModalHeader,
   MDBModalFooter
 } from "mdbreact";
 
-class ModalPage extends Component {
- 
+import showPopupNotification from "./common/ToasterNotification";
+
+class ModalPopup extends Component {
+
   handleConfirmNo = () => {
     const crudOperation = this.props.crudOperation;
-      switch (crudOperation) {
+    switch (crudOperation) {
       case "DELETE":
         this.props.modalToggle();
         break;
@@ -28,15 +29,16 @@ class ModalPage extends Component {
     const crudOperation = this.props.crudOperation;
     switch (crudOperation) {
       case "DELETE":
-        this.props.deleteText(
-          this.props.textObj ? this.props.textObj.id : null
-        );
+        let textId = this.props.textObj ? this.props.textObj.id : null
+        this.props.deleteTextDB(textId, this.props.user);
+        showPopupNotification("Successfully Deleted!!! ", "notify-delete");
         this.props.modalToggle();
         break;
       case "UPDATE":
-        this.props.updateTextDB(this.props.updatedTextObj);
+        this.props.updateTextDB(this.props.updatedTextObj, this.props.user);
         this.props.modalToggle();
-        document.getElementById("text-"+this.props.updatedTextObj.id).style.animation = "sucessAnimation 2s";
+        document.getElementById("text-" + this.props.updatedTextObj.id).style.animation = "sucessAnimation 2s";
+        showPopupNotification("Changes Saved!!! ", "notify-update");
         break;
       default:
         this.props.modalToggle();
@@ -65,4 +67,4 @@ class ModalPage extends Component {
     );
   }
 }
-export default ModalPage;
+export default ModalPopup;

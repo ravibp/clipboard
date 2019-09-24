@@ -1,39 +1,56 @@
 import React from "react";
-import "./Clipboard.scss";
 import { MDBInput } from "mdbreact";
 import { ReactComponent as IconClipboard } from "./assets/svg/IconClipboard.svg";
 
-import toaster from "toasted-notes";
-import "toasted-notes/src/styles.css"; // optional styles
+import * as firebase from "firebase";
 import ContentEditable from "react-contenteditable";
-import ModalPage from "./ModalPage";
+import ModalPopup from "./ModalPopup";
 import * as GLOBAL_CONSTANTS from "./GlobalConstants";
+import { withRouter, Redirect } from "react-router-dom";
+
+import showPopupNotification from "./common/ToasterNotification";
+import Spinner from "./common/Spinner";
+import { MDBBtn } from "mdbreact";
+import "./Clipboard.scss";
+import "./common/Scrollbar.scss";
+
 const FontAwesome = require("react-fontawesome");
 const monthNames = GLOBAL_CONSTANTS.monthNames;
-export function showPopupNotification(message, notificationStylesClass) {
-  const notificationDiv = (
-    <div className={notificationStylesClass + " notification-popup"}>
-      {message}
-    </div>
-  );
-  toaster.notify(notificationDiv, {
-    duration: 2000
-  });
-}
 
 class ClipboardApp extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      inputText: ""
+      inputText: "",
+      userName: null
     };
     this.updateFlag = false;
     this.newTextObj = "";
   }
   componentDidMount() {
-    this.props.fetchTextsDB();
+    this.props.fetchTextsDB(this.props.user);
+    let displayName = this.handleDisplayName(this.props.user);
+    this.setState({
+      displayName
+    });
   }
+  capitalizeFirstLetter = string => {
+    return string.replace(/^./, string[0].toUpperCase());
+  };
+  handleDisplayName = user => {
+    let displayName = "";
+    if (user !== null) {
+      if (user.displayName) {
+        displayName = user.displayName;
+      } else if (user.email) {
+        displayName = this.capitalizeFirstLetter(user.email.split("@")[0]);
+      } else if (user.phoneNumber) {
+        displayName = user.phoneNumber;
+      }
+    }
+    return displayName;
+  };
   handleInputChange = event => {
     this.setState({
       [event.target.name]: event.target.value
@@ -45,7 +62,6 @@ class ClipboardApp extends React.Component {
     if (this.updateFlag === true) {
       this.props.setTextDetails(this.props.textObj, this.newTextObj);
       this.props.modalToggle("UPDATE");
-      // showPopupNotification("Changes Saved!!! ", "notify-update");
     }
   };
   handleDoubleclick = id => {
@@ -63,7 +79,7 @@ class ClipboardApp extends React.Component {
     this.setState({
       inputText: ""
     });
-    this.props.addTextDB(textObj);
+    this.props.addTextDB(textObj, this.props.user);
     showPopupNotification("Successfully Added!!! ", "notify-create");
   };
   readText = textId => {
@@ -78,16 +94,16 @@ class ClipboardApp extends React.Component {
     } else if (document.selection) {
       document.selection.empty();
     }
-    showPopupNotification("Successfully Copied!!! ", "notify-read");
+    showPopupNotification("Successfully Copied!!! ", "notify-create");
   };
-  updateText = (textId) => {
+  updateText = textId => {
     let textObj = {
       id: textId,
-      textValue: document.getElementById("text-"+textId).innerHTML,
+      textValue: document.getElementById("text-" + textId).innerHTML,
       dateStamp: new Date().toLocaleString().split(",")
     };
     this.newTextObj = textObj;
-    this.props.renderText(textObj)
+    this.props.renderText(textObj);
     this.updateFlag = true;
   };
   enableTextEdit = textObj => {
@@ -96,10 +112,7 @@ class ClipboardApp extends React.Component {
     this.props.setTextDetails(textObj, null);
     this.updateFlag = false;
   };
-  deleteText = textId => {
-    this.props.deleteTextDB(textId);
-    showPopupNotification("Successfully Deleted!!! ", "notify-delete");
-  };
+  deleteText = textId => {};
   showEditCopyBtn = text => {
     return (
       <div className="icons-container">
@@ -120,10 +133,34 @@ class ClipboardApp extends React.Component {
   };
 
   render() {
+    if (!this.props.user) return <Redirect to="/" />;
+    else if (this.props.texts === null) {
+      return <Spinner />;
+    }
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
           <h1 id="test">My ClipBoard</h1>
+          {this.state.displayName && (
+            <h4>
+              Welcome <span>{this.state.displayName}</span>
+            </h4>
+          )}
+
+          {this.props.user && this.props.user.uid && (
+            <MDBBtn
+              color="mdb-color"
+              className="homepage-btn mb-1"
+              onClick={() => {
+                let uid = this.props.user.uid;
+                uid === "@Guest" && window.location.replace("/");
+                uid !== "@Guest" && firebase.auth().signOut();
+              }}
+            >
+              {this.props.user.uid === "@Guest" ? "Login/ Signup" : "Logout"}
+            </MDBBtn>
+          )}
+          {this.props.texts.length === 0 && <p>Your Clipboard is empty!</p>}
         </div>
         <div className="clipboard__list col-12">
           <ul>
@@ -144,7 +181,6 @@ class ClipboardApp extends React.Component {
                     <span className="text-id">{index + 1}.</span>
                     <span className="delete-icon">
                       <FontAwesome
-                        onDoubleClick={this.deleteText.bind(this, text.id)}
                         onClick={() => {
                           this.props.setTextDetails(text, null);
                           this.props.modalToggle("DELETE");
@@ -164,8 +200,8 @@ class ClipboardApp extends React.Component {
                           text.id
                         )}
                         contentEditable={false}
-                        className="text-value"
                         id={`text-${text.id}`}
+                        className="text-value"
                         html={text.textValue} // innerHTML of the editable div
                         disabled={true} // use true to disable editing
                         onChange={this.updateText.bind(this, text.id)} // handle innerHTML change
@@ -192,7 +228,9 @@ class ClipboardApp extends React.Component {
           </div>
           <div className="col-12 clipboard__textArea">
             <MDBInput
+              id="textarea-char-counter"
               type="textarea"
+              label="Type something here..."
               rows="2"
               name="inputText"
               value={this.state.inputText.toString()}
@@ -205,17 +243,17 @@ class ClipboardApp extends React.Component {
             type="button"
             className={
               this.state.inputText.length > 0
-                ? "btn blue-gradient"
-                : "btn blue-gradient addText-btn submit-disabled"
+                ? "btn addText-btn-color"
+                : "btn addText-btn-color addText-btn submit-disabled"
             }
             onClick={this.createText}
           >
             Add Text
           </button>
         </div>
-        <ModalPage {...this.props} deleteText={this.deleteText} />
+        <ModalPopup {...this.props} />
       </div>
     );
   }
 }
-export default ClipboardApp;
+export default withRouter(ClipboardApp);
