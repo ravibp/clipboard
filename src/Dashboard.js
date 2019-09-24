@@ -14,6 +14,9 @@ class Dashboard extends Component {
     return (
       <div className="dashboard-container row no-gutters">
         <div className="col-12">
+          <h6 className="devloped-by">
+            Developed by {process.env.REACT_APP_DEVELOPER_NAME}
+          </h6>
           <h1 className="dashboard__heading">Welcome to My Clipboard App</h1>
         </div>
         <div className="col-12 dashboard__viewDemo-btn">

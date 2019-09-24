@@ -1,6 +1,11 @@
 // common styles
 .dashboard-container {
   margin-top: 50px;
+  .devloped-by {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #ff5722;
+  }
   .dashboard {
     &__heading {
       font-weight: bold;

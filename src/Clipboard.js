@@ -140,7 +140,7 @@ class ClipboardApp extends React.Component {
     return (
       <div className="clipboard-container row no-gutters">
         <div className="clipboard__heading col-12">
-          <h1 id="test">My ClipBoard</h1>
+          <h1>My ClipBoard</h1>
           {this.state.displayName && (
             <h4>
               Welcome <span>{this.state.displayName}</span>
