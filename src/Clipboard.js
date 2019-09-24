@@ -160,7 +160,7 @@ class ClipboardApp extends React.Component {
               {this.props.user.uid === "@Guest" ? "Login/ Signup" : "Logout"}
             </MDBBtn>
           )}
-          {this.props.texts.length === 0 && <p>Your Clipboard is empty!</p>}
+          {this.props.texts && this.props.texts.length === 0 && <p>Your Clipboard is empty!</p>}
         </div>
         <div className="clipboard__list col-12">
           <ul>

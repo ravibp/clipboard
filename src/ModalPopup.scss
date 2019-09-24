@@ -1,0 +1,32 @@
+/* Chrome, Safari, Opera */
+// Modal Popup animation
+@keyframes sucessAnimation {
+  from {
+    background-color: lightgreen;
+  }
+  to {
+    background-color: #0000000a;
+  }
+}
+.modal-container {
+  button.close {
+    display: none;
+  }
+  .close-modal-btn {
+    background-color: transparent !important;
+    border: none !important;
+    background: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    position: absolute !important;
+    right: 10px;
+    span {
+      cursor: pointer;
+      color: #6f6f6f;
+      font-weight: bold;
+      font-size: 23px !important;
+    }
+  }
+}
