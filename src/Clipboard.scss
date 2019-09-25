@@ -48,6 +48,7 @@
             background-color: #0000000a;
             border-radius: 12px;
             .text-value {
+              padding: 0px 0px 10px 0px !important;
               max-height: 300px;
             }
           }
@@ -209,8 +210,6 @@
             }
             .contentEditable-wrapper {
               padding: 15px;
-            }
-            .text-value {
             }
             .edit-icon,
             .clipboard-icon {
