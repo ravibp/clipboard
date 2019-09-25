@@ -1,22 +1,4 @@
 // Toaster notification popup styles
-@keyframes sucessAnimation {
-  from {
-    background-color: #90ee90cc;
-  }
-  to {
-    background-color: #0000000a;
-  }
-}
-@keyframes deleteAnimation {
-  from {
-    background-color: #ff7155ed;
-    transform: scale(1);
-  }
-  to {
-    background-color: #0000000a;
-    transform: scale(0.2);
-  }
-}
 .notification-popup {
   font-weight: 1000;
   border-radius: 8px;
@@ -50,14 +32,14 @@
   outline: none !important;
 }
 .notify-create {
-  background-color: #90ee90cc;
+  background-color: lightgreen;
 }
 .notify-read {
-  background-color: #90ee90cc;
+  background-color: lightblue;
 }
 .notify-update {
-  background-color: #90ee90cc;
+  background-color: lightgreen;
 }
 .notify-delete {
-  background-color: #ff7155ed;
+  background-color: lightsalmon;
 }

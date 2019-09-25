@@ -1,3 +1,4 @@
+
 // common styles
 .clipboard-container {
   max-width: 1400px;
@@ -5,18 +6,33 @@
     border-radius: 10px;
   }
   .clipboard {
-    &__searchBox {
-      color: white;
-      position: fixed;
-      z-index: 100;
-      input {
-        padding-left: 10px;
+    &__heading {
+      h1 {
+        font-family: sans-serif;
+        font-weight: 1000;
+        color: lightgoldenrodyellow;
+      }
+   
+      h4 {
+        color: lightgoldenrodyellow;
+        span {
+          color: #2196F3;
+          font-weight: bold;
+          text-decoration: underline;
+        }
+      }
+      .homepage-btn {
+        background-color: #4ac36eed !important;
+        margin-bottom: 27px !important;
+      }
+      p {
+        margin: 0px;
+        font-size: 19px;
+        color: #007bff;
+        font-weight: bold;
       }
     }
     &__list {
-      .no-search-results {
-        color: bisque;
-      }
       ul {
         list-style: none;
         margin: 0px;
@@ -113,7 +129,7 @@
           background-color: #e8f4ff;
         }
         li:nth-child(odd) {
-          background-color: #ffffff;
+          background-color: #add2ff;
         }
       }
     }
@@ -151,7 +167,7 @@
       }
       textarea:focus {
         box-shadow: 0 5px 0 0 #4285f4 !important;
-        border: 3px solid #4285f4 !important;
+        border: 3px solid #4285f4!important;
       }
     }
     &__submit {
@@ -183,32 +199,6 @@
   .clipboard-container {
     margin: 30px 0px;
     .clipboard {
-      &__searchBox {
-        right: 60px;
-        top: 12px;
-        .search-icon {
-          font-size: 23px;
-          margin-left: 5px;
-        }
-      }
-      &__searchInput {
-        top: 45px;
-        display: block;
-        z-index: 100;
-        right: 57px;
-        position: absolute;
-        .search-arrow {
-          right: 7px;
-          position: absolute;
-          border: 7px solid;
-          transform: rotate(45deg);
-          top: -7px;
-          color: white;
-        }
-      }
-      &__input {
-        margin-top: 30px;
-      }
       &__list {
         ul {
           li {
@@ -289,14 +279,6 @@
     margin: 50px;
     padding: 0px 30px;
     .clipboard {
-      &__searchBox {
-        top: 10px;
-        left: 0;
-        left: 220px;
-        .search-icon {
-          margin-right: 5px;
-        }
-      }
       &__list {
         ul {
           li {
