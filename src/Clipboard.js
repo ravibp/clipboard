@@ -79,8 +79,10 @@ class ClipboardApp extends React.Component {
     this.setState({
       inputText: ""
     });
-    this.props.addTextDB(textObj, this.props.user);
-    showPopupNotification("Successfully Added!!! ", "notify-create");
+    this.props.addTextDB(textObj, this.props.user).then(() => {
+      let textId = this.props.texts[this.props.texts.length - 1].id;
+      showPopupNotification("Successfully Added!!! ", "notify-create", textId);
+    });
   };
   readText = textId => {
     window
@@ -94,7 +96,8 @@ class ClipboardApp extends React.Component {
     } else if (document.selection) {
       document.selection.empty();
     }
-    showPopupNotification("Successfully Copied!!! ", "notify-create");
+
+    showPopupNotification("Successfully Copied!!! ", "notify-create", textId);
   };
   updateText = textId => {
     let textObj = {
@@ -160,7 +163,9 @@ class ClipboardApp extends React.Component {
               {this.props.user.uid === "@Guest" ? "Login/ Signup" : "Logout"}
             </MDBBtn>
           )}
-          {this.props.texts && this.props.texts.length === 0 && <p>Your Clipboard is empty!</p>}
+          {this.props.texts && this.props.texts.length === 0 && (
+            <p>Your Clipboard is empty!</p>
+          )}
         </div>
         <div className="clipboard__list col-12">
           <ul>

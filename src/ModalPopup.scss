@@ -1,13 +1,5 @@
 /* Chrome, Safari, Opera */
-// Modal Popup animation
-@keyframes sucessAnimation {
-  from {
-    background-color: lightgreen;
-  }
-  to {
-    background-color: #0000000a;
-  }
-}
+
 .modal-container {
   button.close {
     display: none;
