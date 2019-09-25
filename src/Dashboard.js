@@ -10,7 +10,6 @@ class Dashboard extends Component {
     renderAuthUI(ui);
   }
   render() {
-    console.log("dashboard.....................", this.props.user)
     if (this.props.user) return <Redirect to="/clipboard" />;
     return (
       <div className="dashboard-container row no-gutters">
