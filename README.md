@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## About Clipboard Application
 
-Clipboard Application is a notes application to store snippets of text/ code and can be easily accessed in different devices for reference/ copy-pasting. User can signup, login and access their private notes.
+Clipboard Application is a notes application to store snippets of text/ code and can be easily accessed in different devices for reference/ copy-pasting. User can signup, login and manage their private notes.
 
 ## Available Scripts
 

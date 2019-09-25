@@ -1,7 +1,7 @@
 {
   "name": "clipboard-app",
-  "author": "Ravi B.P"
-  "version": "1.08",
+  "author": "Ravi B.P",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",
