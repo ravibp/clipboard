@@ -1,7 +1,7 @@
 // Toaster notification popup styles
 @keyframes sucessAnimation {
   from {
-    background-color: lightgreen;
+    background-color: #90ee90cc;
   }
   to {
     background-color: #0000000a;
@@ -9,7 +9,7 @@
 }
 @keyframes deleteAnimation {
   from {
-    background-color: #ff3e3e;
+    background-color: #ff7155ed;
     transform: scale(1);
   }
   to {
@@ -50,14 +50,14 @@
   outline: none !important;
 }
 .notify-create {
-  background-color: lightgreen;
+  background-color: #90ee90cc;
 }
 .notify-read {
-  background-color: lightgreen;
+  background-color: #90ee90cc;
 }
 .notify-update {
-  background-color: lightgreen;
+  background-color: #90ee90cc;
 }
 .notify-delete {
-  background-color: #ff3e3e;
+  background-color: #ff7155ed;
 }
