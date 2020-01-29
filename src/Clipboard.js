@@ -13,6 +13,7 @@ import Spinner from "./common/Spinner";
 import { MDBBtn } from "mdbreact";
 import "./Clipboard.scss";
 import "./common/Scrollbar.scss";
+import FilterResults from "react-filter-search";
 
 const FontAwesome = require("react-fontawesome");
 const monthNames = GLOBAL_CONSTANTS.monthNames;
@@ -23,11 +24,15 @@ class ClipboardApp extends React.Component {
 
     this.state = {
       inputText: "",
+      searchText: "",
       userName: null
     };
     this.updateFlag = false;
     this.newTextObj = "";
   }
+  handleChange = event => {
+    this.setState({ searchText: event.target.value });
+  };
   componentDidMount() {
     this.props.fetchTextsDB(this.props.user);
     let displayName = this.handleDisplayName(this.props.user);
@@ -162,8 +167,69 @@ class ClipboardApp extends React.Component {
             <p>Your Clipboard is empty!</p>
           )}
         </div>
+        <div>
+          <h2>Search Text</h2>
+          <input
+            type="text"
+            value={this.state.searchText}
+            onChange={this.handleChange}
+          />
+        </div>
         <div className="clipboard__list col-12">
-          <ul>
+          <FilterResults
+            value={this.state.searchText}
+            data={this.props.texts}
+            renderResults={texts => (
+              <ul>
+                {texts.map((text, index) => {
+                  const d = new Date();
+                  const dateVariable = text.dateStamp
+                    ? `
+                        ${text.dateStamp[0].slice(0, 2)} 
+                        ${monthNames[d.getMonth()]} 
+                          ${text.dateStamp[0].slice(-4)},   
+                            ${text.dateStamp[1].slice(0, -3)}
+                      `
+                    : "";
+                  return (
+                    <li key={index + 1}>
+                      <span className="text-id">{index + 1}.</span>
+                      <span className="delete-icon">
+                        <FontAwesome
+                          onClick={() => {
+                            this.props.setTextDetails(text, null);
+                            this.props.modalToggle("DELETE");
+                          }}
+                          className="super-crazy-colors"
+                          name="remove"
+                          size="2x"
+                          style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
+                        />
+                      </span>
+                      {window.innerWidth > 767 && this.showEditCopyBtn(text)}
+                      <div className="contentEditable-wrapper">
+                        <ContentEditable
+                          name="inputText"
+                          onDoubleClick={this.enableTextEdit.bind(this, text)}
+                          contentEditable={false}
+                          id={`text-${text.id}`}
+                          className="text-value"
+                          html={text.textValue} // innerHTML of the editable div
+                          disabled={true} // use true to disable editing
+                          onChange={this.updateText.bind(this, text.id)} // handle innerHTML change
+                          onBlur={this.handleContentBlur.bind(this, text.id)}
+                          tagName="pre" // Use a custom HTML tag (uses a div by default)
+                        />
+                      </div>
+                      {window.innerWidth <= 767 && this.showEditCopyBtn(text)}
+                      <div className="dateStamp">{dateVariable}</div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          />
+          {/* <ul>
             {this.props.texts &&
               this.props.texts.length > 0 &&
               this.props.texts.map((text, index) => {
@@ -195,10 +261,7 @@ class ClipboardApp extends React.Component {
                     <div className="contentEditable-wrapper">
                       <ContentEditable
                         name="inputText"
-                        onDoubleClick={this.enableTextEdit.bind(
-                          this,
-                          text
-                        )}
+                        onDoubleClick={this.enableTextEdit.bind(this, text)}
                         contentEditable={false}
                         id={`text-${text.id}`}
                         className="text-value"
@@ -214,7 +277,7 @@ class ClipboardApp extends React.Component {
                   </li>
                 );
               })}
-          </ul>
+          </ul> */}
         </div>
         <div className="clipboard__input col-12">
           <div className="clipboard__inputIcon">
