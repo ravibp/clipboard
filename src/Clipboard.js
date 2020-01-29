@@ -64,11 +64,6 @@ class ClipboardApp extends React.Component {
       this.props.modalToggle("UPDATE");
     }
   };
-  handleDoubleclick = id => {
-    this.updateFlag = false;
-    document.getElementById(`text-${id}`).contentEditable = true;
-    document.getElementById(`text-${id}`).focus();
-  };
 
   // CRUD Operations
   createText = () => {
@@ -200,9 +195,9 @@ class ClipboardApp extends React.Component {
                     <div className="contentEditable-wrapper">
                       <ContentEditable
                         name="inputText"
-                        onDoubleClick={this.handleDoubleclick.bind(
+                        onDoubleClick={this.enableTextEdit.bind(
                           this,
-                          text.id
+                          text
                         )}
                         contentEditable={false}
                         id={`text-${text.id}`}
