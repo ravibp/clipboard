@@ -1,14 +1,10 @@
 import React from "react";
 import "./Header.scss";
-// import HamburgerMenu from "react-hamburger-menu";
+import Hamburger from "./Hamburger";
 import * as firebase from "firebase";
 const isMobileOnly = window.innerWidth <= 767 ? true : false;
 
 class Header extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="row no-gutters">
@@ -17,30 +13,33 @@ class Header extends React.Component {
             <li>My Clipboard</li>
           </ul>
         </div>
-        <div className="col-3 col-md-6 header-userInfo">
-          <ul>
-            <li>
-              {!isMobileOnly && `Welcome `} {this.props.displayName}
-            </li>
-            {this.props.user && this.props.user.uid && (
-              <li>
-                <button
-                  onClick={() => {
-                    let uid = this.props.user.uid;
-                    uid === "@Guest" && window.location.replace("/");
-                    uid !== "@Guest" && firebase.auth().signOut();
-                  }}
-                >
-                  {this.props.user.uid === "@Guest"
-                    ? !isMobileOnly
+        {isMobileOnly && (
+          <div className="hamburgerMenu">
+            <Hamburger user={this.props.user} displayName={this.props.displayName}  />
+          </div>
+        )}
+        {!isMobileOnly && (
+          <div className="col-3 col-md-6 header-userInfo">
+            <ul>
+              <li>{`Welcome ${this.props.displayName}`}</li>
+              {this.props.user && this.props.user.uid && (
+                <li>
+                  <button
+                    onClick={() => {
+                      let uid = this.props.user.uid;
+                      uid === "@Guest" && window.location.replace("/");
+                      uid !== "@Guest" && firebase.auth().signOut();
+                    }}
+                  >
+                    {this.props.user.uid === "@Guest"
                       ? "Login/ Signup"
-                      : "Login"
-                    : "Logout"}
-                </button>
-              </li>
-            )}
-          </ul>
-        </div>
+                      : "Logout"}
+                  </button>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
       </div>
     );
   }

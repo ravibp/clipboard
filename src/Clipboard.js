@@ -156,6 +156,7 @@ class ClipboardApp extends React.Component {
       document.removeEventListener("mousedown", this.handleClickOutside);
     }
   }
+
   render() {
     if (!this.props.user) return <Redirect to="/" />;
     else if (this.props.texts === null) {
@@ -163,6 +164,7 @@ class ClipboardApp extends React.Component {
     }
     return (
       <div className="clipboard-container row no-gutters">
+        <div id="hamburgerOverlay-ref" className="hamburger-overlay"></div>
         <div className="clipboard__header col-12">
           <Header displayName={this.state.displayName} {...this.props} />
         </div>
@@ -203,8 +205,7 @@ class ClipboardApp extends React.Component {
             Add Text
           </button>
         </div>
-
-        <div className="clipboard__searchBox">
+        {/* <div className="clipboard__searchBox">
           <span
             onClick={e => {
               if (isMobileOnly) {
@@ -238,7 +239,7 @@ class ClipboardApp extends React.Component {
               />
             </div>
           )}
-        </div>
+        </div> */}
 
         <div className="clipboard__list col-12">
           {this.props.texts && this.props.texts.length === 0 && (
