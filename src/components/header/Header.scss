@@ -25,15 +25,37 @@
 @media screen and (max-width: 767px) {
   .clipboard {
     &__header {
+      height: 50px;
       > div {
-        margin: 5px 10px;
+        margin: 10px;
       }
       .header-title {
-          font-size: 20px;
+        font-size: 20px;
       }
       .header-userInfo {
-          font-size: 15px;
-          text-align: left;
+        font-size: 15px;
+        text-align: left;
+      }
+      .hamburgerMenu {
+        margin: auto;
+        &__icon {
+          > div {
+            z-index: 100;
+          }
+        }
+
+        .drawer {
+          color: white;
+          position: fixed;
+          background-color: #000000c2;
+          top: -300px;
+          left: 0;
+          height: 120px;
+          width: 100%;
+          > div {
+            margin: 50px;
+          }
+        }
       }
     }
   }
