@@ -45,7 +45,6 @@ export default class Hamburger extends Component {
     }
   };
   render() {
-    console.log("Aaaaa", this.props);
 
     return (
       <>

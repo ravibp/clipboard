@@ -24,18 +24,14 @@ class ClipboardApp extends React.Component {
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
     this.state = {
-      inputText: "",
-      searchText: "",
-      displayName: "",
-      hideSearch: true
+      displayName: ""
     };
     this.updateFlag = false;
     this.newTextObj = "";
   }
-  handleChange = event => {
-    this.setState({ searchText: event.target.value });
-  };
+
   componentDidMount() {
+    this.props.toggleElement("expandSearchBox", true);
     if (isMobileOnly) {
       document.addEventListener("mousedown", this.handleClickOutside);
     }
@@ -45,6 +41,7 @@ class ClipboardApp extends React.Component {
       displayName
     });
   }
+
   capitalizeFirstLetter = string => {
     return string.replace(/^./, string[0].toUpperCase());
   };
@@ -61,11 +58,6 @@ class ClipboardApp extends React.Component {
     }
     return displayName;
   };
-  handleInputChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
 
   handleContentBlur = id => {
     document.getElementById(`text-${id}`).contentEditable = false;
@@ -77,14 +69,12 @@ class ClipboardApp extends React.Component {
 
   // CRUD Operations
   createText = () => {
-    this.setState({ searchText: "" });
     let textObj = {
-      textValue: this.state.inputText,
+      textValue: this.props.inputText,
       dateStamp: new Date().toLocaleString().split(",")
     };
-    this.setState({
-      inputText: ""
-    });
+    this.props.setText("searchText", "");
+    this.props.setText("inputText", "");
     this.props.addTextDB(textObj, this.props.user).then(() => {
       let textId = this.props.texts[this.props.texts.length - 1].id;
       showPopupNotification("Successfully Added!!! ", "notify-create", textId);
@@ -147,7 +137,7 @@ class ClipboardApp extends React.Component {
    */
   handleClickOutside(event) {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-      this.setState({ hideSearch: true });
+      this.props.toggleElement("expandSearchBox", false);
     }
   }
 
@@ -186,8 +176,8 @@ class ClipboardApp extends React.Component {
               label="Type something here..."
               rows="2"
               name="inputText"
-              value={this.state.inputText.toString()}
-              onChange={this.handleInputChange}
+              value={this.props.inputText.toString()}
+              onChange={() => this.props.setText(e.target.name, e.target.value)}
             />
           </div>
         </div>
@@ -196,7 +186,7 @@ class ClipboardApp extends React.Component {
           <button
             type="button"
             className={
-              this.state.inputText.length > 0
+              this.props.inputText.length > 0
                 ? "btn addText-btn-color"
                 : "btn addText-btn-color addText-btn submit-disabled"
             }
@@ -209,9 +199,10 @@ class ClipboardApp extends React.Component {
           <span
             onClick={e => {
               if (isMobileOnly) {
-                this.setState(prevState => ({
-                  hideSearch: !prevState.hideSearch
-                }));
+                this.props.toggleElement(
+                  "expandSearchBox",
+                  !this.props.expandSearchBox
+                );
               }
             }}
             className="search-icon fa fa-search"
@@ -220,16 +211,16 @@ class ClipboardApp extends React.Component {
             <input
               placeholder="Search Notes"
               type="text"
-              value={this.state.searchText}
-              onChange={this.handleChange}
+              value={this.props.searchText}
+              onChange={() => this.props.setText(e.target.name, e.target.value)}
             />
           )}
         </div>
         {isMobileOnly && (
           <div
-          className="clipboard__searchInput"
+            className="clipboard__searchInput"
             style={{
-              display: this.state.hideSearch ? "none" : "block"
+              display: this.props.expandSearchBox ? "block" : "none"
             }}
           >
             <div className="search-arrow"></div>
@@ -237,8 +228,8 @@ class ClipboardApp extends React.Component {
               ref={this.setWrapperRef}
               placeholder="Search Notes"
               type="text"
-              value={this.state.searchText}
-              onChange={this.handleChange}
+              value={this.props.searchText}
+              onChange={() => this.props.setText(e.target.name, e.target.value)}
             />
           </div>
         )}
@@ -247,7 +238,7 @@ class ClipboardApp extends React.Component {
             <p>Your Clipboard is empty!</p>
           )}
           <FilterResults
-            value={this.state.searchText}
+            value={this.props.searchText}
             data={this.props.texts}
             renderResults={texts => {
               texts.reverse();
