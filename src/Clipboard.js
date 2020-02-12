@@ -205,7 +205,7 @@ class ClipboardApp extends React.Component {
             Add Text
           </button>
         </div>
-        {/* <div className="clipboard__searchBox">
+        <div className="clipboard__searchBox">
           <span
             onClick={e => {
               if (isMobileOnly) {
@@ -224,23 +224,24 @@ class ClipboardApp extends React.Component {
               onChange={this.handleChange}
             />
           )}
-          {isMobileOnly && (
-            <div
-              style={{
-                visibility: this.state.hideSearch ? "hidden" : "visible"
-              }}
-            >
-              <input
-                ref={this.setWrapperRef}
-                placeholder="Search Notes"
-                type="text"
-                value={this.state.searchText}
-                onChange={this.handleChange}
-              />
-            </div>
-          )}
-        </div> */}
-
+        </div>
+        {isMobileOnly && (
+          <div
+          className="clipboard__searchInput"
+            style={{
+              display: this.state.hideSearch ? "none" : "block"
+            }}
+          >
+            <div className="search-arrow"></div>
+            <input
+              ref={this.setWrapperRef}
+              placeholder="Search Notes"
+              type="text"
+              value={this.state.searchText}
+              onChange={this.handleChange}
+            />
+          </div>
+        )}
         <div className="clipboard__list col-12">
           {this.props.texts && this.props.texts.length === 0 && (
             <p>Your Clipboard is empty!</p>

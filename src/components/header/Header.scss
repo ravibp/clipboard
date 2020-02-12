@@ -38,6 +38,7 @@
       }
       .hamburgerMenu {
         margin: auto;
+        margin-right: initial !important;
         &__icon {
           > div {
             z-index: 100;

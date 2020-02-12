@@ -184,11 +184,26 @@
     margin: 30px 0px;
     .clipboard {
       &__searchBox {
-        right: 10px;
-        top: 10px;
-        text-align: right;
+        right: 60px;
+        top: 12px;
         .search-icon {
+          font-size: 23px;
           margin-left: 5px;
+        }
+      }
+      &__searchInput {
+        top: 45px;
+        display: block;
+        z-index: 100;
+        right: 57px;
+        position: absolute;
+        .search-arrow {
+          right: 7px;
+          position: absolute;
+          border: 7px solid;
+          transform: rotate(45deg);
+          top: -7px;
+          color: white;
         }
       }
       &__input {
