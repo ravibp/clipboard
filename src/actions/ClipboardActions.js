@@ -2,8 +2,8 @@ import * as actionKeys from "./ActionTypes";
 import { databaseRef } from "../config/Config";
 import _ from "lodash";
 
-export const setStoreVariable = (inputStoreVariable, inputValue) => ({
-  type: actionKeys.SET_STORE_VARIABLE,
+export const setText = (inputStoreVariable, inputValue) => ({
+  type: actionKeys.SET_TEXT,
   inputStoreVariable,
   inputValue
 });
