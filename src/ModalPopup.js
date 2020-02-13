@@ -14,6 +14,9 @@ class ModalPopup extends Component {
   handleConfirmNo = () => {
     const crudOperation = this.props.crudOperation;
     switch (crudOperation) {
+      case "DELETE-CATEGORY":
+        this.props.modalToggle();
+        break;
       case "DELETE":
         this.props.modalToggle();
         break;
@@ -26,28 +29,43 @@ class ModalPopup extends Component {
     }
   };
   handleConfirmYes = () => {
-    const crudOperation = this.props.crudOperation;
+    const {
+      updatedTextObj,
+      user,
+      selectedNotesCategory,
+      crudOperation,
+      textObj
+    } = this.props;
+    // const computedTextID = `${
+    //   selectedNotesCategory ? `${selectedNotesCategory}_` : ""
+    //   }text-${textObj.id}`;
+    console.log("cruid, ", crudOperation);
+
     switch (crudOperation) {
+      case "DELETE-CATEGORY":
+        this.props.deleteNotesCategoryDB(user, selectedNotesCategory)
+        this.props.setStoreVariable(
+          "selectedNotesCategory",
+          "Default"
+        );
+        this.props.fetchTextsDB(user, "Default");
       case "DELETE":
-        let textId = this.props.textObj ? this.props.textObj.id : null;
+        const textId = textObj ? textObj.id : null;
         showPopupNotification(
           "Successfully Deleted!!! ",
           "notify-delete",
-          textId,
-          "delete"
         );
-        setTimeout(() => {
-          this.props.deleteTextDB(textId, this.props.user);
-        }, 1000);
+        this.props.deleteTextDB(textId, user, selectedNotesCategory);
         this.props.modalToggle();
         break;
       case "UPDATE":
-        this.props.updateTextDB(this.props.updatedTextObj, this.props.user);
+        this.props.updateTextDB(updatedTextObj, user, selectedNotesCategory);
         this.props.modalToggle();
         showPopupNotification(
           "Changes Saved!!! ",
-          "notify-update",
-          this.props.updatedTextObj.id
+          "notify-update"
+          // this.props.updatedTextObj.id,
+          // computedTextID
         );
         break;
       default:

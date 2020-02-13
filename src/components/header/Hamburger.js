@@ -48,7 +48,7 @@ export default class Hamburger extends Component {
 
     return (
       <>
-        <div className="hamburgerMenu__icon">
+        <div ref={this.setWrapperRef} className="hamburgerMenu-icon">
           <HamburgerMenu
             isOpen={drawerOpenFlag === undefined ? false : drawerOpenFlag}
             menuClicked={this.handleDrawerToggle}

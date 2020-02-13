@@ -2,27 +2,29 @@ import React from "react";
 import toaster from "toasted-notes";
 import "./ToasterNotification.scss";
 
-function showPopupNotification(message, notificationStylesClass, textId, crudAction) {
+function showPopupNotification(
+  message,
+  notificationStylesClass,
+) {
   const notificationDiv = (
     <div className={notificationStylesClass + " notification-popup"}>
       {message}
     </div>
   );
   toaster.notify(notificationDiv, {
-    duration: 2000
+    duration: 1000
   });
-  if(textId) {
-    let animation = "sucessAnimation 2s";
-    if(crudAction === "delete") {
-      animation = "deleteAnimation 2s";
+}
+function highlightOperationOnText(notificationStylesClass, textID, computedTextID) {
+  if (textID) {
+    let animation = "sucessAnimation 1s";
+    if (notificationStylesClass === "notify-delete") {
+      animation = "deleteAnimation 1s";
     }
-    document.getElementById(
-      "text-" + textId
-    ).parentElement.style.animation = animation;
+    const id = computedTextID ? computedTextID : textID;
+    document.getElementById(id).parentElement.style.animation = animation;
     setTimeout(() => {
-      document.getElementById(
-        "text-" + textId
-      ).parentElement.style.animation = "";
+      document.getElementById(id).parentElement.style.animation = "";
     }, 1000);
   }
 }

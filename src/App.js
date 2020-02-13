@@ -15,8 +15,7 @@ class App extends Component {
   }
   showRenderedPage = () => {
     const spinnerComponent = document.querySelector("#spinner-loader");
-    spinnerComponent.style.opacity = "0";
-    spinnerComponent.style.transition = "opacity 1s";
+    spinnerComponent.style.display = "none";
   };
   async componentDidMount() {
     // authHandler updates userState after authentication.

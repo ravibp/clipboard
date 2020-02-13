@@ -13,6 +13,7 @@ import Spinner from "./common/Spinner";
 import "./Clipboard.scss";
 import "./common/Scrollbar.scss";
 import FilterResults from "react-filter-search";
+import NotesCategories from "./NotesCategories";
 
 const FontAwesome = require("react-fontawesome");
 const monthNames = GLOBAL_CONSTANTS.monthNames;
@@ -31,12 +32,25 @@ class ClipboardApp extends React.Component {
     if (isMobileOnly) {
       document.addEventListener("mousedown", this.handleClickOutside);
     }
-    this.props.fetchTextsDB(this.props.user);
-    let displayName = this.handleDisplayName(this.props.user);
-    this.props.setStoreVariable("displayName", displayName);
-    this.props.setStoreVariable("user", this.props.user);
-  }
 
+    this.props.fetchNotesCategoriesDB(this.props.user);
+    this.props.fetchTextsDB(this.props.user, this.props.selectedNotesCategory);
+    const displayName = this.handleDisplayName(this.props.user);
+    this.props.setStoreVariable("displayName", displayName);
+  }
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.notesCategories !== this.props.notesCategories &&
+      this.props.notesCategories.length > 0 &&
+      !this.props.selectedNotesCategory
+    ) {
+      this.props.setStoreVariable(
+        "selectedNotesCategory",
+        this.props.notesCategories[0]
+      );
+      this.props.fetchTextsDB(this.props.user, this.props.notesCategories[0]);
+    }
+  }
   capitalizeFirstLetter = string => {
     return string.replace(/^./, string[0].toUpperCase());
   };
@@ -56,8 +70,8 @@ class ClipboardApp extends React.Component {
     return displayName;
   };
 
-  handleContentBlur = id => {
-    document.getElementById(`text-${id}`).contentEditable = false;
+  handleContentBlur = textID => {
+    document.getElementById(this.computeTextID(textID)).contentEditable = false;
     if (this.updateFlag === true) {
       this.props.setTextDetails(this.props.textObj, this.newTextObj);
       this.props.modalToggle("UPDATE");
@@ -66,21 +80,29 @@ class ClipboardApp extends React.Component {
 
   // CRUD Operations
   createText = () => {
-    let textObj = {
+    const textObj = {
       textValue: this.props.inputText,
       dateStamp: new Date().toLocaleString().split(",")
     };
     this.props.setStoreVariable("searchText", "");
     this.props.setStoreVariable("inputText", "");
-    this.props.addTextDB(textObj, this.props.user).then(() => {
-      let textId = this.props.texts[this.props.texts.length - 1].id;
-      showPopupNotification("Successfully Added!!! ", "notify-create", textId);
-    });
+    this.props
+      .addTextDB(textObj, this.props.user, this.props.selectedNotesCategory)
+      .then(() => {
+        if (this.props.texts && this.props.texts.length > 0) {
+          const textID = this.props.texts[this.props.texts.length - 1].id;
+          showPopupNotification(
+            "Successfully Added!!! ",
+            "notify-create",
+          );
+        }
+      });
   };
-  readText = textId => {
+  readText = textID => {
+    const computedTextID = this.computeTextID(textID);
     window
       .getSelection()
-      .selectAllChildren(document.getElementById(`text-${textId}`));
+      .selectAllChildren(document.getElementById(computedTextID));
     document.execCommand("copy");
 
     // de-select current selection
@@ -89,13 +111,22 @@ class ClipboardApp extends React.Component {
     } else if (document.selection) {
       document.selection.empty();
     }
-
-    showPopupNotification("Successfully Copied!!! ", "notify-create", textId);
+    showPopupNotification(
+      "Successfully Copied!!! ",
+      "notify-create",
+    );
   };
-  updateText = textId => {
-    let textObj = {
-      id: textId,
-      textValue: document.getElementById("text-" + textId).innerHTML,
+  computeTextID = textID => {
+    const { selectedNotesCategory } = this.props;
+    const computedTextID = `${
+      selectedNotesCategory ? `${selectedNotesCategory}_` : ""
+    }text-${textID}`;
+    return computedTextID;
+  };
+  updateText = textID => {
+    const textObj = {
+      id: textID,
+      textValue: document.getElementById(this.computeTextID(textID)).innerHTML,
       dateStamp: new Date().toLocaleString().split(",")
     };
     this.newTextObj = textObj;
@@ -103,8 +134,9 @@ class ClipboardApp extends React.Component {
     this.updateFlag = true;
   };
   enableTextEdit = textObj => {
-    document.getElementById(`text-${textObj.id}`).contentEditable = true;
-    document.getElementById(`text-${textObj.id}`).focus();
+    const computedTextID = this.computeTextID(textObj.id);
+    document.getElementById(computedTextID).contentEditable = true;
+    document.getElementById(computedTextID).focus();
     this.props.setTextDetails(textObj, null);
     this.updateFlag = false;
   };
@@ -134,7 +166,7 @@ class ClipboardApp extends React.Component {
    */
   handleClickOutside(event) {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-      this.props.toggleElement("expandSearchBox", false);
+      this.setState({ hideSearch: true });
     }
   }
 
@@ -145,10 +177,17 @@ class ClipboardApp extends React.Component {
   }
 
   render() {
-    console.log("render", this.props.user, this.props.texts);
-
-    if (!this.props.user) return <Redirect to="/" />;
-    else if (this.props.texts === null) {
+    const {
+      selectedNotesCategory,
+      texts,
+      user,
+      searchText,
+      inputText,
+      expandInputBox
+    } = this.props;
+    
+    if (!user) return <Redirect to="/" />;
+    else if (texts === null) {
       return <Spinner />;
     }
     return (
@@ -157,104 +196,52 @@ class ClipboardApp extends React.Component {
         <div className="clipboard__header col-12">
           <Header {...this.props} />
         </div>
-
-        <div className="clipboard__input col-12">
-          <div className="clipboard__inputIcon">
-            <FontAwesome
-              className="super-crazy-colors"
-              name="pencil"
-              size="2x"
-              spin
-              style={{ textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)" }}
-            />
-          </div>
-          <div className="col-12 clipboard__textArea">
-            <MDBInput
-              id="textarea-char-counter"
-              type="textarea"
-              label="Type something here..."
-              rows="2"
-              name="inputText"
-              value={this.props.inputText.toString()}
-              onChange={e =>
-                this.props.setStoreVariable(e.target.name, e.target.value)
-              }
-            />
-          </div>
+        <div className="clipboard__notesCategories col-12">
+          <NotesCategories {...this.props} />
         </div>
-
-        <div className="clipboard__submit col-12">
-          <button
-            type="button"
-            className={
-              this.props.inputText.length > 0
-                ? "btn addText-btn-color"
-                : "btn addText-btn-color addText-btn submit-disabled"
-            }
-            onClick={this.createText}
-          >
-            Add Text
-          </button>
-        </div>
-        <div className="clipboard__searchBox">
-          <span
-            onClick={e => {
-              if (isMobileOnly) {
-                this.props.toggleElement(
-                  "expandSearchBox",
-                  !this.props.expandSearchBox
-                );
-                document.getElementById(`searchText`).focus();
-              }
-            }}
-            className="search-icon fa fa-search"
-          />
-          {!isMobileOnly && (
-            <input
-              id="searchText"
-              name="searchText"
-              placeholder="Search Notes"
-              type="text"
-              value={this.props.searchText}
-              onChange={e =>
-                this.props.setStoreVariable(e.target.name, e.target.value)
-              }
-            />
-          )}
-        </div>
-        {isMobileOnly && (
-          <div
-            className="clipboard__searchInput"
-            style={{
-              display: this.props.expandSearchBox ? "block" : "none"
-            }}
-          >
-            <div className="search-arrow"></div>
-            <input
-              id="searchText"
-              name="searchText"
-              ref={this.setWrapperRef}
-              placeholder="Search Notes"
-              type="text"
-              value={this.props.searchText}
-              onChange={e =>
-                this.props.setStoreVariable(e.target.name, e.target.value)
-              }
-            />
-          </div>
+        {expandInputBox && (
+          <>
+            <div className="clipboard__input col-12">
+              <div className="clipboard__textArea">
+                <MDBInput
+                  id="textarea-char-counter"
+                  type="textarea"
+                  label="Type something here..."
+                  rows="2"
+                  name="inputText"
+                  value={inputText.toString()}
+                  onChange={e =>
+                    this.props.setStoreVariable(e.target.name, e.target.value)
+                  }
+                />
+              </div>
+            </div>
+            <div className="clipboard__submit col-12">
+              <button
+                type="button"
+                className={
+                  inputText.length > 0
+                    ? "btn addText-btn-color"
+                    : "btn addText-btn-color addText-btn submit-disabled"
+                }
+                onClick={this.createText}
+              >
+                Add Text
+              </button>
+            </div>
+          </>
         )}
+
         <div className="clipboard__list col-12">
-          {this.props.texts && this.props.texts.length === 0 && (
-            <p>Your Clipboard is empty!</p>
-          )}
+          {texts && texts.length === 0 && <p>Your Clipboard is empty!</p>}
           <FilterResults
-            value={this.props.searchText}
-            data={this.props.texts}
+            value={searchText}
+            data={texts}
             renderResults={texts => {
               texts.reverse();
               return (
                 <>
-                  {texts && texts.length === 0 && (
+                  {texts && texts.length === 0 && searchText && (
                     <p className="no-search-results">No results found!</p>
                   )}
                   <ul>
@@ -295,7 +282,11 @@ class ClipboardApp extends React.Component {
                                 text
                               )}
                               contentEditable={false}
-                              id={`text-${text.id}`}
+                              id={`${
+                                selectedNotesCategory
+                                  ? `${selectedNotesCategory}_`
+                                  : ""
+                              }text-${text.id}`}
                               className="text-value"
                               html={text.textValue} // innerHTML of the editable div
                               disabled={true} // use true to disable editing
@@ -319,7 +310,6 @@ class ClipboardApp extends React.Component {
             }}
           />
         </div>
-
         <ModalPopup {...this.props} />
       </div>
     );

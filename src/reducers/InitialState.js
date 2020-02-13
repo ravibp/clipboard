@@ -9,6 +9,8 @@ export default {
   expandInputBox: false,
   searchText: "",
   inputText: "",
+  notesCategoryInputText: "",
   displayName: "",
-  // user: null
+  selectedNotesCategory: null,
+  notesCategories: []
 };

@@ -6,7 +6,7 @@ const isMobileOnly = window.innerWidth <= 767 ? true : false;
 
 class Header extends React.Component {
   render() {
-    const { user, displayName } = this.props;
+    const { user, displayName, expandInputBox } = this.props;
     const SignInOutButton = ({ uid, displayName }) => {
       return (
         <button
@@ -20,26 +20,86 @@ class Header extends React.Component {
         </button>
       );
     };
+    const toggleIconClass = !expandInputBox
+      ? "fa fa-plus-circle"
+      : "fa fa-minus-circle";
     return (
-      <div className="row no-gutters">
-        <div className="col-9 col-md-6 header-title">
-          <ul>
-            <li>My Clipboard</li>
-          </ul>
+      <div className="row no-gutters header-container">
+        <div className="col-auto header__title">
+          <h1>My Clipboard</h1>
+          <i
+            onClick={() =>
+              this.props.setStoreVariable(
+                "expandInputBox",
+                !this.props.expandInputBox
+              )
+            }
+            className={`${toggleIconClass} inputToggleButton`}
+            aria-hidden="true"
+          ></i>
+        </div>
+        <div className="col-auto header__searchBox">
+          <span
+            onClick={e => {
+              if (isMobileOnly) {
+                this.props.setStoreVariable(
+                  "expandSearchBox",
+                  !this.props.expandSearchBox
+                );
+                document.getElementById(`searchText`).focus();
+              }
+            }}
+            className="search-icon fa fa-search"
+          />
+          {!isMobileOnly && (
+            <input
+              id="searchText"
+              name="searchText"
+              placeholder="Search Notes"
+              type="text"
+              value={this.props.searchText}
+              onChange={e =>
+                this.props.setStoreVariable(e.target.name, e.target.value)
+              }
+            />
+          )}
+          {isMobileOnly && (
+            <div
+              className="searchInput-container"
+              style={{
+                display: this.props.expandSearchBox ? "block" : "none"
+              }}
+            >
+              <div className="search-arrow"></div>
+              <input
+                id="searchText"
+                name="searchText"
+                ref={this.setWrapperRef}
+                placeholder="Search Notes"
+                type="text"
+                value={this.props.searchText}
+                onChange={e =>
+                  this.props.setStoreVariable(e.target.name, e.target.value)
+                }
+              />
+            </div>
+          )}
         </div>
         {isMobileOnly && (
-          <div className="hamburgerMenu">
-            <Hamburger
-              user={this.props.user}
-              displayName={this.props.displayName}
-              SignInOutButton={SignInOutButton}
-            />
-          </div>
+          <>
+            <div className="col header__hamburgerMenu">
+              <Hamburger
+                user={this.props.user}
+                displayName={this.props.displayName}
+                SignInOutButton={SignInOutButton}
+              />
+            </div>
+          </>
         )}
         {!isMobileOnly && (
-          <div className="col-3 col-md-6 header-userInfo">
+          <div className="col header__userInfo">
             <ul>
-              <li>{`Welcome ${displayName}`}</li>
+              <li>{`${displayName}`}</li>
               {user && user.uid && (
                 <li>
                   <SignInOutButton uid={user.uid} displayName={displayName} />
