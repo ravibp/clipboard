@@ -19,7 +19,9 @@ const mapStateToProps = state => {
     expandSearchBox: state.clipboardReducer.expandSearchBox,
     expandInputBox: state.clipboardReducer.expandInputBox,
     searchText: state.clipboardReducer.searchText,
-    inputText: state.clipboardReducer.inputText
+    inputText: state.clipboardReducer.inputText,
+    displayName: state.clipboardReducer.displayName,
+    // user: state.clipboardReducer.user
   };
 };
 
@@ -27,8 +29,10 @@ const mapDispatchToProps = dispatch => {
   return {
     toggleElement: (storeVariable, booleanValue) =>
       dispatch(ClipboardActions.toggleElement(storeVariable, booleanValue)),
-      setText: (inputStoreVariable, inputValue) =>
-      dispatch(ClipboardActions.setText(inputStoreVariable, inputValue)),
+    setStoreVariable: (inputStoreVariable, inputValue) =>
+      dispatch(
+        ClipboardActions.setStoreVariable(inputStoreVariable, inputValue)
+      ),
     addTextDB: (textObj, user) =>
       dispatch(ClipboardActions.addTextDB(textObj, user)),
     deleteTextDB: (textId, user) =>

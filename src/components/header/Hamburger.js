@@ -14,8 +14,6 @@ export default class Hamburger extends Component {
         return { drawerOpenFlag: !prevState.drawerOpenFlag };
       },
       () => {
-        console.log("opem", this.state.drawerOpenFlag);
-
         if (this.state.drawerOpenFlag) {
           //   this.refs["headerNavBar-ref"].classList.remove("drawer");
           this.refs["headerNavBar-ref"].style.top = "0px";
@@ -45,16 +43,15 @@ export default class Hamburger extends Component {
     }
   };
   render() {
+    let { SignInOutButton, displayName, user } = this.props;
+    let { drawerOpenFlag } = this.state;
+    console.log("user", this.props.user.uid);
 
     return (
       <>
         <div className="hamburgerMenu__icon">
           <HamburgerMenu
-            isOpen={
-              this.state.drawerOpenFlag === undefined
-                ? false
-                : this.state.drawerOpenFlag
-            }
+            isOpen={drawerOpenFlag === undefined ? false : drawerOpenFlag}
             menuClicked={this.handleDrawerToggle}
             width={25}
             height={20}
@@ -67,11 +64,11 @@ export default class Hamburger extends Component {
         </div>
 
         <div ref="headerNavBar-ref" className="drawer">
-          <div>
-            {this.props.user.uid === "@Guest"
-              ? "Login/ Signup"
-              : `Sign out, ${this.props.displayName}?`}
-          </div>
+          {user && user.uid && (
+            <div>
+              <SignInOutButton uid={user.uid} displayName={displayName} />
+            </div>
+          )}
         </div>
       </>
     );

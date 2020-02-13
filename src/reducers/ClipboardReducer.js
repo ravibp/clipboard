@@ -3,7 +3,7 @@ import * as actionKeys from "../actions/ActionTypes";
 
 export default function clipboardReducer(state = initialState, action) {
   switch (action.type) {
-    case actionKeys.SET_TEXT:
+    case actionKeys.SET_STORE_VARIABLE:
       return {
         ...state,
         [action.inputStoreVariable]: action.inputValue

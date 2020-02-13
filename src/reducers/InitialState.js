@@ -7,6 +7,8 @@ export default {
   crudOperation: null,
   expandSearchBox: false,
   expandInputBox: false,
-  searchText: '',
-  inputText: ''
+  searchText: "",
+  inputText: "",
+  displayName: "",
+  // user: null
 };
