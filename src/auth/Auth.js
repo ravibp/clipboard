@@ -1,18 +1,12 @@
 import * as firebase from "firebase";
 import * as firebaseui from "firebaseui";
 
-export function authHandler(thisProp) {
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      // User is signed in.
-      thisProp.setState({
-        userState: user
-      });
-    } else {
-      thisProp.setState({
-        userState: null
-      });
-    }
+export async function authHandler(thisProp) {
+  await firebase.auth().onAuthStateChanged(user => {
+    // User is signed in.
+    thisProp.setState({
+      user
+    });
   });
 }
 export const ui = new firebaseui.auth.AuthUI(firebase.auth());

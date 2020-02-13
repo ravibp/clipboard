@@ -6,6 +6,20 @@ const isMobileOnly = window.innerWidth <= 767 ? true : false;
 
 class Header extends React.Component {
   render() {
+    let { user, displayName } = this.props;
+    const SignInOutButton = ({ uid, displayName }) => {
+      return (
+        <button
+          onClick={() => {
+            uid === "@Guest"
+              ? window.location.replace("/") // redirect to dashboard "/"
+              : firebase.auth().signOut();
+          }}
+        >
+          {uid === "@Guest" ? "Login/ Signup" : `Logout, ${displayName}`}
+        </button>
+      );
+    };
     return (
       <div className="row no-gutters">
         <div className="col-9 col-md-6 header-title">
@@ -15,26 +29,20 @@ class Header extends React.Component {
         </div>
         {isMobileOnly && (
           <div className="hamburgerMenu">
-            <Hamburger user={this.props.user} displayName={this.props.displayName}  />
+            <Hamburger
+              user={this.props.user}
+              displayName={this.props.displayName}
+              SignInOutButton={SignInOutButton}
+            />
           </div>
         )}
         {!isMobileOnly && (
           <div className="col-3 col-md-6 header-userInfo">
             <ul>
-              <li>{`Welcome ${this.props.displayName}`}</li>
-              {this.props.user && this.props.user.uid && (
+              <li>{`Welcome ${displayName}`}</li>
+              {user && user.uid && (
                 <li>
-                  <button
-                    onClick={() => {
-                      let uid = this.props.user.uid;
-                      uid === "@Guest" && window.location.replace("/");
-                      uid !== "@Guest" && firebase.auth().signOut();
-                    }}
-                  >
-                    {this.props.user.uid === "@Guest"
-                      ? "Login/ Signup"
-                      : "Logout"}
-                  </button>
+                  <SignInOutButton uid={user.uid} displayName={displayName} />
                 </li>
               )}
             </ul>

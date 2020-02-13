@@ -23,23 +23,18 @@ class ClipboardApp extends React.Component {
     super(props);
     this.setWrapperRef = this.setWrapperRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
-    this.state = {
-      displayName: ""
-    };
     this.updateFlag = false;
     this.newTextObj = "";
   }
 
   componentDidMount() {
-    this.props.toggleElement("expandSearchBox", true);
     if (isMobileOnly) {
       document.addEventListener("mousedown", this.handleClickOutside);
     }
     this.props.fetchTextsDB(this.props.user);
     let displayName = this.handleDisplayName(this.props.user);
-    this.setState({
-      displayName
-    });
+    this.props.setStoreVariable("displayName", displayName);
+    this.props.setStoreVariable("user", this.props.user);
   }
 
   capitalizeFirstLetter = string => {
@@ -54,6 +49,8 @@ class ClipboardApp extends React.Component {
         displayName = this.capitalizeFirstLetter(user.email.split("@")[0]);
       } else if (user.phoneNumber) {
         displayName = user.phoneNumber;
+      } else {
+        displayName = "Anonymous User";
       }
     }
     return displayName;
@@ -73,8 +70,8 @@ class ClipboardApp extends React.Component {
       textValue: this.props.inputText,
       dateStamp: new Date().toLocaleString().split(",")
     };
-    this.props.setText("searchText", "");
-    this.props.setText("inputText", "");
+    this.props.setStoreVariable("searchText", "");
+    this.props.setStoreVariable("inputText", "");
     this.props.addTextDB(textObj, this.props.user).then(() => {
       let textId = this.props.texts[this.props.texts.length - 1].id;
       showPopupNotification("Successfully Added!!! ", "notify-create", textId);
@@ -148,6 +145,8 @@ class ClipboardApp extends React.Component {
   }
 
   render() {
+    console.log("render", this.props.user, this.props.texts);
+
     if (!this.props.user) return <Redirect to="/" />;
     else if (this.props.texts === null) {
       return <Spinner />;
@@ -156,7 +155,7 @@ class ClipboardApp extends React.Component {
       <div className="clipboard-container row no-gutters">
         <div id="hamburgerOverlay-ref" className="hamburger-overlay"></div>
         <div className="clipboard__header col-12">
-          <Header displayName={this.state.displayName} {...this.props} />
+          <Header {...this.props} />
         </div>
 
         <div className="clipboard__input col-12">
@@ -177,7 +176,9 @@ class ClipboardApp extends React.Component {
               rows="2"
               name="inputText"
               value={this.props.inputText.toString()}
-              onChange={() => this.props.setText(e.target.name, e.target.value)}
+              onChange={e =>
+                this.props.setStoreVariable(e.target.name, e.target.value)
+              }
             />
           </div>
         </div>
@@ -203,16 +204,21 @@ class ClipboardApp extends React.Component {
                   "expandSearchBox",
                   !this.props.expandSearchBox
                 );
+                document.getElementById(`searchText`).focus();
               }
             }}
             className="search-icon fa fa-search"
           />
           {!isMobileOnly && (
             <input
+              id="searchText"
+              name="searchText"
               placeholder="Search Notes"
               type="text"
               value={this.props.searchText}
-              onChange={() => this.props.setText(e.target.name, e.target.value)}
+              onChange={e =>
+                this.props.setStoreVariable(e.target.name, e.target.value)
+              }
             />
           )}
         </div>
@@ -225,11 +231,15 @@ class ClipboardApp extends React.Component {
           >
             <div className="search-arrow"></div>
             <input
+              id="searchText"
+              name="searchText"
               ref={this.setWrapperRef}
               placeholder="Search Notes"
               type="text"
               value={this.props.searchText}
-              onChange={() => this.props.setText(e.target.name, e.target.value)}
+              onChange={e =>
+                this.props.setStoreVariable(e.target.name, e.target.value)
+              }
             />
           </div>
         )}

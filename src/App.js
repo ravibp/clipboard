@@ -10,7 +10,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userState: null
+      user: null
     };
   }
   showRenderedPage = () => {
@@ -18,7 +18,8 @@ class App extends Component {
     spinnerComponent.style.opacity = "0";
     spinnerComponent.style.transition = "opacity 1s";
   };
-  componentDidMount() {
+  async componentDidMount() {
+    // authHandler updates userState after authentication.
     authHandler(this);
     this.showRenderedPage();
   }
@@ -27,6 +28,7 @@ class App extends Component {
       uid: "@Guest",
       displayName: "Guest User"
     };
+
     return (
       <BrowserRouter>
         <div className="App">
@@ -34,7 +36,7 @@ class App extends Component {
             <Route
               exact
               path="/"
-              render={() => <Dashboard user={this.state.userState} />}
+              render={() => <Dashboard user={this.state.user} />}
             />
             <Route
               path="/demo"
@@ -42,9 +44,8 @@ class App extends Component {
             />
             <Route
               path="/clipboard"
-              render={() => <ClipboardConnector user={this.state.userState} />}
+              render={() => <ClipboardConnector user={this.state.user} />}
             />
-            {/* <Route path='/create' component = {CreateProject} /> */}
           </Switch>
         </div>
       </BrowserRouter>
