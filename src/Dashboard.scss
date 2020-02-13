@@ -1,6 +1,11 @@
 // common styles
 .dashboard-container {
   margin-top: 50px;
+  .devloped-by {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #ff5722;
+  }
   .dashboard {
     &__heading {
       font-weight: bold;
@@ -13,13 +18,11 @@
       }
     }
   }
-  p {
-    color: lightgoldenrodyellow;
-    a {
-    color: #4facff;
-    }
-  }
-  .firebaseui-idp-text.firebaseui-idp-text-long:nth-child(3) {
-    opacity: 0 !important;
+  .firebaseui-provider-sign-in-footer {
+    display: none;
+    // color: lightgoldenrodyellow;
+    // a {
+    // color: #4facff;
+    // }
   }
 }

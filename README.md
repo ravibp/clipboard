@@ -2,9 +2,11 @@ Developed by: Ravi BP
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Project Website: https://clipboard-application.web.app/
+
 ## About Clipboard Application
 
-Clipboard Application is a notes application to store snippets of text/ code and can be easily accessed in different devices for reference/ copy-pasting. User can signup, login and access their private notes.
+Clipboard Application is a notes application to store snippets of text/ code and can be easily accessed in different devices for reference/ copy-pasting. User can signup, login and manage their private notes.
 
 ## Available Scripts
 
