@@ -43,9 +43,8 @@ export default class Hamburger extends Component {
     }
   };
   render() {
-    let { SignInOutButton, displayName, user } = this.props;
-    let { drawerOpenFlag } = this.state;
-    console.log("user", this.props.user.uid);
+    const { SignInOutButton, displayName, user } = this.props;
+    const { drawerOpenFlag } = this.state;
 
     return (
       <>

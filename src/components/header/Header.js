@@ -6,13 +6,13 @@ const isMobileOnly = window.innerWidth <= 767 ? true : false;
 
 class Header extends React.Component {
   render() {
-    let { user, displayName } = this.props;
+    const { user, displayName } = this.props;
     const SignInOutButton = ({ uid, displayName }) => {
       return (
         <button
           onClick={() => {
             uid === "@Guest"
-              ? window.location.replace("/") // redirect to dashboard "/"
+              ? window.location.replace("/") // redirect to dashboard route "/"
               : firebase.auth().signOut();
           }}
         >
