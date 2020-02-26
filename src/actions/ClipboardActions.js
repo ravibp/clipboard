@@ -19,12 +19,15 @@ export const addNotesCategoryDB = (
       .set(textObj);
   }
 };
-export const deleteNotesCategoryDB = (user, selectedNotesCategory) => async dispatch => {
-    if (user) {
-      const dbEndPoint = `users/${user.uid}/${selectedNotesCategory}`;
-      databaseRef.child(dbEndPoint).remove();
-    }
+export const deleteNotesCategoryDB = (
+  user,
+  selectedNotesCategory
+) => async dispatch => {
+  if (user) {
+    const dbEndPoint = `users/${user.uid}/${selectedNotesCategory}`;
+    databaseRef.child(dbEndPoint).remove();
   }
+};
 export const fetchNotesCategoriesDB = user => async dispatch => {
   if (user) {
     const dbEndPoint = `users/${user.uid}`;
@@ -53,7 +56,7 @@ export const addTextDB = (
 ) => async dispatch => {
   const dbEndPoint = `users/${user.uid}/${
     selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
-    }texts`;
+  }texts`;
   databaseRef
     .child(dbEndPoint)
     .push()
@@ -66,7 +69,7 @@ export const deleteTextDB = (
 ) => async dispatch => {
   const dbEndPoint = `users/${user.uid}/${
     selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
-    }texts/${textId}`;
+  }texts/${textId}`;
   databaseRef.child(dbEndPoint).remove();
 };
 export const updateTextDB = (
@@ -76,7 +79,7 @@ export const updateTextDB = (
 ) => async dispatch => {
   const dbEndPoint = `users/${user.uid}/${
     selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
-    }texts/${textObj.id}`;
+  }texts/${textObj.id}`;
   databaseRef.child(dbEndPoint).set(textObj);
 };
 
@@ -86,7 +89,7 @@ export const fetchTextsDB = (user, selectedNotesCategory) => async dispatch => {
   if (user) {
     const dbEndPoint = `users/${user.uid}/${
       selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
-      }texts`;
+    }texts`;
     databaseRef.child(dbEndPoint).on("value", snapshot => {
       let texts = [];
       _.map(snapshot.val(), (value, key) => {

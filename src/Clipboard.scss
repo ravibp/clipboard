@@ -16,6 +16,9 @@
     &__notesCategories {
       margin: 10px 0px;
     }
+    &__list::-webkit-scrollbar {
+      width: 0px !important;
+    }
     &__list {
       .no-search-results {
         color: bisque;
@@ -172,7 +175,7 @@
 //mobile styles
 @media screen and (max-width: 767px) {
   .clipboard-container {
-    margin: 50px 0px;
+    margin: 50px 0px 0px 0px;
     .clipboard {
       &__header {
         height: 50px;

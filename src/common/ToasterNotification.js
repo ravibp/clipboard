@@ -15,18 +15,18 @@ function showPopupNotification(
     duration: 1000
   });
 }
-function highlightOperationOnText(notificationStylesClass, textID, computedTextID) {
-  if (textID) {
-    let animation = "sucessAnimation 1s";
-    if (notificationStylesClass === "notify-delete") {
-      animation = "deleteAnimation 1s";
-    }
-    const id = computedTextID ? computedTextID : textID;
-    document.getElementById(id).parentElement.style.animation = animation;
-    setTimeout(() => {
-      document.getElementById(id).parentElement.style.animation = "";
-    }, 1000);
-  }
-}
+// function highlightOperationOnText(notificationStylesClass, textID, computedTextID) {
+//   if (textID) {
+//     let animation = "sucessAnimation 1s";
+//     if (notificationStylesClass === "notify-delete") {
+//       animation = "deleteAnimation 1s";
+//     }
+//     const id = computedTextID ? computedTextID : textID;
+//     document.getElementById(id).parentElement.style.animation = animation;
+//     setTimeout(() => {
+//       document.getElementById(id).parentElement.style.animation = "";
+//     }, 1000);
+//   }
+// }
 
 export default showPopupNotification;

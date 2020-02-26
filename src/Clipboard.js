@@ -3,20 +3,19 @@ import { MDBInput } from "mdbreact";
 import { ReactComponent as IconClipboard } from "./assets/svg/IconClipboard.svg";
 
 import ContentEditable from "react-contenteditable";
-import ModalPopup from "./ModalPopup";
-import * as GLOBAL_CONSTANTS from "./GlobalConstants";
+import FilterResults from "react-filter-search";
 import { withRouter, Redirect } from "react-router-dom";
+import Moment from "react-moment";
 
 import Header from "./components/header/Header";
+import NotesCategories from "./NotesCategories";
+import ModalPopup from "./ModalPopup";
 import showPopupNotification from "./common/ToasterNotification";
 import Spinner from "./common/Spinner";
 import "./Clipboard.scss";
 import "./common/Scrollbar.scss";
-import FilterResults from "react-filter-search";
-import NotesCategories from "./NotesCategories";
 
 const FontAwesome = require("react-fontawesome");
-const monthNames = GLOBAL_CONSTANTS.monthNames;
 const isMobileOnly = window.innerWidth <= 767 ? true : false;
 
 class ClipboardApp extends React.Component {
@@ -84,17 +83,16 @@ class ClipboardApp extends React.Component {
       textValue: this.props.inputText,
       dateStamp: new Date().toLocaleString().split(",")
     };
+    console.log("textobj", textObj);
+
     this.props.setStoreVariable("searchText", "");
     this.props.setStoreVariable("inputText", "");
     this.props
       .addTextDB(textObj, this.props.user, this.props.selectedNotesCategory)
       .then(() => {
         if (this.props.texts && this.props.texts.length > 0) {
-          const textID = this.props.texts[this.props.texts.length - 1].id;
-          showPopupNotification(
-            "Successfully Added!!! ",
-            "notify-create",
-          );
+          // const textID = this.props.texts[this.props.texts.length - 1].id;
+          showPopupNotification("Successfully Added!!! ", "notify-create");
         }
       });
   };
@@ -111,10 +109,7 @@ class ClipboardApp extends React.Component {
     } else if (document.selection) {
       document.selection.empty();
     }
-    showPopupNotification(
-      "Successfully Copied!!! ",
-      "notify-create",
-    );
+    showPopupNotification("Successfully Copied!!! ", "notify-create");
   };
   computeTextID = textID => {
     const { selectedNotesCategory } = this.props;
@@ -185,7 +180,7 @@ class ClipboardApp extends React.Component {
       inputText,
       expandInputBox
     } = this.props;
-    
+
     if (!user) return <Redirect to="/" />;
     else if (texts === null) {
       return <Spinner />;
@@ -246,15 +241,6 @@ class ClipboardApp extends React.Component {
                   )}
                   <ul>
                     {texts.map((text, index) => {
-                      const d = new Date();
-                      const dateVariable = text.dateStamp
-                        ? `
-                        ${text.dateStamp[0].slice(0, 2)} 
-                        ${monthNames[d.getMonth()]} 
-                          ${text.dateStamp[0].slice(-4)},   
-                            ${text.dateStamp[1].slice(0, -3)}
-                      `
-                        : "";
                       return (
                         <li key={index + 1}>
                           <span className="text-id">{index + 1}.</span>
@@ -300,7 +286,11 @@ class ClipboardApp extends React.Component {
                           </div>
                           {window.innerWidth <= 767 &&
                             this.showEditCopyBtn(text)}
-                          <div className="dateStamp">{dateVariable}</div>
+                          <Moment
+                            format="DD MMM YYYY, HH:mm"
+                            className="dateStamp"
+                            date={new Date()}
+                          />
                         </li>
                       );
                     })}

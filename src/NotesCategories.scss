@@ -17,9 +17,11 @@
         color: white;
       }
       li {
-        margin: 0px 10px;
+        height: 35px;
         button {
-          padding: 10px 17px;
+          background-color: #ffffff12;
+          padding: 10px;
+          margin: 0;
         }
         > i {
           display: inherit;
@@ -32,11 +34,36 @@
       }
     }
     &__inputBox {
+      > div.md-form {
+        display: inline-block;
+        margin: 0 5px 0 0;
+      }
       input {
+        color: white;
         padding-left: 5px;
+      }
+      label {
+        color: white;
       }
       button {
         padding: 7px;
+      }
+    }
+  }
+}
+
+//mobile styles
+@media screen and (max-width: 767px) {
+  .notesCategories-container {
+    .notesCategories {
+      &__inputBox {
+        margin-top: 10px;
+      }
+      &__list {
+        margin: auto;
+        li {
+          margin: 10px 10px;
+        }
       }
     }
   }
@@ -46,18 +73,18 @@
 @media screen and (min-width: 768px) {
   .notesCategories-container {
     .notesCategories {
+      &__inputBox {
+        button:hover {
+          background-color: white !important;
+          color: black;
+          font-weight: bold;
+        }
+      }
       &__list {
         margin: 15px auto;
-      }
-    }
-  }
-}
-//mobile styles
-@media screen and (max-width: 767px) {
-  .notesCategories-container {
-    .notesCategories {
-      &__list {
-        margin: auto;
+        li {
+          margin: 10px 10px;
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
-import React, { Component, PureComponent } from "react";
-import { MDBBtn } from "mdbreact";
+import React, { PureComponent } from "react";
+import { MDBBtn, MDBInput } from "mdbreact";
 import ModalPopup from "./ModalPopup";
 import showPopupNotification from "./common/ToasterNotification";
 
@@ -23,24 +23,28 @@ class NotesCategories extends PureComponent {
       alert("Note category cannot be Empty!");
     }
     this.props.setStoreVariable("notesCategoryInputText", "");
-    showPopupNotification(
-      "Successfully Added!!! ",
-      "notify-create",
-    );
+    showPopupNotification("Successfully Added!!! ", "notify-create");
   };
   fetchNotesByCategory = category => {
     const { user } = this.props;
     this.props.setStoreVariable("selectedNotesCategory", category);
     this.props.fetchTextsDB(user, category);
   };
-  deleteNotesCategory = (category) => {
+  deleteNotesCategory = category => {
     const { user } = this.props;
     this.props.setStoreVariable("selectedNotesCategory", category);
     this.props.fetchTextsDB(user, category);
     this.props.modalToggle("DELETE-CATEGORY");
-  }
+  };
   render() {
-    const { notesCategories, user, notesCategoryInputText, selectedNotesCategory } = this.props;
+    const {
+      notesCategories,
+      notesCategoryInputText,
+      expandInputBox,
+      selectedNotesCategory
+    } = this.props;
+    console.log("aaaa", notesCategories);
+    
     return (
       <div className="notesCategories-container row no-gutters">
         <div className="col-12 notesCategories__heading">
@@ -50,45 +54,53 @@ class NotesCategories extends PureComponent {
           <ul>
             {notesCategories.length > 0 &&
               notesCategories.map((category, index) => {
-                const notesSelectedFlag = (category === selectedNotesCategory);
+                const notesSelectedFlag = category === selectedNotesCategory;
                 return (
                   <>
                     <li key={index}>
                       <MDBBtn
                         outline={notesSelectedFlag ? false : true}
-                        color={notesSelectedFlag ? "success" : ""} rounded onClick={() => {
+                        color={notesSelectedFlag ? "success" : ""}
+                        rounded
+                        onClick={() => {
                           this.fetchNotesByCategory(category);
-                        }}>
+                        }}
+                      >
                         {category}
                       </MDBBtn>
                       {category !== "Default" && (
                         <i
-                          class="fa fa-window-close"
+                          className="fa fa-window-close"
                           aria-hidden="true"
                           onClick={() => {
-                            this.deleteNotesCategory(category)
+                            this.deleteNotesCategory(category);
                           }}
                         ></i>
                       )}
                     </li>
-                
                   </>
-                )
+                );
               })}
           </ul>
         </div>
-        {this.props.expandInputBox && (
+        {expandInputBox && (
           <div className="col-12 notesCategories__inputBox">
-            <input
-              placeholder="Add notes category..."
+            <MDBInput
+              label="Add notes category..."
+              rows="2"
               name="notesCategoryInputText"
-              type="text"
               value={notesCategoryInputText}
               onChange={e =>
                 this.props.setStoreVariable(e.target.name, e.target.value)
               }
             />
-            <MDBBtn color="info" onClick={this.addNotesCategory}>ADD CATEGORY</MDBBtn>
+            <MDBBtn
+              color="primary"
+              rounded
+              onClick={this.addNotesCategory}
+            >
+              Add Category
+            </MDBBtn>
           </div>
         )}
         <ModalPopup {...this.props} />

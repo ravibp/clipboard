@@ -1,6 +1,7 @@
 import React from "react";
 import "./Header.scss";
 import Hamburger from "./Hamburger";
+import { MDBInput } from "mdbreact";
 import * as firebase from "firebase";
 const isMobileOnly = window.innerWidth <= 767 ? true : false;
 
@@ -52,16 +53,18 @@ class Header extends React.Component {
             className="search-icon fa fa-search"
           />
           {!isMobileOnly && (
-            <input
-              id="searchText"
-              name="searchText"
-              placeholder="Search Notes"
-              type="text"
-              value={this.props.searchText}
-              onChange={e =>
-                this.props.setStoreVariable(e.target.name, e.target.value)
-              }
-            />
+            <>
+              <MDBInput
+                id="searchText"
+                name="searchText"
+                label="Search Notes"
+                rows="2"
+                value={this.props.searchText}
+                onChange={e =>
+                  this.props.setStoreVariable(e.target.name, e.target.value)
+                }
+              />
+            </>
           )}
           {isMobileOnly && (
             <div

@@ -43,20 +43,17 @@ class ModalPopup extends Component {
 
     switch (crudOperation) {
       case "DELETE-CATEGORY":
-        this.props.deleteNotesCategoryDB(user, selectedNotesCategory)
-        this.props.setStoreVariable(
-          "selectedNotesCategory",
-          "Default"
-        );
+        this.props.deleteNotesCategoryDB(user, selectedNotesCategory);
+        this.props.setStoreVariable("selectedNotesCategory", "Default");
         this.props.fetchTextsDB(user, "Default");
+        this.props.modalToggle();
+        showPopupNotification("Successfully Deleted!!! ", "notify-delete");
+        break;
       case "DELETE":
         const textId = textObj ? textObj.id : null;
-        showPopupNotification(
-          "Successfully Deleted!!! ",
-          "notify-delete",
-        );
         this.props.deleteTextDB(textId, user, selectedNotesCategory);
         this.props.modalToggle();
+        showPopupNotification("Successfully Deleted!!! ", "notify-delete");
         break;
       case "UPDATE":
         this.props.updateTextDB(updatedTextObj, user, selectedNotesCategory);
