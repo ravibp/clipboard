@@ -1,6 +1,6 @@
 
 import {combineReducers} from 'redux';
-import clipboardReducer from './ClipboardReducer';
+import clipboardReducer from 'reducers/ClipboardReducer';
 
 const rootReducer = combineReducers({
     clipboardReducer

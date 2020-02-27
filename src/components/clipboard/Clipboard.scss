@@ -1,0 +1,121 @@
+// common styles
+.clipboard-container {
+
+  max-width: 1400px;
+
+  button {
+    border-radius: 10px;
+  }
+
+  .clipboard {
+    &__header {
+      border-bottom: 2px solid #e38800;
+      background: radial-gradient(#0b93ff, #4b4b4ba3);
+      position: fixed !important;
+      left: 0;
+      top: 0;
+      z-index: 100;
+    }
+
+    &__notesCategories {
+      margin: 10px 0px;
+    }
+
+    &__textArea {
+      margin: auto;
+      padding: 0px;
+
+      label {
+        margin-left: 10px;
+      }
+
+      label.active {
+        display: none !important;
+      }
+
+      textarea {
+        background-color: white !important;
+        padding: 15px !important;
+        border: 1px solid #bcbcbc !important;
+        height: 200px;
+        overflow-y: hidden;
+        overflow: visible !important;
+        -webkit-box-shadow: 9px 10px 5px -4px rgba(0, 0, 0, 0.37);
+        -moz-box-shadow: 9px 10px 5px -4px rgba(0, 0, 0, 0.37);
+        box-shadow: 9px 10px 5px -4px rgba(0, 0, 0, 0.37);
+      }
+
+      textarea:focus {
+        box-shadow: 0 5px 0 0 #4285f4 !important;
+        border: 3px solid #4285f4 !important;
+      }
+    }
+
+    &__submit {
+      button {
+        transition: initial;
+      }
+
+      .addText-btn {
+        font-family: sans-serif;
+        font-weight: bold;
+        transition: all 1s !important;
+      }
+
+      .addText-btn-color {
+        font-weight: bold;
+        color: white;
+        background: #4ac36eed;
+      }
+
+      .submit-disabled {
+        background: initial !important;
+        background-color: #d8d8d8 !important;
+        color: #b0b0b0 !important;
+        pointer-events: none;
+      }
+    }
+  }
+}
+
+//mobile styles
+@media screen and (max-width: 767px) {
+  .clipboard-container {
+    margin: 50px 0px 0px 0px;
+
+    .clipboard {
+      &__header {
+        height: 50px;
+      }
+
+      &__textArea {
+        margin: 20px 30px 0px !important;
+        padding: 0px !important;
+
+        .md-form {
+          display: flex !important;
+          flex-wrap: wrap !important;
+          margin: 0px -15px !important;
+        }
+      }
+    }
+  }
+}
+
+// desktop styles
+@media screen and (min-width: 768px) {
+  .clipboard-container {
+    margin: 50px;
+    padding: 0px 30px;
+
+    .clipboard {
+      &__textArea {
+        padding: 0px;
+
+        .md-form {
+          margin: 20px 30px;
+        }
+      }
+    }
+  }
+}

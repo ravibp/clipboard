@@ -12,5 +12,6 @@ export default {
   notesCategoryInputText: "",
   displayName: "",
   selectedNotesCategory: null,
+  selectedNotesCategoryID: null,
   notesCategories: []
 };

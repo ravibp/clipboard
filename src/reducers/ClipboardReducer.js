@@ -1,5 +1,5 @@
-import initialState from "./InitialState";
-import * as actionKeys from "../actions/ActionTypes";
+import initialState from "reducers/InitialState";
+import * as actionKeys from "actions/ActionTypes";
 
 export default function clipboardReducer(state = initialState, action) {
   switch (action.type) {

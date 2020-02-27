@@ -1,4 +1,5 @@
-import * as firebase from "firebase";
+import firebase from "firebase/app";
+import 'firebase/auth';
 import * as firebaseui from "firebaseui";
 
 export async function authHandler(thisProp) {

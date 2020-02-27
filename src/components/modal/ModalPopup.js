@@ -6,7 +6,7 @@ import {
   MDBModalHeader,
   MDBModalFooter
 } from "mdbreact";
-import "./ModalPopup.scss";
+import "components/modal/ModalPopup.scss";
 
 class ModalPopup extends Component {
   handleConfirmNo = () => {
@@ -27,16 +27,21 @@ class ModalPopup extends Component {
       updatedTextObj,
       user,
       selectedNotesCategory,
+      selectedNotesCategoryID,
       crudOperation,
       textObj
     } = this.props;
     switch (crudOperation) {
       case "DELETE-CATEGORY":
-        this.props.deleteNotesCategoryDB(user, selectedNotesCategory);
+        this.props.deleteNotesCategoryDB(
+          user,
+          selectedNotesCategory,
+          selectedNotesCategoryID
+        );
         break;
       case "DELETE":
-        const textId = textObj ? textObj.id : null;
-        this.props.deleteTextDB(textId, user, selectedNotesCategory);
+        const textID = textObj ? textObj.id : null;
+        this.props.deleteTextDB(textID, user, selectedNotesCategory);
         break;
       case "UPDATE":
         this.props.updateTextDB(updatedTextObj, user, selectedNotesCategory);
@@ -46,18 +51,19 @@ class ModalPopup extends Component {
     }
   };
   render() {
-    let crudVariable = ""
-    const { crudOperation, selectedNotesCategory } = this.props
+    let crudVariable = "";
+    const { crudOperation, selectedNotesCategory } = this.props;
     switch (crudOperation) {
       case "DELETE-CATEGORY":
-        crudVariable = `${crudOperation} ${selectedNotesCategory}`
+        crudVariable = `${crudOperation} ${selectedNotesCategory}`;
         break;
       case "DELETE":
-        crudVariable = `${crudOperation} Text`
+        crudVariable = `${crudOperation} Text`;
         break;
       case "UPDATE":
-        crudVariable = `${crudOperation} Text`
+        crudVariable = `${crudOperation} Text`;
         break;
+      default:
     }
     return (
       <div className="modal-container">

@@ -12,15 +12,3 @@ code {
     monospace;
 }
 
-b {
-  font-weight: bold !important;
-}
-
-ul {
-  margin: 0px !important;
-  padding: 0px !important;
-  list-style: none !important;
-}
-button {
-  text-transform: none !important; 
-}

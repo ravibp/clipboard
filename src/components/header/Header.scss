@@ -1,31 +1,35 @@
 // common styles
 .header-container {
   font-weight: bold;
+
   > div {
     margin-top: auto;
     margin-bottom: auto;
     padding: 0px 10px !important;
   }
+
   .header {
     &__title {
       display: inline-flex;
+
       > h1 {
         font-weight: bold;
         margin: 0;
       }
+
       > .inputToggleButton {
         color: white;
-        cursor: pointer;
         margin-top: auto;
         margin-bottom: auto;
       }
     }
+
     &__searchBox {
-      color: white;
-      div.md-form {
-        display: inline-block;
-        margin: 0;
+      .search-icon,
+      i {
+        color: white;
       }
+
       input {
         margin: 0;
         padding-left: 5px;
@@ -39,28 +43,34 @@
 @media screen and (max-width: 767px) {
   .header-container {
     margin: 10px;
+
     .header {
       &__title {
         > h1 {
           font-size: 20px;
         }
-        > .inputToggleButton {
+
+        > i.inputToggleButton {
           margin-left: 15px;
           font-size: 23px !important;
         }
       }
+
       &__userInfo {
         font-size: 15px;
         text-align: left;
       }
+
       &__hamburgerMenu {
         text-align: right;
+
         .hamburgerMenu-icon {
           > div {
             z-index: 100;
             float: right;
           }
         }
+
         .drawer {
           color: white;
           position: fixed;
@@ -69,16 +79,19 @@
           left: 0;
           height: 120px;
           width: 100%;
+
           > div {
             margin: 50px 0px;
             text-align: center;
           }
         }
       }
+
       &__searchBox {
         .search-icon {
           font-size: 22px;
         }
+
         .searchInput-container {
           width: 160px;
           top: 30px;
@@ -86,8 +99,13 @@
           display: block;
           z-index: 100;
           position: absolute;
+
           input {
             width: 85%;
+          }
+
+          i {
+            margin-left: 2px;
           }
 
           .search-arrow {
@@ -109,18 +127,22 @@
   .header-container {
     margin: auto 15px;
     height: 50px;
+
     .header {
       &__title {
         > h1 {
           font-size: 20px;
         }
+
         > .inputToggleButton {
           margin-left: 15px;
           font-size: 22px !important;
         }
       }
+
       &__userInfo {
         text-align: right;
+
         > ul > li {
           margin: auto 10px;
           display: inline;
@@ -129,15 +151,24 @@
 
       &__searchBox {
         text-align: left;
+
+        .md-form {
+          display: inline-block;
+          margin: 0;
+        }
         .search-icon {
+          cursor: initial !important;
           margin-right: 5px;
           font-size: 20px;
         }
+
         input {
           color: white;
         }
-        label {
-          color: white;
+
+        label,
+        label.active {
+          color: white !important;
         }
       }
     }

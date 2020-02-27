@@ -1,10 +1,14 @@
 import { connect } from "react-redux";
-import * as ClipboardActions from "../actions/ClipboardActions";
+import * as ClipboardActions from "actions/ClipboardActions";
 import React from "react";
-import Clipboard from "../Clipboard";
+import Clipboard from "components/clipboard/Clipboard";
+import { Redirect } from "react-router-dom";
 
 class ClipboardConnector extends React.Component {
   render() {
+    if (!this.props.isOnline) {
+      return <Redirect to="/" />;
+    }
     return <Clipboard {...this.props} />;
   }
 }
@@ -23,7 +27,8 @@ const mapStateToProps = state => {
     notesCategoryInputText: state.clipboardReducer.notesCategoryInputText,
     displayName: state.clipboardReducer.displayName,
     selectedNotesCategory: state.clipboardReducer.selectedNotesCategory,
-    notesCategories: state.clipboardReducer.notesCategories,
+    selectedNotesCategoryID: state.clipboardReducer.selectedNotesCategoryID,
+    notesCategories: state.clipboardReducer.notesCategories
   };
 };
 
@@ -37,13 +42,13 @@ const mapDispatchToProps = dispatch => {
       dispatch(
         ClipboardActions.addTextDB(textObj, user, selectedNotesCategory)
       ),
-    deleteTextDB: (textId, user, selectedNotesCategory) =>
+    deleteTextDB: (textID, user, selectedNotesCategory) =>
       dispatch(
-        ClipboardActions.deleteTextDB(textId, user, selectedNotesCategory)
+        ClipboardActions.deleteTextDB(textID, user, selectedNotesCategory)
       ),
-    fetchTextsDB: (textId, user, selectedNotesCategory) =>
+    fetchTextsDB: (textID, user, selectedNotesCategory) =>
       dispatch(
-        ClipboardActions.fetchTextsDB(textId, user, selectedNotesCategory)
+        ClipboardActions.fetchTextsDB(textID, user, selectedNotesCategory)
       ),
     updateTextDB: (textObj, user, selectedNotesCategory) =>
       dispatch(
@@ -57,9 +62,21 @@ const mapDispatchToProps = dispatch => {
     fetchNotesCategoriesDB: user =>
       dispatch(ClipboardActions.fetchNotesCategoriesDB(user)),
     addNotesCategoryDB: (user, selectedNotesCategory) =>
-      dispatch(ClipboardActions.addNotesCategoryDB(user, selectedNotesCategory)),
-    deleteNotesCategoryDB: (user, selectedNotesCategory) =>
-      dispatch(ClipboardActions.deleteNotesCategoryDB(user, selectedNotesCategory)),
+      dispatch(
+        ClipboardActions.addNotesCategoryDB(user, selectedNotesCategory)
+      ),
+    deleteNotesCategoryDB: (
+      user,
+      selectedNotesCategory,
+      selectedNotesCategoryID
+    ) =>
+      dispatch(
+        ClipboardActions.deleteNotesCategoryDB(
+          user,
+          selectedNotesCategory,
+          selectedNotesCategoryID
+        )
+      )
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ClipboardConnector);

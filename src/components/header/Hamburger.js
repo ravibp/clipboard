@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import HamburgerMenu from "react-hamburger-menu";
+import LoginButton from "components/button/LoginButton";
 
 export default class Hamburger extends Component {
   constructor(props) {
@@ -43,7 +44,7 @@ export default class Hamburger extends Component {
     }
   };
   render() {
-    const { SignInOutButton, displayName, user } = this.props;
+    const { displayName, user } = this.props;
     const { drawerOpenFlag } = this.state;
 
     return (
@@ -65,7 +66,7 @@ export default class Hamburger extends Component {
         <div ref="headerNavBar-ref" className="drawer">
           {user && user.uid && (
             <div>
-              <SignInOutButton uid={user.uid} displayName={displayName} />
+              <LoginButton uid={user.uid} displayName={displayName} />
             </div>
           )}
         </div>

@@ -1,26 +1,36 @@
 import React from "react";
-import "./Header.scss";
-import Hamburger from "./Hamburger";
+import "components/header/Header.scss";
+import Hamburger from "components/header/Hamburger";
 import { MDBInput } from "mdbreact";
-import * as firebase from "firebase";
-const isMobileOnly = window.innerWidth <= 767 ? true : false;
+import LoginButton from "components/button/LoginButton";
+import FontAwesome from "react-fontawesome";
 
 class Header extends React.Component {
+  setWrapperRef = node => {
+    this.wrapperRef = node;
+  };
+  renderRemoveIcon = () => (
+    <FontAwesome
+      name="remove"
+      className="super-crazy-colors searchInput-clear ml-2"
+      onClick={() => {
+        this.props.setStoreVariable("searchText", "");
+      }}
+      style={{
+        textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)",
+        color: "white"
+      }}
+    />
+  );
   render() {
-    const { user, displayName, expandInputBox } = this.props;
-    const SignInOutButton = ({ uid, displayName }) => {
-      return (
-        <button
-          onClick={() => {
-            uid === "@Guest"
-              ? window.location.replace("/") // redirect to dashboard route "/"
-              : firebase.auth().signOut();
-          }}
-        >
-          {uid === "@Guest" ? "Login/ Signup" : `Logout, ${displayName}`}
-        </button>
-      );
-    };
+    const {
+      user,
+      displayName,
+      expandInputBox,
+      isMobileOnly,
+      searchText
+    } = this.props;
+
     const toggleIconClass = !expandInputBox
       ? "fa fa-plus-circle"
       : "fa fa-minus-circle";
@@ -41,6 +51,7 @@ class Header extends React.Component {
         </div>
         <div className="col-auto header__searchBox">
           <span
+            className="search-icon fa fa-search"
             onClick={e => {
               if (isMobileOnly) {
                 this.props.setStoreVariable(
@@ -50,7 +61,6 @@ class Header extends React.Component {
                 document.getElementById(`searchText`).focus();
               }
             }}
-            className="search-icon fa fa-search"
           />
           {!isMobileOnly && (
             <>
@@ -64,6 +74,7 @@ class Header extends React.Component {
                   this.props.setStoreVariable(e.target.name, e.target.value)
                 }
               />
+              {searchText && this.renderRemoveIcon()}
             </>
           )}
           {isMobileOnly && (
@@ -85,6 +96,7 @@ class Header extends React.Component {
                   this.props.setStoreVariable(e.target.name, e.target.value)
                 }
               />
+              {searchText && this.renderRemoveIcon()}
             </div>
           )}
         </div>
@@ -94,7 +106,6 @@ class Header extends React.Component {
               <Hamburger
                 user={this.props.user}
                 displayName={this.props.displayName}
-                SignInOutButton={SignInOutButton}
               />
             </div>
           </>
@@ -102,10 +113,16 @@ class Header extends React.Component {
         {!isMobileOnly && (
           <div className="col header__userInfo">
             <ul>
-              <li>{`${displayName}`}</li>
+              <li
+                style={{
+                  color: "#ff9800",
+                  fontStyle: "italic",
+                  fontFamily: "cursive"
+                }}
+              >{`${displayName}`}</li>
               {user && user.uid && (
                 <li>
-                  <SignInOutButton uid={user.uid} displayName={displayName} />
+                  <LoginButton uid={user.uid} displayName={displayName} />
                 </li>
               )}
             </ul>
