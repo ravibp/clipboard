@@ -1,29 +1,28 @@
 import React, { PureComponent } from "react";
 import { MDBBtn, MDBInput } from "mdbreact";
 import ModalPopup from "./ModalPopup";
-import showPopupNotification from "./common/ToasterNotification";
-
 import "./NotesCategories.scss";
 
 class NotesCategories extends PureComponent {
   addNotesCategory = () => {
     const { user, notesCategories, notesCategoryInputText } = this.props;
-    if (notesCategoryInputText) {
-      if (notesCategories.indexOf(notesCategoryInputText) === -1) {
-        this.props.addNotesCategoryDB(user, notesCategoryInputText);
+    const encodedCategoryText = encodeURI(notesCategoryInputText)
+    if (encodedCategoryText) {
+      if (notesCategories.indexOf(encodedCategoryText) === -1) {
+        this.props.addNotesCategoryDB(user, encodedCategoryText);
         this.props.setStoreVariable(
           "selectedNotesCategory",
-          notesCategoryInputText
+          encodedCategoryText
         );
-        this.props.fetchTextsDB(user, notesCategoryInputText);
+        this.props.fetchTextsDB(user, encodedCategoryText);
       } else {
         alert("Note category already present!");
+        return;
       }
     } else {
       alert("Note category cannot be Empty!");
+      return;
     }
-    this.props.setStoreVariable("notesCategoryInputText", "");
-    showPopupNotification("Successfully Added!!! ", "notify-create");
   };
   fetchNotesByCategory = category => {
     const { user } = this.props;
@@ -43,8 +42,7 @@ class NotesCategories extends PureComponent {
       expandInputBox,
       selectedNotesCategory
     } = this.props;
-    console.log("aaaa", notesCategories);
-    
+
     return (
       <div className="notesCategories-container row no-gutters">
         <div className="col-12 notesCategories__heading">
@@ -66,7 +64,7 @@ class NotesCategories extends PureComponent {
                           this.fetchNotesByCategory(category);
                         }}
                       >
-                        {category}
+                        {decodeURIComponent(category)}
                       </MDBBtn>
                       {category !== "Default" && (
                         <i
@@ -90,8 +88,9 @@ class NotesCategories extends PureComponent {
               rows="2"
               name="notesCategoryInputText"
               value={notesCategoryInputText}
-              onChange={e =>
+              onChange={e => {
                 this.props.setStoreVariable(e.target.name, e.target.value)
+              }
               }
             />
             <MDBBtn

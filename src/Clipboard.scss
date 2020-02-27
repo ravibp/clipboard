@@ -30,7 +30,7 @@
         li {
           text-align: left;
           font-family: sans-serif;
-          .text-id {
+          .text-index {
             font-weight: bold;
             position: absolute;
           }
@@ -185,7 +185,7 @@
           li {
             transition: all 0.3s;
             padding: 15px 35px 15px 35px;
-            .text-id {
+            .text-index {
               left: 10px;
               margin-top: 10px;
             }
@@ -269,7 +269,7 @@
             padding: 15px 120px 15px 80px;
             border-radius: 30px;
             margin: 10px 0px;
-            .text-id {
+            .text-index {
               left: 50px;
               margin-top: 15px;
             }

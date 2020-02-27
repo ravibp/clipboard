@@ -53,7 +53,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(ClipboardActions.modalToggle(crudOperation)),
     setTextDetails: (textObj, updatedTextObj) =>
       dispatch(ClipboardActions.setTextDetails(textObj, updatedTextObj)),
-    renderText: textObj => dispatch(ClipboardActions.renderText(textObj)),
+    renderOldText: textObj => dispatch(ClipboardActions.renderOldText(textObj)),
     fetchNotesCategoriesDB: user =>
       dispatch(ClipboardActions.fetchNotesCategoriesDB(user)),
     addNotesCategoryDB: (user, selectedNotesCategory) =>

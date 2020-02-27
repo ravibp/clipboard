@@ -6,24 +6,18 @@ import {
   MDBModalHeader,
   MDBModalFooter
 } from "mdbreact";
-
-import showPopupNotification from "./common/ToasterNotification";
 import "./ModalPopup.scss";
 
 class ModalPopup extends Component {
   handleConfirmNo = () => {
     const crudOperation = this.props.crudOperation;
     switch (crudOperation) {
-      case "DELETE-CATEGORY":
-        this.props.modalToggle();
-        break;
-      case "DELETE":
-        this.props.modalToggle();
-        break;
       case "UPDATE":
-        this.props.renderText(this.props.textObj);
+        this.props.renderOldText(this.props.textObj);
         this.props.modalToggle();
         break;
+      case "DELETE-CATEGORY":
+      case "DELETE":
       default:
         this.props.modalToggle();
     }
@@ -36,40 +30,35 @@ class ModalPopup extends Component {
       crudOperation,
       textObj
     } = this.props;
-    // const computedTextID = `${
-    //   selectedNotesCategory ? `${selectedNotesCategory}_` : ""
-    //   }text-${textObj.id}`;
-    console.log("cruid, ", crudOperation);
-
     switch (crudOperation) {
       case "DELETE-CATEGORY":
         this.props.deleteNotesCategoryDB(user, selectedNotesCategory);
-        this.props.setStoreVariable("selectedNotesCategory", "Default");
-        this.props.fetchTextsDB(user, "Default");
-        this.props.modalToggle();
-        showPopupNotification("Successfully Deleted!!! ", "notify-delete");
         break;
       case "DELETE":
         const textId = textObj ? textObj.id : null;
         this.props.deleteTextDB(textId, user, selectedNotesCategory);
-        this.props.modalToggle();
-        showPopupNotification("Successfully Deleted!!! ", "notify-delete");
         break;
       case "UPDATE":
         this.props.updateTextDB(updatedTextObj, user, selectedNotesCategory);
-        this.props.modalToggle();
-        showPopupNotification(
-          "Changes Saved!!! ",
-          "notify-update"
-          // this.props.updatedTextObj.id,
-          // computedTextID
-        );
         break;
       default:
         this.props.modalToggle();
     }
   };
   render() {
+    let crudVariable = ""
+    const { crudOperation, selectedNotesCategory } = this.props
+    switch (crudOperation) {
+      case "DELETE-CATEGORY":
+        crudVariable = `${crudOperation} ${selectedNotesCategory}`
+        break;
+      case "DELETE":
+        crudVariable = `${crudOperation} Text`
+        break;
+      case "UPDATE":
+        crudVariable = `${crudOperation} Text`
+        break;
+    }
     return (
       <div className="modal-container">
         <MDBContainer>
@@ -83,7 +72,7 @@ class ModalPopup extends Component {
               </span>
             </button>
             <MDBModalHeader toggle={this.props.modalToggle}>
-              Confirm {this.props.crudOperation} ???
+              {`Confirm ${crudVariable} ???`}
             </MDBModalHeader>
             <MDBModalFooter>
               <MDBBtn color="secondary" onClick={this.handleConfirmNo}>

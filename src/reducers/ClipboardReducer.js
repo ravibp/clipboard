@@ -30,7 +30,7 @@ export default function clipboardReducer(state = initialState, action) {
         textObj: action.textObj,
         updatedTextObj: action.updatedTextObj
       };
-    case actionKeys.RENDER_TEXT:
+    case actionKeys.RENDER_OLD_TEXT:
       const updatedTexts = state.texts;
       const index = state.texts.findIndex(x => x.id === action.textObj.id);
       updatedTexts[index] = action.textObj;

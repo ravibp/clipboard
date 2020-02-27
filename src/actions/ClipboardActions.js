@@ -1,6 +1,7 @@
 import * as actionKeys from "./ActionTypes";
 import { databaseRef } from "../config/Config";
 import _ from "lodash";
+import showPopupNotification from "../common/ToasterNotification";
 
 export const addNotesCategoryDB = (
   user,
@@ -8,7 +9,7 @@ export const addNotesCategoryDB = (
 ) => async dispatch => {
   const textObj = {
     id: selectedNotesCategory,
-    textValue: `This is ${selectedNotesCategory} category notes`,
+    textValue: `This is <b>${decodeURIComponent(selectedNotesCategory)}</b> category notes`,
     dateStamp: new Date().toLocaleString().split(",")
   };
   if (user) {
@@ -16,7 +17,10 @@ export const addNotesCategoryDB = (
     databaseRef
       .child(dbEndPoint)
       .push()
-      .set(textObj);
+      .set(textObj, () => {
+        setStoreVariable("notesCategoryInputText", "");
+        showPopupNotification("Successfully Added!!! ", "notify-create");
+      });
   }
 };
 export const deleteNotesCategoryDB = (
@@ -25,7 +29,12 @@ export const deleteNotesCategoryDB = (
 ) => async dispatch => {
   if (user) {
     const dbEndPoint = `users/${user.uid}/${selectedNotesCategory}`;
-    databaseRef.child(dbEndPoint).remove();
+    databaseRef.child(dbEndPoint).remove(() => {
+      dispatch(modalToggle());
+      showPopupNotification("Successfully Deleted!!! ", "notify-delete");
+      dispatch(setStoreVariable("selectedNotesCategory", "Default"));
+      dispatch(fetchTextsDB(user, "Default"));
+    });
   }
 };
 export const fetchNotesCategoriesDB = user => async dispatch => {
@@ -56,11 +65,12 @@ export const addTextDB = (
 ) => async dispatch => {
   const dbEndPoint = `users/${user.uid}/${
     selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
-  }texts`;
+    }texts`;
   databaseRef
     .child(dbEndPoint)
     .push()
-    .set(textObject);
+    .set(textObject, () => showPopupNotification("Successfully Added!!! ", "notify-create")
+    );
 };
 export const deleteTextDB = (
   textId,
@@ -69,8 +79,11 @@ export const deleteTextDB = (
 ) => async dispatch => {
   const dbEndPoint = `users/${user.uid}/${
     selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
-  }texts/${textId}`;
-  databaseRef.child(dbEndPoint).remove();
+    }texts/${textId}`;
+  databaseRef.child(dbEndPoint).remove(() => {
+    dispatch(modalToggle());
+    showPopupNotification("Successfully Deleted!!! ", "notify-delete");
+  });
 };
 export const updateTextDB = (
   textObj,
@@ -79,8 +92,16 @@ export const updateTextDB = (
 ) => async dispatch => {
   const dbEndPoint = `users/${user.uid}/${
     selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
-  }texts/${textObj.id}`;
-  databaseRef.child(dbEndPoint).set(textObj);
+    }texts/${textObj.id}`;
+  databaseRef.child(dbEndPoint).set(textObj, () => {
+
+    dispatch(modalToggle());
+    showPopupNotification(
+      "Changes Saved!!! ",
+      "notify-update"
+      // this.props.updatedTextObj.id,
+    );
+  });
 };
 
 // action to update store corresponding to database data change
@@ -89,7 +110,7 @@ export const fetchTextsDB = (user, selectedNotesCategory) => async dispatch => {
   if (user) {
     const dbEndPoint = `users/${user.uid}/${
       selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
-    }texts`;
+      }texts`;
     databaseRef.child(dbEndPoint).on("value", snapshot => {
       let texts = [];
       _.map(snapshot.val(), (value, key) => {
@@ -122,9 +143,9 @@ export const setTextDetails = (textObj, updatedTextObj) => {
     updatedTextObj
   };
 };
-export const renderText = textObj => {
+export const renderOldText = textObj => {
   return {
-    type: actionKeys.RENDER_TEXT,
+    type: actionKeys.RENDER_OLD_TEXT,
     textObj
   };
 };
