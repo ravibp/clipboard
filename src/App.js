@@ -18,9 +18,8 @@ class App extends Component {
     spinnerComponent.style.display = "none";
   };
   async componentDidMount() {
-    // authHandler updates userState after authentication.
-    authHandler(this);
-    this.showRenderedPage();
+    authHandler(this); // authHandler updates 'user' state after authentication.
+    this.showRenderedPage(); // Hide spinner on page load.
   }
   render() {
     const guestUser = {
@@ -28,6 +27,7 @@ class App extends Component {
       displayName: "Guest User"
     };
     return (
+      // Detector checks internet connectivity status.
       <Detector
         render={({ online }) => {
           const offlineMsg =
@@ -36,15 +36,18 @@ class App extends Component {
             <BrowserRouter>
               <div className="App">
                 <Switch>
+                  {/* Route to /dashboard on page load. */}
                   <Route
                     exact
                     path="/"
                     render={() => <Dashboard user={this.state.user} isOnline={online} offlineMsg={offlineMsg}/>}
                   />
+                  {/* Route to /demo for Guest User. */}
                   <Route
                     path="/demo"
                     render={() => <ClipboardConnector user={guestUser} isOnline={online}/>}
                   />
+                  {/* Route to /clipboard for LoggedIn User. */}
                   <Route
                     path="/clipboard"
                     render={() => <ClipboardConnector user={this.state.user} isOnline={online}/>}

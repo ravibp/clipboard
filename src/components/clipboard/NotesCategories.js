@@ -5,6 +5,7 @@ import "components/clipboard/NotesCategories.scss";
 import FontAwesome from "react-fontawesome";
 
 class NotesCategories extends PureComponent {
+  // Add a new note category.
   addNotesCategory = () => {
     const { user, notesCategories, notesCategoryInputText } = this.props;
     const encodedCategoryText = encodeURI(notesCategoryInputText);
@@ -20,11 +21,13 @@ class NotesCategories extends PureComponent {
       return;
     }
   };
+  // Fetch notes belonging to a particular category.
   fetchNotesByCategory = category => {
     const { user } = this.props;
     this.props.setStoreVariable("selectedNotesCategory", category);
     this.props.fetchTextsDB(user, category);
   };
+  // Delete a particulat note category and all the notes of that category.
   deleteNotesCategory = (category, index) => {
     const { user } = this.props;
     this.props.setStoreVariable("selectedNotesCategory", category);
@@ -81,7 +84,7 @@ class NotesCategories extends PureComponent {
               })}
           </ul>
         </div>
-        {expandInputBox && (
+        {(this.props.isMobileOnly ? true : expandInputBox) && (
           <div className="col-12 notesCategories__inputBox">
             <MDBInput
               label="Add notes category..."

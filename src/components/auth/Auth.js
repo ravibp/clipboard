@@ -4,7 +4,7 @@ import * as firebaseui from "firebaseui";
 
 export async function authHandler(thisProp) {
   await firebase.auth().onAuthStateChanged(user => {
-    // User is signed in.
+    // User is signed in. Updates 'user' state
     thisProp.setState({
       user
     });

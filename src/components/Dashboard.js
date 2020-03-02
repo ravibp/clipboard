@@ -6,7 +6,7 @@ import "components/Dashboard.scss";
 
 class Dashboard extends Component {
   componentDidMount() {
-    renderAuthUI(ui);
+    renderAuthUI(ui); // render firebase login UI on page load
   }
   render() {
     const { user, isOnline, offlineMsg } = this.props;
@@ -23,6 +23,7 @@ class Dashboard extends Component {
           </h6>
           <h1 className="dashboard__heading">Welcome to My Clipboard App</h1>
         </div>
+        {/* Button to view demo page for Guest users */}
         <div className="col-12 dashboard__viewDemo-btn">
           <MDBBtn
             className={!isOnline && "noInternet-disabled"}
@@ -34,7 +35,7 @@ class Dashboard extends Component {
             View Demo
           </MDBBtn>
         </div>
-
+        {/* Firebase Login with different social platforms */}
         <div
           className={`col-12 ${!isOnline && "noInternet-disabled"} `}
           id="firebaseui-auth-container"

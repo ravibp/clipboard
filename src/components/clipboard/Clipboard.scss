@@ -1,6 +1,5 @@
 // common styles
 .clipboard-container {
-
   max-width: 1400px;
 
   button {
@@ -82,7 +81,7 @@
 @media screen and (max-width: 767px) {
   .clipboard-container {
     margin: 50px 0px 0px 0px;
-
+  
     .clipboard {
       &__header {
         height: 50px;

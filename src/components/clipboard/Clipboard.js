@@ -14,11 +14,8 @@ import "common/CommonStyles.scss";
 const isMobileOnly = window.innerWidth <= 767 ? true : false;
 
 class Clipboard extends React.Component {
-
   componentDidMount() {
-    if (isMobileOnly) {
-      document.addEventListener("mousedown", this.handleClickOutside);
-    }
+    // fetch notes categories and texts from DB.
     this.props.fetchNotesCategoriesDB(this.props.user);
     this.props.fetchTextsDB(this.props.user, this.props.selectedNotesCategory);
     const displayName = this.handleDisplayName(this.props.user);
@@ -26,6 +23,7 @@ class Clipboard extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    // Fetch Default note category texts on deleting a particular note category.
     if (
       prevProps.notesCategories !== this.props.notesCategories &&
       this.props.notesCategories.length > 0 &&
@@ -39,16 +37,13 @@ class Clipboard extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    if (isMobileOnly) {
-      document.removeEventListener("mousedown", this.handleClickOutside);
-    }
-  }
+
 
   capitalizeFirstLetter = string => {
     return string.replace(/^./, string[0].toUpperCase());
   };
 
+  // Format display name.
   handleDisplayName = user => {
     let displayName = "";
     if (user !== null) {
@@ -65,43 +60,33 @@ class Clipboard extends React.Component {
     return displayName;
   };
 
-  /**
-   * Toggle on Clicking outside of element
-   */
-  handleClickOutside = (event) => {
-    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
-      this.props.setStoreVariable(
-        "expandSearchBox",
-        false
-      );
-    }
-  }
 
   render() {
-    const {
-      texts,
-      user,
-      expandInputBox
-    } = this.props;
+    const { texts, user, expandInputBox } = this.props;
     if (!user) return <Redirect to="/" />;
+    // Redirect to dashboard if user is not logged in.
     else if (texts === null) {
-      return <Spinner />;
+      return <Spinner />; // Show spinner during page load.
     }
     return (
       <div className="clipboard-container row no-gutters">
-        <div id="hamburgerOverlay-ref" className="hamburger-overlay"></div>
+        {/* Header component. */}
         <div className="clipboard__header col-12">
           <Header {...this.props} isMobileOnly={isMobileOnly} />
         </div>
-        <div className="clipboard__notesCategories col-12">
-          <NotesCategories {...this.props} />
-        </div>
-        {expandInputBox && (
-          <NotesInput {...this.props} />
+        {/* Notes category list component. */}
+        {!isMobileOnly && (
+          <div className="clipboard__notesCategories col-12">
+            <NotesCategories {...this.props} />
+          </div>
         )}
+        {/* Notes input component for adding new notes categories. */}
+        {expandInputBox && <NotesInput {...this.props} />}
+        {/* Notes list component belonging to a particular note category. */}
         <div className="clipboard__list col-12">
           <NotesList {...this.props} />
         </div>
+        {/* Modal popup component for confirm operations. */}
         <ModalPopup {...this.props} />
       </div>
     );

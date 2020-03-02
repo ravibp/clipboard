@@ -58,7 +58,6 @@ class NotesList extends React.Component {
   readText = textID => {
     window.getSelection().selectAllChildren(document.getElementById(textID));
     document.execCommand("copy");
-
     // de-select current selection
     if (window.getSelection) {
       window.getSelection().removeAllRanges();
@@ -108,9 +107,8 @@ class NotesList extends React.Component {
                             id={text.id}
                             className="text-value"
                             html={text.textValue}
-                            // innerHTML of the editable div
-                            disabled={true} // use true to disable editing
-                            onChange={this.updateText.bind(this, text.id)} // handle innerHTML change
+                            disabled={true}
+                            onChange={this.updateText.bind(this, text.id)}
                             onBlur={this.handleContentBlur.bind(this, text.id)}
                             tagName="pre" // Use a custom HTML tag (uses a div by default)
                           />

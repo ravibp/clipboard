@@ -41,6 +41,12 @@
 
 // mobile styles
 @media screen and (max-width: 767px) {
+  .hamburger-overlay {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    transition: background-color 1s;
+  }
   .header-container {
     margin: 10px;
 
@@ -72,17 +78,29 @@
         }
 
         .drawer {
+          transition: all 0.5s;
           color: white;
           position: fixed;
           background-color: #000000c2;
-          top: -300px;
-          left: 0;
-          height: 120px;
-          width: 100%;
-
+          top: 0;
+          left: 500px;
+          margin-left: 25%;
+          width: 75%;
           > div {
             margin: 50px 0px;
             text-align: center;
+          }
+        }
+
+        // Notes categories styles
+        .notesCategories {
+          &__list {
+            > ul {
+              display: block !important;
+              overflow-x: initial !important;
+              height: 200px;
+              overflow-y: scroll;
+            }
           }
         }
       }

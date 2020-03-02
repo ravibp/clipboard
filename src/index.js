@@ -9,6 +9,8 @@ import { Provider } from "react-redux";
 import "font-awesome/css/font-awesome.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "mdbreact/dist/css/mdb.css";
+
+// Initialize Store
 const store = configureStore();
 ReactDOM.render(
   <Provider store={store}>

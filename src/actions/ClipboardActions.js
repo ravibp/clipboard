@@ -5,6 +5,9 @@ import showPopupNotification, {
   highlightOperationOnText
 } from "common/ToasterNotification";
 
+/**
+ * ACTIONS TO PERFORM CRUD ON NOTES CATEGORIES.
+ */
 export const addNotesCategoryDB = (
   user,
   encodedCategoryText
@@ -63,11 +66,10 @@ export const fetchNotesCategoriesDB = user => async dispatch => {
     });
   }
 };
-export const setStoreVariable = (inputStoreVariable, inputValue) => ({
-  type: actionKeys.SET_STORE_VARIABLE,
-  inputStoreVariable,
-  inputValue
-});
+
+/**
+ * ACTIONS TO PERFORM CRUD ON NOTES OF A PARTICULAR CATEGORY.
+ */
 
 export const addTextDB = (
   textObject,
@@ -143,6 +145,14 @@ export const fetchTextsDB = (user, selectedNotesCategory) => async dispatch => {
   }
 };
 
+// Action to dynamically update store variables with a single action name.
+export const setStoreVariable = (inputStoreVariable, inputValue) => ({
+  type: actionKeys.SET_STORE_VARIABLE,
+  inputStoreVariable,
+  inputValue
+});
+
+// Action to toggle modal flag.
 export const modalToggle = crudOperation => {
   return {
     type: actionKeys.MODAL_TOGGLE,
@@ -150,6 +160,7 @@ export const modalToggle = crudOperation => {
   };
 };
 
+// Action to update text object.
 export const setTextDetails = (textObj, updatedTextObj) => {
   return {
     type: actionKeys.SET_TEXT_DETAILS,
@@ -157,6 +168,8 @@ export const setTextDetails = (textObj, updatedTextObj) => {
     updatedTextObj
   };
 };
+
+// Action to update old text object on cancelling text update.
 export const renderOldText = textObj => {
   return {
     type: actionKeys.RENDER_OLD_TEXT,

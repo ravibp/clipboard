@@ -6,7 +6,7 @@ import { Redirect } from "react-router-dom";
 
 class ClipboardConnector extends React.Component {
   render() {
-    if (!this.props.isOnline) {
+    if (!this.props.isOnline && !this.props.texts) {
       return <Redirect to="/" />;
     }
     return <Clipboard {...this.props} />;
