@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import HamburgerMenu from "react-hamburger-menu";
+import LoginButton from "components/button/LoginButton";
+import NotesCategories from "components/clipboard/NotesCategories";
 
 export default class Hamburger extends Component {
   constructor(props) {
@@ -7,6 +9,17 @@ export default class Hamburger extends Component {
     this.state = {
       drawerOpenFlag: false
     };
+    this.headerNavbarRef = React.createRef();
+  }
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.selectedNotesCategory &&
+      prevProps.selectedNotesCategory !== this.props.selectedNotesCategory
+    ) {
+      setTimeout(() => {
+        this.handleDrawerToggle();
+      }, 500);
+    }
   }
   handleDrawerToggle = () => {
     this.setState(
@@ -15,41 +28,59 @@ export default class Hamburger extends Component {
       },
       () => {
         if (this.state.drawerOpenFlag) {
-          //   this.refs["headerNavBar-ref"].classList.remove("drawer");
-          this.refs["headerNavBar-ref"].style.top = "0px";
-          //   document.getElementById("hamburgerOverlay-ref").style.background =
-          //     "#000000bd";
-          //   document.getElementById("hamburgerOverlay-ref").style.zIndex = "100";
+          this.headerNavbarRef.current.style.left = "0px";
+          this.props.hamburgerOverlayRef.current.style.backgroundColor =
+            "#000000bd";
+          this.props.hamburgerOverlayRef.current.style.width = "100vw";
         } else {
-          this.refs["headerNavBar-ref"].style.top = "-300px";
-          //   document.getElementById("hamburgerOverlay-ref").style.zIndex = "0";
-          //   document.getElementById("hamburgerOverlay-ref").style.background =
-          //     "transparent";
+          this.headerNavbarRef.current.style.left = "500px";
+          this.props.hamburgerOverlayRef.current.style.backgroundColor =
+            "transparent";
+            this.props.hamburgerOverlayRef.current.style.width = "0";
         }
       }
     );
   };
-  setWrapperRef = node => {
-    this.wrapperRef = node;
-  };
   /**
    * Toggle on Clicking outside of element
    */
-  handleClickOutside = event => {
-    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+  handleClickOutsideHamburgerDrawer = event => {
+    if (
+      this.headerNavbarRef &&
+      !this.headerNavbarRef.current.contains(event.target) &&
+      event.target.className
+    ) {
       if (this.state.drawerOpenFlag) {
         this.handleDrawerToggle();
       }
     }
   };
+  componentDidMount() {
+    if (this.props.isMobileOnly) {
+      document.addEventListener(
+        "mousedown",
+        this.handleClickOutsideHamburgerDrawer
+      );
+    }
+  }
+  componentWillUnmount() {
+    if (this.props.isMobileOnly) {
+      document.removeEventListener(
+        "mousedown",
+        this.handleClickOutsideHamburgerDrawer
+      );
+    }
+  }
+
   render() {
-    const { SignInOutButton, displayName, user } = this.props;
+    const { displayName, user } = this.props;
     const { drawerOpenFlag } = this.state;
 
     return (
       <>
-        <div className="hamburgerMenu__icon">
+        <div className="hamburgerMenu-icon">
           <HamburgerMenu
+            name="aaaa"
             isOpen={drawerOpenFlag === undefined ? false : drawerOpenFlag}
             menuClicked={this.handleDrawerToggle}
             width={25}
@@ -62,10 +93,13 @@ export default class Hamburger extends Component {
           />
         </div>
 
-        <div ref="headerNavBar-ref" className="drawer">
+        <div ref={this.headerNavbarRef} className="drawer">
           {user && user.uid && (
             <div>
-              <SignInOutButton uid={user.uid} displayName={displayName} />
+              <LoginButton uid={user.uid} displayName={displayName} />
+              <div className="mt-4">
+                <NotesCategories {...this.props} />
+              </div>
             </div>
           )}
         </div>

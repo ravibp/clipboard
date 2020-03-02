@@ -1,10 +1,14 @@
 import { connect } from "react-redux";
-import * as ClipboardActions from "../actions/ClipboardActions";
+import * as ClipboardActions from "actions/ClipboardActions";
 import React from "react";
-import Clipboard from "../Clipboard";
+import Clipboard from "components/clipboard/Clipboard";
+import { Redirect } from "react-router-dom";
 
 class ClipboardConnector extends React.Component {
   render() {
+    if (!this.props.isOnline && !this.props.texts) {
+      return <Redirect to="/" />;
+    }
     return <Clipboard {...this.props} />;
   }
 }
@@ -20,32 +24,59 @@ const mapStateToProps = state => {
     expandInputBox: state.clipboardReducer.expandInputBox,
     searchText: state.clipboardReducer.searchText,
     inputText: state.clipboardReducer.inputText,
+    notesCategoryInputText: state.clipboardReducer.notesCategoryInputText,
     displayName: state.clipboardReducer.displayName,
-    // user: state.clipboardReducer.user
+    selectedNotesCategory: state.clipboardReducer.selectedNotesCategory,
+    selectedNotesCategoryID: state.clipboardReducer.selectedNotesCategoryID,
+    notesCategories: state.clipboardReducer.notesCategories
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    toggleElement: (storeVariable, booleanValue) =>
-      dispatch(ClipboardActions.toggleElement(storeVariable, booleanValue)),
     setStoreVariable: (inputStoreVariable, inputValue) =>
       dispatch(
         ClipboardActions.setStoreVariable(inputStoreVariable, inputValue)
       ),
-    addTextDB: (textObj, user) =>
-      dispatch(ClipboardActions.addTextDB(textObj, user)),
-    deleteTextDB: (textId, user) =>
-      dispatch(ClipboardActions.deleteTextDB(textId, user)),
-    fetchTextsDB: (textId, user) =>
-      dispatch(ClipboardActions.fetchTextsDB(textId, user)),
-    updateTextDB: (textObj, user) =>
-      dispatch(ClipboardActions.updateTextDB(textObj, user)),
+    addTextDB: (textObj, user, selectedNotesCategory) =>
+      dispatch(
+        ClipboardActions.addTextDB(textObj, user, selectedNotesCategory)
+      ),
+    deleteTextDB: (textID, user, selectedNotesCategory) =>
+      dispatch(
+        ClipboardActions.deleteTextDB(textID, user, selectedNotesCategory)
+      ),
+    fetchTextsDB: (textID, user, selectedNotesCategory) =>
+      dispatch(
+        ClipboardActions.fetchTextsDB(textID, user, selectedNotesCategory)
+      ),
+    updateTextDB: (textObj, user, selectedNotesCategory) =>
+      dispatch(
+        ClipboardActions.updateTextDB(textObj, user, selectedNotesCategory)
+      ),
     modalToggle: crudOperation =>
       dispatch(ClipboardActions.modalToggle(crudOperation)),
     setTextDetails: (textObj, updatedTextObj) =>
       dispatch(ClipboardActions.setTextDetails(textObj, updatedTextObj)),
-    renderText: textObj => dispatch(ClipboardActions.renderText(textObj))
+    renderOldText: textObj => dispatch(ClipboardActions.renderOldText(textObj)),
+    fetchNotesCategoriesDB: user =>
+      dispatch(ClipboardActions.fetchNotesCategoriesDB(user)),
+    addNotesCategoryDB: (user, selectedNotesCategory) =>
+      dispatch(
+        ClipboardActions.addNotesCategoryDB(user, selectedNotesCategory)
+      ),
+    deleteNotesCategoryDB: (
+      user,
+      selectedNotesCategory,
+      selectedNotesCategoryID
+    ) =>
+      dispatch(
+        ClipboardActions.deleteNotesCategoryDB(
+          user,
+          selectedNotesCategory,
+          selectedNotesCategoryID
+        )
+      )
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ClipboardConnector);

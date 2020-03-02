@@ -1,28 +1,33 @@
 // common styles
 .dashboard-container {
   margin-top: 50px;
+
   .devloped-by {
+    text-align: center;
     margin-top: 20px;
     font-weight: bold;
     color: #ff5722;
   }
+
   .dashboard {
     &__heading {
       font-weight: bold;
       color: lightgoldenrodyellow;
       margin-bottom: 40px;
     }
+
     &__viewDemo-btn {
       button {
+        transition: 1s all;
         font-weight: bold;
       }
     }
   }
+  .noInternet-disabled {
+    pointer-events: none;
+    opacity: 0.2;
+  }
   .firebaseui-provider-sign-in-footer {
     display: none;
-    // color: lightgoldenrodyellow;
-    // a {
-    // color: #4facff;
-    // }
   }
 }

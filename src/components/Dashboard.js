@@ -1,26 +1,32 @@
 import React, { Component } from "react";
-
 import { Redirect } from "react-router-dom";
-import { renderAuthUI, ui } from "./auth/Auth";
+import { renderAuthUI, ui } from "components/auth/Auth";
 import { MDBBtn } from "mdbreact";
-import "./Dashboard.scss";
+import "components/Dashboard.scss";
 
 class Dashboard extends Component {
   componentDidMount() {
-    renderAuthUI(ui);
+    renderAuthUI(ui); // render firebase login UI on page load
   }
   render() {
-    if (this.props.user) return <Redirect to="/clipboard" />;
+    const { user, isOnline, offlineMsg } = this.props;
+    if (!isOnline) {
+      alert(offlineMsg);
+    }
+    if (user) return <Redirect to="/clipboard" />;
     return (
       <div className="dashboard-container row no-gutters">
         <div className="col-12">
+          {!isOnline && <h6 className="devloped-by">{offlineMsg}</h6>}
           <h6 className="devloped-by">
             Developed by {process.env.REACT_APP_DEVELOPER_NAME}
           </h6>
           <h1 className="dashboard__heading">Welcome to My Clipboard App</h1>
         </div>
+        {/* Button to view demo page for Guest users */}
         <div className="col-12 dashboard__viewDemo-btn">
           <MDBBtn
+            className={!isOnline && "noInternet-disabled"}
             color="mdb-color"
             onClick={() => {
               window.location.replace("/demo");
@@ -29,8 +35,11 @@ class Dashboard extends Component {
             View Demo
           </MDBBtn>
         </div>
-
-        <div className="col-12" id="firebaseui-auth-container"></div>
+        {/* Firebase Login with different social platforms */}
+        <div
+          className={`col-12 ${!isOnline && "noInternet-disabled"} `}
+          id="firebaseui-auth-container"
+        ></div>
       </div>
     );
   }

@@ -1,60 +1,138 @@
-.clipboard {
-  &__header {
-    border-bottom: 2px solid #e38800;
-    background-color: #0095d9;
-    position: fixed !important;
-    left: 0;
-    top: 0;
-    z-index: 100;
-    > div {
-      font-weight: bold;
-    }
-    .header-title {
-      text-align: left;
+// common styles
+.header-container {
+  font-weight: bold;
+
+  > div {
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 0px 10px !important;
+  }
+
+  .header {
+    &__title {
+      display: inline-flex;
+
+      > h1 {
+        font-weight: bold;
+        margin: 0;
+      }
+
+      > .inputToggleButton {
+        color: white;
+        margin-top: auto;
+        margin-bottom: auto;
+      }
     }
 
-    ul {
-      list-style: none;
-      padding: 0px;
-      margin: 0;
+    &__searchBox {
+      .search-icon,
+      i {
+        color: white;
+      }
+
+      input {
+        margin: 0;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
     }
   }
 }
 
 // mobile styles
 @media screen and (max-width: 767px) {
-  .clipboard {
-    &__header {
-      height: 50px;
-      > div {
-        margin: 10px;
+  .hamburger-overlay {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    transition: background-color 1s;
+  }
+  .header-container {
+    margin: 10px;
+
+    .header {
+      &__title {
+        > h1 {
+          font-size: 20px;
+        }
+
+        > i.inputToggleButton {
+          margin-left: 15px;
+          font-size: 23px !important;
+        }
       }
-      .header-title {
-        font-size: 20px;
-      }
-      .header-userInfo {
+
+      &__userInfo {
         font-size: 15px;
         text-align: left;
       }
-      .hamburgerMenu {
-        margin: auto;
-        margin-right: initial !important;
-        &__icon {
+
+      &__hamburgerMenu {
+        text-align: right;
+
+        .hamburgerMenu-icon {
           > div {
             z-index: 100;
+            float: right;
           }
         }
 
         .drawer {
+          transition: all 0.5s;
           color: white;
           position: fixed;
           background-color: #000000c2;
-          top: -300px;
-          left: 0;
-          height: 120px;
-          width: 100%;
+          top: 0;
+          left: 500px;
+          margin-left: 25%;
+          width: 75%;
           > div {
-            margin: 50px;
+            margin: 50px 0px;
+            text-align: center;
+          }
+        }
+
+        // Notes categories styles
+        .notesCategories {
+          &__list {
+            > ul {
+              display: block !important;
+              overflow-x: initial !important;
+              height: 200px;
+              overflow-y: scroll;
+            }
+          }
+        }
+      }
+
+      &__searchBox {
+        .search-icon {
+          font-size: 22px;
+        }
+
+        .searchInput-container {
+          width: 160px;
+          top: 30px;
+          left: -15px;
+          display: block;
+          z-index: 100;
+          position: absolute;
+
+          input {
+            width: 85%;
+          }
+
+          i {
+            margin-left: 2px;
+          }
+
+          .search-arrow {
+            left: 28px;
+            position: absolute;
+            border: 7px solid;
+            transform: rotate(45deg);
+            top: -5px;
+            color: white;
           }
         }
       }
@@ -64,23 +142,52 @@
 
 // desktop styles
 @media screen and (min-width: 768px) {
-  .clipboard {
-    &__header {
-      > div {
-        margin: auto 40px;
-        height: 50px;
+  .header-container {
+    margin: auto 15px;
+    height: 50px;
+
+    .header {
+      &__title {
+        > h1 {
+          font-size: 20px;
+        }
+
+        > .inputToggleButton {
+          margin-left: 15px;
+          font-size: 22px !important;
+        }
       }
-      .header-title {
-        font-size: 25px;
-        margin: auto;
-      }
-      .header-userInfo {
+
+      &__userInfo {
         text-align: right;
-        margin: auto;
+
+        > ul > li {
+          margin: auto 10px;
+          display: inline;
+        }
       }
-      li {
-        margin: auto 10px;
-        display: inline;
+
+      &__searchBox {
+        text-align: left;
+
+        .md-form {
+          display: inline-block;
+          margin: 0;
+        }
+        .search-icon {
+          cursor: initial !important;
+          margin-right: 5px;
+          font-size: 20px;
+        }
+
+        input {
+          color: white;
+        }
+
+        label,
+        label.active {
+          color: white !important;
+        }
       }
     }
   }
