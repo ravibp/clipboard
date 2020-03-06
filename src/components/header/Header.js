@@ -102,6 +102,11 @@ class Header extends React.Component {
                   label="Search Notes"
                   rows="2"
                   value={this.props.searchText}
+                  onKeyDown={e => {
+                    if (e.keyCode === 13) {
+                      window.find(this.props.searchText);
+                    }
+                  }}
                   onChange={e =>
                     this.props.setStoreVariable(e.target.name, e.target.value)
                   }
