@@ -116,6 +116,7 @@ export const updateTextDB = (
   }texts/${textObj.id}`;
   databaseRef.child(dbEndPoint).set(textObj, () => {
     dispatch(modalToggle());
+    highlightOperationOnText(textObj.id, "notify-edit");
     showPopupNotification("Changes Saved!!! ", "notify-update");
   });
 };

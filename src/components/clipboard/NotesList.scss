@@ -59,6 +59,11 @@
         .delete-icon {
           position: absolute;
         }
+        .delete-icon,
+        .edit-icon,
+        .clipboard-icon {
+          transition: 0.5s all !important;
+        }
 
         .dateStamp {
           float: right;
@@ -97,6 +102,13 @@
             padding: 15px;
           }
 
+          .edit-icon,
+          .clipboard-icon,
+          .delete-icon {
+            font-size: 27px !important;
+            pointer-events: none !important;
+            opacity: 0;
+          }
           .delete-icon {
             right: 12px;
             font-size: 22px;
@@ -104,9 +116,6 @@
           .edit-icon,
           .clipboard-icon {
             margin-right: 15px;
-            font-size: 27px !important;
-            pointer-events: none !important;
-            opacity: 0;
           }
 
           .icons-container {
@@ -120,8 +129,8 @@
         padding: 15px 35px 40px 35px !important;
 
         .edit-icon,
-        .clipboard-icon {
-          transition: all 1s;
+        .clipboard-icon,
+        .delete-icon {
           opacity: 1;
           pointer-events: initial !important;
         }
@@ -168,7 +177,6 @@
           .edit-icon,
           .clipboard-icon {
             opacity: 0;
-            transition: 0.5s all;
           }
         }
 

@@ -25,9 +25,11 @@ export function highlightOperationOnText(textID, notificationStylesClass) {
         animation = "sucessAnimation 1s";
     }
     document.getElementById(textID).style.animation = animation;
-    setTimeout(() => {
-      document.getElementById(textID).style.animation = "";
-    }, 1000);
+    if (notificationStylesClass !== "notify-delete") {
+      setTimeout(() => {
+        document.getElementById(textID).style.animation = "";
+      }, 1000);
+    }
   }
 }
 
