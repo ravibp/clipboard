@@ -24,7 +24,7 @@ class Dashboard extends Component {
           <h1 className="dashboard__heading">Welcome to My Clipboard App</h1>
         </div>
         {/* Button to view demo page for Guest users */}
-        <div className="col-12 dashboard__viewDemo-btn">
+        <div className="col-12 mb-3 dashboard__viewDemo-btn">
           <MDBBtn
             className={!isOnline && "noInternet-disabled"}
             color="mdb-color"
