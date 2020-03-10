@@ -6,6 +6,7 @@ import { Redirect } from "react-router-dom";
 
 class ClipboardConnector extends React.Component {
   render() {
+    // if (!this.props.user) return <Redirect to="/" />;
     if (!this.props.isOnline && !this.props.texts) {
       return <Redirect to="/" />;
     }
@@ -28,7 +29,8 @@ const mapStateToProps = state => {
     displayName: state.clipboardReducer.displayName,
     selectedNotesCategory: state.clipboardReducer.selectedNotesCategory,
     selectedNotesCategoryID: state.clipboardReducer.selectedNotesCategoryID,
-    notesCategories: state.clipboardReducer.notesCategories
+    notesCategories: state.clipboardReducer.notesCategories,
+    loadingFlag: state.clipboardReducer.loadingFlag
   };
 };
 

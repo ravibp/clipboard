@@ -125,6 +125,7 @@ export const updateTextDB = (
 export const fetchTextsDB = (user, selectedNotesCategory) => async dispatch => {
   /* above function is not called on db data change, only below event data change listener is called */
   if (user) {
+    dispatch(setStoreVariable("loadingFlag", true));
     const dbEndPoint = `users/${user.uid}/${
       selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
     }texts`;
@@ -142,6 +143,7 @@ export const fetchTextsDB = (user, selectedNotesCategory) => async dispatch => {
         type: actionKeys.FETCH_TEXTS_DB,
         texts: texts
       });
+      dispatch(setStoreVariable("loadingFlag", false));
     });
   }
 };

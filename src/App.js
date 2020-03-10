@@ -26,6 +26,7 @@ class App extends Component {
       uid: "@Guest",
       displayName: "Guest User"
     };
+    
     return (
       // Detector checks internet connectivity status.
       <Detector
