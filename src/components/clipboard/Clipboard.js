@@ -64,7 +64,8 @@ class Clipboard extends React.Component {
   };
 
   render() {
-    const { user, expandInputBox, loadingFlag } = this.props;
+    const { user, expandInputBox, loadingFlag, loadingFlagDB } = this.props;
+
     // Redirect to dashboard if user is not logged in.
     if (!user) return <Redirect to="/" />;
     else if (loadingFlag) {
@@ -72,6 +73,13 @@ class Clipboard extends React.Component {
     }
     return (
       <div className="clipboard-container row no-gutters">
+        {loadingFlagDB && (
+          <div className="clipboard__spinnerDB">
+            <div className="spinnerDB-overlay">
+              <Spinner />
+            </div>
+          </div>
+        )}
         {/* Header component. */}
         <div className="clipboard__header col-12">
           <Header {...this.props} isMobileOnly={isMobileOnly} />

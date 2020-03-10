@@ -12,19 +12,21 @@ export const addNotesCategoryDB = (
   user,
   encodedCategoryText
 ) => async dispatch => {
-  const textObj = {
-    textValue: `This is <b>${decodeURIComponent(
-      encodedCategoryText
-    )}</b> category notes`,
-    dateStamp: new Date().toLocaleString().split(",")
-  };
   if (user) {
+    const textObj = {
+      textValue: `This is <b>${decodeURIComponent(
+        encodedCategoryText
+      )}</b> category notes`,
+      dateStamp: new Date().toLocaleString().split(",")
+    };
     const dbEndPoint = `users/${user.uid}/${encodedCategoryText}/texts`;
-    dispatch(setStoreVariable("notesCategoryInputText", ""));
+    dispatch(setStoreVariable("loadingFlagDB", true));
     databaseRef
       .child(dbEndPoint)
       .push()
       .set(textObj, () => {
+        dispatch(setStoreVariable("notesCategoryInputText", ""));
+        dispatch(setStoreVariable("loadingFlagDB", false));
         dispatch(
           setStoreVariable("selectedNotesCategory", encodedCategoryText)
         );
@@ -41,9 +43,11 @@ export const deleteNotesCategoryDB = (
   if (user) {
     const dbEndPoint = `users/${user.uid}/${selectedNotesCategory}`;
     dispatch(modalToggle());
+    dispatch(setStoreVariable("loadingFlagDB", true));
     highlightOperationOnText(selectedNotesCategoryID, "notify-delete");
     setTimeout(() => {
       databaseRef.child(dbEndPoint).remove(() => {
+        dispatch(setStoreVariable("loadingFlagDB", false));
         dispatch(setStoreVariable("selectedNotesCategory", "Default"));
         dispatch(fetchTextsDB(user, "Default"));
         showPopupNotification("Successfully Deleted!!! ", "notify-delete");
@@ -76,15 +80,17 @@ export const addTextDB = (
   user,
   selectedNotesCategory
 ) => async dispatch => {
+  dispatch(setStoreVariable("loadingFlagDB", true));
+  dispatch(setStoreVariable("searchText", ""));
   const dbEndPoint = `users/${user.uid}/${
     selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
   }texts`;
-  dispatch(setStoreVariable("searchText", ""));
-  dispatch(setStoreVariable("inputText", ""));
   databaseRef
     .child(dbEndPoint)
     .push(textObject)
     .then(snap => {
+      dispatch(setStoreVariable("loadingFlagDB", false));
+      dispatch(setStoreVariable("inputText", ""));
       highlightOperationOnText(snap.key, "notify-create");
       showPopupNotification("Successfully Added!!! ", "notify-create");
     });
@@ -99,9 +105,11 @@ export const deleteTextDB = (
   }texts/${textID}`;
 
   dispatch(modalToggle());
+  dispatch(setStoreVariable("loadingFlagDB", true));
   highlightOperationOnText(textID, "notify-delete");
   setTimeout(() => {
     databaseRef.child(dbEndPoint).remove(() => {
+      dispatch(setStoreVariable("loadingFlagDB", false));
       showPopupNotification("Successfully Deleted!!! ", "notify-delete");
     });
   }, 1000);
@@ -111,11 +119,13 @@ export const updateTextDB = (
   user,
   selectedNotesCategory
 ) => async dispatch => {
+  dispatch(modalToggle());
+  dispatch(setStoreVariable("loadingFlagDB", true));
   const dbEndPoint = `users/${user.uid}/${
     selectedNotesCategory !== null ? `${selectedNotesCategory}/` : ""
   }texts/${textObj.id}`;
   databaseRef.child(dbEndPoint).set(textObj, () => {
-    dispatch(modalToggle());
+    dispatch(setStoreVariable("loadingFlagDB", false));
     highlightOperationOnText(textObj.id, "notify-edit");
     showPopupNotification("Changes Saved!!! ", "notify-update");
   });
@@ -139,11 +149,11 @@ export const fetchTextsDB = (user, selectedNotesCategory) => async dispatch => {
         };
         texts.push(textObj);
       });
+      dispatch(setStoreVariable("loadingFlag", false));
       dispatch({
         type: actionKeys.FETCH_TEXTS_DB,
         texts: texts
       });
-      dispatch(setStoreVariable("loadingFlag", false));
     });
   }
 };

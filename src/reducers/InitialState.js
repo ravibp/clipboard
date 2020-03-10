@@ -14,5 +14,6 @@ export default {
   selectedNotesCategory: null,
   selectedNotesCategoryID: null,
   notesCategories: [],
-  loadingFlag: true
+  loadingFlag: true,
+  loadingFlagDB: false,
 };

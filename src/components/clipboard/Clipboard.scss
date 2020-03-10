@@ -7,6 +7,17 @@
   }
 
   .clipboard {
+    &__spinnerDB {
+      z-index: 100;
+      .spinnerDB-overlay {
+        background-color: #000000c2;
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        left: 0;
+        top: 0;
+      }
+    }
     &__header {
       border-bottom: 2px solid #e38800;
       background: radial-gradient(#0b93ff, #4b4b4ba3);
@@ -81,7 +92,7 @@
 @media screen and (max-width: 767px) {
   .clipboard-container {
     margin: 50px 0px 0px 0px;
-  
+
     .clipboard {
       &__header {
         height: 50px;
