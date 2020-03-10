@@ -28,7 +28,9 @@ const mapStateToProps = state => {
     displayName: state.clipboardReducer.displayName,
     selectedNotesCategory: state.clipboardReducer.selectedNotesCategory,
     selectedNotesCategoryID: state.clipboardReducer.selectedNotesCategoryID,
-    notesCategories: state.clipboardReducer.notesCategories
+    notesCategories: state.clipboardReducer.notesCategories,
+    loadingFlag: state.clipboardReducer.loadingFlag,
+    loadingFlagDB: state.clipboardReducer.loadingFlagDB,
   };
 };
 

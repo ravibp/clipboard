@@ -14,15 +14,20 @@ import "common/CommonStyles.scss";
 const isMobileOnly = window.innerWidth <= 767 ? true : false;
 
 class Clipboard extends React.Component {
-  componentDidMount() {
+  fetchDataDB = () => {
     // fetch notes categories and texts from DB.
     this.props.fetchNotesCategoriesDB(this.props.user);
     this.props.fetchTextsDB(this.props.user, this.props.selectedNotesCategory);
     const displayName = this.handleDisplayName(this.props.user);
     this.props.setStoreVariable("displayName", displayName);
+  };
+  componentDidMount() {
+    this.fetchDataDB();
   }
-
   componentDidUpdate(prevProps) {
+    if (prevProps.user !== this.props.user && this.props.user) {
+      this.fetchDataDB();
+    }
     // Fetch Default note category texts on deleting a particular note category.
     if (
       prevProps.notesCategories !== this.props.notesCategories &&
@@ -36,8 +41,6 @@ class Clipboard extends React.Component {
       this.props.fetchTextsDB(this.props.user, this.props.notesCategories[0]);
     }
   }
-
-
 
   capitalizeFirstLetter = string => {
     return string.replace(/^./, string[0].toUpperCase());
@@ -60,16 +63,23 @@ class Clipboard extends React.Component {
     return displayName;
   };
 
-
   render() {
-    const { texts, user, expandInputBox } = this.props;
-    if (!user) return <Redirect to="/" />;
+    const { user, expandInputBox, loadingFlag, loadingFlagDB } = this.props;
+
     // Redirect to dashboard if user is not logged in.
-    else if (texts === null) {
+    if (!user) return <Redirect to="/" />;
+    else if (loadingFlag) {
       return <Spinner />; // Show spinner during page load.
     }
     return (
       <div className="clipboard-container row no-gutters">
+        {loadingFlagDB && (
+          <div className="clipboard__spinnerDB">
+            <div className="spinnerDB-overlay">
+              <Spinner />
+            </div>
+          </div>
+        )}
         {/* Header component. */}
         <div className="clipboard__header col-12">
           <Header {...this.props} isMobileOnly={isMobileOnly} />

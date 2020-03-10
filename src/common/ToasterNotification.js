@@ -24,11 +24,14 @@ export function highlightOperationOnText(textID, notificationStylesClass) {
       default:
         animation = "sucessAnimation 1s";
     }
-    document.getElementById(textID).style.animation = animation;
-    if (notificationStylesClass !== "notify-delete") {
-      setTimeout(() => {
-        document.getElementById(textID).style.animation = "";
-      }, 1000);
+    const textNode = document.getElementById(textID);
+    if (textNode) {
+      textNode.style.animation = animation;
+      if (notificationStylesClass !== "notify-delete") {
+        setTimeout(() => {
+          textNode.style.animation = "";
+        }, 1000);
+      }
     }
   }
 }

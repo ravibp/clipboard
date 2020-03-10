@@ -13,5 +13,7 @@ export default {
   displayName: "",
   selectedNotesCategory: null,
   selectedNotesCategoryID: null,
-  notesCategories: []
+  notesCategories: [],
+  loadingFlag: true,
+  loadingFlagDB: false,
 };

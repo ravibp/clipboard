@@ -72,61 +72,71 @@ class NotesList extends React.Component {
     return (
       <>
         {texts && texts.length === 0 && <p>Your Clipboard is empty!</p>}
-        <FilterResults
-          value={searchText}
-          data={texts}
-          renderResults={texts => {
-            texts.reverse();
-            return (
-              <>
-                {texts && texts.length === 0 && searchText && (
-                  <p className="no-search-results">No results found!</p>
-                )}
-                <ul>
-                  {texts.map((text, index) => {
-                    return (
-                      <li key={text.id}>
-                        <span className="text-index">{index + 1}.</span>
-                        <FontAwesome
-                          onClick={() => {
-                            this.props.setTextDetails(text, null);
-                            this.props.modalToggle("DELETE");
-                          }}
-                          className="super-crazy-colors delete-icon"
-                          name="remove"
-                          style={{
-                            textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)"
-                          }}
-                        />
-                        {window.innerWidth > 767 && this.showEditCopyBtn(text)}
-                        <div className="contentEditable-wrapper">
-                          <ContentEditable
-                            name="inputText"
-                            onDoubleClick={this.enableTextEdit.bind(this, text)}
-                            contentEditable={false}
-                            id={text.id}
-                            className="text-value"
-                            html={text.textValue}
-                            disabled={true}
-                            onChange={this.updateText.bind(this, text.id)}
-                            onBlur={this.handleContentBlur.bind(this, text.id)}
-                            tagName="pre" // Use a custom HTML tag (uses a div by default)
+        {texts && (
+          <FilterResults
+            value={searchText}
+            data={texts}
+            renderResults={texts => {
+              texts.reverse();
+              return (
+                <>
+                  {texts && texts.length === 0 && searchText && (
+                    <p className="no-search-results">No results found!</p>
+                  )}
+                  <ul>
+                    {texts.map((text, index) => {
+                      return (
+                        <li key={text.id}>
+                          <span className="text-index">{index + 1}.</span>
+                          <FontAwesome
+                            onClick={() => {
+                              this.props.setTextDetails(text, null);
+                              this.props.modalToggle("DELETE");
+                            }}
+                            className="super-crazy-colors delete-icon"
+                            name="remove"
+                            style={{
+                              textShadow: "0 1px 0 rgba(0, 0, 0, 0.1)"
+                            }}
                           />
-                        </div>
-                        {window.innerWidth <= 767 && this.showEditCopyBtn(text)}
-                        <Moment
-                          format="DD MMM YYYY, HH:mm"
-                          className="dateStamp"
-                          date={new Date()}
-                        />
-                      </li>
-                    );
-                  })}
-                </ul>
-              </>
-            );
-          }}
-        />
+                          {window.innerWidth > 767 &&
+                            this.showEditCopyBtn(text)}
+                          <div className="contentEditable-wrapper">
+                            <ContentEditable
+                              name="inputText"
+                              onDoubleClick={this.enableTextEdit.bind(
+                                this,
+                                text
+                              )}
+                              contentEditable={false}
+                              id={text.id}
+                              className="text-value"
+                              html={text.textValue}
+                              disabled={true}
+                              onChange={this.updateText.bind(this, text.id)}
+                              onBlur={this.handleContentBlur.bind(
+                                this,
+                                text.id
+                              )}
+                              tagName="pre" // Use a custom HTML tag (uses a div by default)
+                            />
+                          </div>
+                          {window.innerWidth <= 767 &&
+                            this.showEditCopyBtn(text)}
+                          <Moment
+                            format="DD MMM YYYY, HH:mm"
+                            className="dateStamp"
+                            date={new Date()}
+                          />
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              );
+            }}
+          />
+        )}
       </>
     );
   }
