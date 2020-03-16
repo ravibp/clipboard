@@ -33,7 +33,7 @@ export default class Hamburger extends Component {
             "#000000bd";
           this.props.hamburgerOverlayRef.current.style.width = "100vw";
         } else {
-          this.headerNavbarRef.current.style.left = "500px";
+          this.headerNavbarRef.current.style.left = "800px";
           this.props.hamburgerOverlayRef.current.style.backgroundColor =
             "transparent";
             this.props.hamburgerOverlayRef.current.style.width = "0";
