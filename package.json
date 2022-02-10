@@ -9,7 +9,7 @@
     "firebaseui": "^4.2.0",
     "font-awesome": "^4.7.0",
     "mdbreact": "^4.19.2",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "react": "^16.9.0",
     "react-contenteditable": "^3.3.2",
     "react-detect-offline": "^2.4.0",
